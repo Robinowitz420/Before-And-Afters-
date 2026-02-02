@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useUser } from '@clerk/nextjs'
+import { useUser, UserButton } from '@clerk/nextjs'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { Button } from '@/components/ui/button'
@@ -423,6 +423,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <div className="rounded-2xl border border-white/15 bg-black/30 px-5 py-4 text-white shadow-sm backdrop-blur-md">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-white/80">Before And Afters</div>
           <div className="mt-2 text-2xl font-semibold text-white sm:text-3xl">Change your outfit, change the world!</div>
+        </div>
+
+        <div className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md">
+          <UserButton afterSignOutUrl="/" />
         </div>
       </div>
 

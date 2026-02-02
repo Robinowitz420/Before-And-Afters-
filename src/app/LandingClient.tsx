@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import { ProfileWizard } from '@/app/profile-wizard/ProfileWizard'
@@ -9,6 +10,14 @@ import { cn } from '@/lib/utils'
 
 export function LandingClient() {
   const [wizardOpen, setWizardOpen] = useState(false)
+  const router = useRouter()
+
+  const onEnterCloset = () => {
+    if (typeof window === 'undefined') return
+    const raw = window.localStorage.getItem('cyo_profile_v1')
+    const hasProfile = Boolean(raw && raw.trim() !== '' && raw.trim() !== '{}')
+    router.push(hasProfile ? '/profile' : '/profile-wizard')
+  }
 
   return (
     <div className="w-full">
@@ -57,7 +66,7 @@ export function LandingClient() {
               Play with clothing long enough and it starts playing back.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-              <Button type="button" onClick={() => setWizardOpen(true)}>
+              <Button type="button" onClick={onEnterCloset}>
                 Enter the Closet
               </Button>
               <Button asChild variant="secondary">
@@ -241,7 +250,7 @@ export function LandingClient() {
               <p className="text-2xl font-bold text-white md:text-3xl">If you feel the call, you’re already part of it.</p>
             </div>
             <div className="mt-12">
-              <Button type="button" onClick={() => setWizardOpen(true)}>
+              <Button type="button" onClick={onEnterCloset}>
                 Enter the Closet
               </Button>
               <Button asChild variant="secondary" className="ml-0 mt-4 sm:ml-4 sm:mt-0">

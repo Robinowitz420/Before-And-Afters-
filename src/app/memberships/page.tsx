@@ -9,7 +9,7 @@ export default function MembershipsPage() {
 
   const onSelectTier = () => {
     alert('Congrats! Memberships coming soon')
-    router.push('/taste-tuner')
+    router.push('/profile')
   }
 
   return (
