@@ -13,6 +13,13 @@ export async function GET() {
     await auth.protect()
     const { userId } = await auth()
 
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
     const user = await prisma.user.findUnique({
       where: { clerkUserId: userId }
     })
@@ -47,6 +54,14 @@ export async function POST(request: NextRequest) {
   try {
     await auth.protect()
     const { userId } = await auth()
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
     const body = await request.json()
 
     const {
@@ -110,7 +125,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate rental fee
-    const baseFee = additionalFee || 0 // Many items are 0Ġ, premium items have additional fees
+    const baseFee = additionalFee || 0 // Many items are 0, premium items have additional fees
     const totalFee = calculateRentalFee(
       baseFee,
       user.itemsCurrentlyRented + 1, // +1 for this new rental
@@ -176,6 +191,13 @@ export async function PUT(request: NextRequest) {
   try {
     await auth.protect()
     const { userId } = await auth()
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
 
     const url = new URL(request.url)
     const rentalId = url.pathname.split('/').pop()

@@ -13,6 +13,13 @@ export async function POST(
     const { userId } = await auth()
     const rentalId = params.id
 
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
     const rental = await prisma.rental.findUnique({
       where: { id: rentalId },
       include: { item: true, user: true }
