@@ -9,6 +9,13 @@ export async function POST(request: NextRequest) {
     await auth.protect()
     const { userId } = await auth()
 
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
     const user = await prisma.user.findUnique({
       where: { clerkUserId: userId }
     })
@@ -45,6 +52,13 @@ export async function GET() {
   try {
     await auth.protect()
     const { userId } = await auth()
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
 
     const user = await prisma.user.findUnique({
       where: { clerkUserId: userId },
