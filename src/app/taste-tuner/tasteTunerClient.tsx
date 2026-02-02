@@ -412,19 +412,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
-      <div className="mb-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-4 shadow-sm sm:flex-row sm:items-center">
-        <div className="text-sm font-medium text-[hsl(var(--ink))]">Not a member? Join here</div>
-        <Button asChild>
-          <Link href="/memberships">Memberships</Link>
-        </Button>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-6">
-        <div className="rounded-2xl border border-white/15 bg-black/30 px-5 py-4 text-white shadow-sm backdrop-blur-md">
-          <div className="text-xs font-medium uppercase tracking-[0.2em] text-white/80">Before And Afters</div>
-          <div className="mt-2 text-2xl font-semibold text-white sm:text-3xl">Change your outfit, change the world!</div>
-        </div>
-
+      <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
         <div className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md">
           <UserButton afterSignOutUrl="/" />
         </div>
@@ -891,9 +879,9 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
 
               <div className="mt-4 flex items-center gap-4">
-                <div className="h-24 w-24 overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-white">
+                <div className="h-36 w-36 overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-white">
                   {profile.avatar ? (
-                    <Image src={profile.avatar} alt="Your avatar" width={240} height={240} className="h-full w-full object-cover" />
+                    <Image src={profile.avatar} alt="Your avatar" width={360} height={360} className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
                   )}
@@ -942,6 +930,13 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
 
               <div className="mt-5" />
+            </div>
+
+            <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm">
+              <div className="text-sm font-medium text-[hsl(var(--ink))]">Not a member? Join here</div>
+              <Button asChild className="mt-3 w-full">
+                <Link href="/memberships">Memberships</Link>
+              </Button>
             </div>
           </div>
         </aside>
