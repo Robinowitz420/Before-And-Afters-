@@ -54,7 +54,26 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     await auth.protect()
-    await auth()
+    const { userId } = await auth()
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    const clerkUser = await currentUser()
+    const clerkEmail = clerkUser?.primaryEmailAddress?.emailAddress
+      || clerkUser?.emailAddresses?.[0]?.emailAddress
+      || null
+
+    if (!clerkEmail) {
+      return NextResponse.json(
+        { error: 'Missing email address' },
+        { status: 400 }
+      )
+    }
 
     // Handle both JSON and FormData (for file uploads)
     const contentType = request.headers.get('content-type') || ''
@@ -105,8 +124,15 @@ export async function POST(request: NextRequest) {
       membershipTier
     } = body
 
+    if (email && email !== clerkEmail) {
+      return NextResponse.json(
+        { error: 'Email does not match signed-in account' },
+        { status: 400 }
+      )
+    }
+
     // Validate required fields
-    if (!email || !firstName || !lastName || !displayName || !phone || !membershipTier) {
+    if (!firstName || !lastName || !displayName || !phone || !membershipTier) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -124,75 +150,80 @@ export async function POST(request: NextRequest) {
     const membershipLevel = MEMBERSHIP_LEVELS[membershipTier as keyof typeof MEMBERSHIP_LEVELS]
 
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: clerkEmail },
     })
 
-    if (existingUser) {
-      return NextResponse.json(
-        { error: 'Membership already exists for this account' },
-        { status: 409 }
-      )
-    }
-
-    // Create new membership
+    // Create/renew membership
     const membershipStartDate = new Date()
     const membershipEndDate = new Date()
-    membershipEndDate.setFullYear(membershipEndDate.getFullYear() + 1) // 1 year membership
+    membershipEndDate.setMonth(membershipEndDate.getMonth() + 1) // 1 month membership
 
-    const newMembership = await prisma.user.create({
-      data: {
-        // Basic info
-        email,
-        name: displayName, // Keep name field for backward compatibility
-        firstName,
-        middleName,
-        lastName,
-        displayName,
-        partyNames: typeof partyNames === 'string' ? partyNames : JSON.stringify(partyNames || []),
-        pronouns,
+    const baseData = {
+      // Identity binding
+      clerkUserId: userId,
+      email: clerkEmail,
 
-        // Contact
-        phone,
-        instagram,
-        socialLinks: typeof socialLinks === 'string' ? socialLinks : JSON.stringify(socialLinks || []),
+      // Basic info
+      name: displayName, // Keep name field for backward compatibility
+      firstName,
+      middleName,
+      lastName,
+      displayName,
+      partyNames: typeof partyNames === 'string' ? partyNames : JSON.stringify(partyNames || []),
+      pronouns,
 
-        // Addresses
-        homeAddress,
-        homeNeighborhood,
-        additionalAddresses: typeof additionalAddresses === 'string' ? additionalAddresses : JSON.stringify(additionalAddresses || []),
+      // Contact
+      phone,
+      instagram,
+      socialLinks: typeof socialLinks === 'string' ? socialLinks : JSON.stringify(socialLinks || []),
 
-        // Style preferences
-        styleDescription,
-        signatureColor,
-        signaturePatterns: typeof signaturePatterns === 'string' ? signaturePatterns : JSON.stringify(signaturePatterns || []),
-        sizing,
+      // Addresses
+      homeAddress,
+      homeNeighborhood,
+      additionalAddresses: typeof additionalAddresses === 'string' ? additionalAddresses : JSON.stringify(additionalAddresses || []),
 
-        // Shopping habits
-        wardrobeSources: typeof wardrobeSources === 'string' ? wardrobeSources : JSON.stringify(wardrobeSources || []),
-        favoriteBrands,
-        wardrobeSatisfaction: wardrobeSatisfaction ? parseInt(wardrobeSatisfaction) : null,
-        makesClothes: makesClothes === 'true' || makesClothes === true,
+      // Style preferences
+      styleDescription,
+      signatureColor,
+      signaturePatterns: typeof signaturePatterns === 'string' ? signaturePatterns : JSON.stringify(signaturePatterns || []),
+      sizing,
 
-        // Work & interests
-        work,
-        artForms: typeof artForms === 'string' ? artForms : JSON.stringify(artForms || []),
-        borrowingExcitement,
+      // Shopping habits
+      wardrobeSources: typeof wardrobeSources === 'string' ? wardrobeSources : JSON.stringify(wardrobeSources || []),
+      favoriteBrands,
+      wardrobeSatisfaction: wardrobeSatisfaction ? parseInt(wardrobeSatisfaction) : null,
+      makesClothes: makesClothes === 'true' || makesClothes === true,
 
-        // Social preferences
-        partyVibe,
-        sleepSchedule,
-        powerLetter,
+      // Work & interests
+      work,
+      artForms: typeof artForms === 'string' ? artForms : JSON.stringify(artForms || []),
+      borrowingExcitement,
 
-        // Membership
-        membershipTier,
-        membershipStartDate,
-        membershipEndDate,
-        maxItemsAllowed: membershipLevel.maxItems,
-        monthlyFreeGlitcoins: membershipLevel.freeMonthlyGlitcoins,
-        glitcoinBalance: 0, // Start with 0, they'll get monthly free coins
-        depositPaid: false, // Will be updated when deposit is paid
-      },
-    })
+      // Social preferences
+      partyVibe,
+      sleepSchedule,
+      powerLetter,
+
+      // Membership
+      membershipTier,
+      membershipStartDate,
+      membershipEndDate,
+      maxItemsAllowed: membershipLevel.maxItems,
+      monthlyFreeGlitcoins: membershipLevel.freeMonthlyGlitcoins,
+    }
+
+    const newMembership = existingUser
+      ? await prisma.user.update({
+        where: { id: existingUser.id },
+        data: baseData,
+      })
+      : await prisma.user.create({
+        data: {
+          ...baseData,
+          glitcoinBalance: 0, // Start with 0, they'll get monthly free coins
+          depositPaid: false, // Will be updated when deposit is paid
+        },
+      })
 
     // Create initial Glitcoin transactions
     // Membership fee
@@ -205,21 +236,23 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Deposit (required upfront)
-    await prisma.glitcoinTransaction.create({
-      data: {
-        userId: newMembership.id,
-        amount: -DEPOSIT_GLITCOIN, // Negative for debit - deposit
-        type: 'fee',
-        description: 'Membership deposit payment',
-      },
-    })
+    if (!existingUser || !existingUser.depositPaid) {
+      // Deposit (required upfront)
+      await prisma.glitcoinTransaction.create({
+        data: {
+          userId: newMembership.id,
+          amount: -DEPOSIT_GLITCOIN, // Negative for debit - deposit
+          type: 'fee',
+          description: 'Membership deposit payment',
+        },
+      })
 
-    // Mark deposit as paid
-    await prisma.user.update({
-      where: { id: newMembership.id },
-      data: { depositPaid: true }
-    })
+      // Mark deposit as paid
+      await prisma.user.update({
+        where: { id: newMembership.id },
+        data: { depositPaid: true }
+      })
+    }
 
     // Add first month's free Glitcoins
     if (membershipLevel.freeMonthlyGlitcoins > 0) {

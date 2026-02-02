@@ -1,7 +1,17 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { MEMBERSHIP_LEVELS } from '@/types'
 
 export default function MembershipsPage() {
+  const router = useRouter()
+
+  const onSelectTier = () => {
+    alert('Congrats! Memberships coming soon')
+    router.push('/taste-tuner')
+  }
+
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
       <div className="mb-8">
@@ -14,7 +24,19 @@ export default function MembershipsPage() {
 
       <div className="grid gap-6">
         {Object.entries(MEMBERSHIP_LEVELS).map(([tier, level]) => (
-          <Card key={tier} className="overflow-hidden">
+          <Card
+            key={tier}
+            className="overflow-hidden cursor-pointer"
+            role="button"
+            tabIndex={0}
+            onClick={onSelectTier}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                onSelectTier()
+              }
+            }}
+          >
             <CardHeader>
               <CardTitle className="text-xl">{level.name.split(' - ')[0]}</CardTitle>
               <CardDescription>{level.name.split(' - ')[1]}</CardDescription>

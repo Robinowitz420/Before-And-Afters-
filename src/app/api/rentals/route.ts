@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 
     const {
       itemId,
-      rentalDays = 7,
+      rentalDays = 30,
       additionalFee = 0 // For premium items
     } = body
 
@@ -86,6 +86,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
+      )
+    }
+
+    // Membership must be active (not expired)
+    if (!user.membershipEndDate || user.membershipEndDate.getTime() <= Date.now()) {
+      return NextResponse.json(
+        { error: 'Membership expired. Please renew to rent items.' },
+        { status: 403 }
       )
     }
 
@@ -133,9 +141,17 @@ export async function POST(request: NextRequest) {
       user.trustLevel
     )
 
-    // Calculate due date
+    // Calculate due date (max 30 days, and never beyond membership end)
+    const maxDays = 30
+    const requestedDays = typeof rentalDays === 'number' ? rentalDays : parseInt(String(rentalDays), 10)
+    const safeDays = Number.isFinite(requestedDays) ? Math.min(Math.max(requestedDays, 1), maxDays) : maxDays
+
     const dueDate = new Date()
-    dueDate.setDate(dueDate.getDate() + rentalDays)
+    dueDate.setDate(dueDate.getDate() + safeDays)
+
+    if (user.membershipEndDate && dueDate.getTime() > user.membershipEndDate.getTime()) {
+      dueDate.setTime(user.membershipEndDate.getTime())
+    }
 
     // Create rental transaction
     const rental = await prisma.rental.create({

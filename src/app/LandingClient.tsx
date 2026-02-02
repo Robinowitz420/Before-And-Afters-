@@ -60,6 +60,9 @@ export function LandingClient() {
               <Button type="button" onClick={() => setWizardOpen(true)}>
                 Enter the Closet
               </Button>
+              <Button asChild variant="secondary">
+                <a href="/memberships">Join / Renew Membership</a>
+              </Button>
               <Button
                 asChild
                 variant="outline"
@@ -240,6 +243,9 @@ export function LandingClient() {
             <div className="mt-12">
               <Button type="button" onClick={() => setWizardOpen(true)}>
                 Enter the Closet
+              </Button>
+              <Button asChild variant="secondary" className="ml-0 mt-4 sm:ml-4 sm:mt-0">
+                <a href="/memberships">Join / Renew Membership</a>
               </Button>
             </div>
           </div>

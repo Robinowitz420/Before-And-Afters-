@@ -412,6 +412,13 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
+      <div className="mb-6 flex flex-col items-start justify-between gap-3 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-4 shadow-sm sm:flex-row sm:items-center">
+        <div className="text-sm font-medium text-[hsl(var(--ink))]">Not a member? Join here</div>
+        <Button asChild>
+          <Link href="/memberships">Memberships</Link>
+        </Button>
+      </div>
+
       <div className="flex flex-wrap items-center justify-between gap-6">
         <div className="rounded-2xl border border-white/15 bg-black/30 px-5 py-4 text-white shadow-sm backdrop-blur-md">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-white/80">Before And Afters</div>
