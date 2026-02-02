@@ -123,7 +123,7 @@ export function MembershipList() {
         <div className="flex items-center">
           <div className="text-yellow-800">
             <strong>Important:</strong> All memberships require a $25 (5Ġ) deposit upfront.
-            You'll receive monthly free Glitcoins based on your membership tier.
+            You&apos;ll receive monthly free Glitcoins based on your membership tier.
           </div>
         </div>
       </div>

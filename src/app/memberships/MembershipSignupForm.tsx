@@ -284,7 +284,7 @@ function IdentityStep({ formData, updateFormData }: any) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold mb-2">🙂 Let's Get to Know You</h2>
+        <h2 className="text-2xl font-bold mb-2">🙂 Let&apos;s Get to Know You</h2>
         <p className="text-muted-foreground">Start building your magical profile in the endless closet</p>
       </div>
 
@@ -784,7 +784,7 @@ function InterestsStep({ formData, updateFormData }: any) {
             >
               <div className="text-2xl mb-2">❌</div>
               <div className="font-medium">No</div>
-              <div className="text-xs opacity-80">I don't create</div>
+              <div className="text-xs opacity-80">I don&apos;t create</div>
             </button>
           </div>
         </div>
@@ -1008,7 +1008,7 @@ function MembershipStep({ formData, updateFormData }: any) {
             🎉 Welcome to the {MEMBERSHIP_LEVELS[formData.membershipTier as keyof typeof MEMBERSHIP_LEVELS].name.split(' - ')[0]} path!
           </h3>
           <p className="text-sm text-center text-muted-foreground">
-            You're about to join a community that believes clothing is sentient and transformation is endless.
+            You&apos;re about to join a community that believes clothing is sentient and transformation is endless.
           </p>
         </div>
       )}
