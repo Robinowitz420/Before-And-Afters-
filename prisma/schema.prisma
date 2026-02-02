@@ -1,0 +1,195 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Note: Using String types instead of enums for SQLite compatibility
+
+model User {
+  id                    String   @id @default(cuid())
+  clerkUserId           String?  @unique
+  email                 String   @unique
+  name                  String
+
+  // Profile Information
+  avatar                String?  // Profile photo URL
+  firstName             String?
+  middleName            String?
+  lastName              String?
+  displayName           String?
+  partyNames            String?  // JSON string array of party names
+  pronouns              String?
+
+  // Contact Information
+  phone                 String?
+  instagram             String?
+  socialLinks           String?  // JSON string of social links
+
+  // Address Information
+  homeAddress           String?
+  homeNeighborhood      String?
+  additionalAddresses   String?  // JSON string array of additional addresses
+
+  // Style Preferences
+  styleDescription      String?
+  signatureColor        String?
+  signaturePatterns     String?  // JSON string array of patterns
+  sizing                String?
+
+  // Shopping Habits
+  wardrobeSources       String?  // JSON string array of shopping sources
+  favoriteBrands        String?  // JSON string of favorite brands
+  wardrobeSatisfaction  Int?     // 1-10 satisfaction rating
+  makesClothes          Boolean  @default(false)
+
+  // Work & Interests
+  work                  String?
+  artForms              String?  // JSON string of art forms/talents
+  borrowingExcitement   String?
+
+  // Social Preferences
+  partyVibe             String?
+  sleepSchedule         String?
+  powerLetter           String?
+
+  // Membership Information
+  membershipTier        String // 'Eeeehs' | 'Oooohs' | 'Aaaaahs' | 'Mmmmms'
+  membershipStartDate   DateTime
+  membershipEndDate     DateTime?
+  glitcoinBalance       Int      @default(0)
+  itemsCurrentlyRented  Int      @default(0)
+  maxItemsAllowed       Int
+  trustLevel            String   @default("new") // 'new' | 'established' | 'vip'
+  depositPaid           Boolean  @default(false) // $25 deposit tracking
+  monthlyFreeGlitcoins  Int      @default(0)    // Monthly free Glitcoins earned
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  rentals               Rental[]
+  reservations          Reservation[]
+  glitcoinTransactions  GlitcoinTransaction[]
+  eventParticipations   EventParticipation[]
+
+  @@map("users")
+}
+
+model ClothingItem {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  category      String // 'tops' | 'bottoms' | 'dresses' | etc.
+  size          String // 'XS' | 'S' | 'M' | 'L' | 'XL' | etc.
+  color         String
+  brand         String?
+  condition     String   // 'excellent' | 'good' | 'fair' | 'poor'
+  rentalPrice   Int      // In Glitcoin
+  lustLostPrice Int      // Price to buy permanently in Glitcoin
+  images        String   // JSON string array of image URLs
+  tags          String   // JSON string array of tags
+  available     Boolean  @default(true)
+  dryCleanOnly  Boolean  @default(false)
+  designer      Boolean  @default(false)
+  sentimental   Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  rentals      Rental[]
+  reservations Reservation[]
+
+  @@map("clothing_items")
+}
+
+model Rental {
+  id            String   @id @default(cuid())
+  userId        String
+  itemId        String
+  rentedAt      DateTime @default(now())
+  dueDate       DateTime
+  returnedAt    DateTime?
+  extendedCount Int      @default(0)
+  lateFees      Int      @default(0) // In Glitcoin
+  status        String   @default("active") // 'active' | 'returned' | 'overdue' | 'lost'
+  notes         String?
+
+  // Relations
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item ClothingItem @relation(fields: [itemId], references: [id])
+
+  @@map("rentals")
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  userId    String
+  itemId    String
+  reservedAt DateTime @default(now())
+  expiresAt DateTime
+  status    String   @default("pending") // 'pending' | 'confirmed' | 'cancelled' | 'expired'
+
+  // Relations
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item ClothingItem @relation(fields: [itemId], references: [id])
+
+  @@map("reservations")
+}
+
+model GlitcoinTransaction {
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Int      // Positive for credits, negative for debits
+  type        String   // 'rental' | 'purchase' | 'membership' | 'fee' | 'refund' | 'bonus'
+  description String
+  reference   String?  // Related rental, item, etc.
+  timestamp   DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("glitcoin_transactions")
+}
+
+model Event {
+  id                 String   @id @default(cuid())
+  title              String
+  description        String
+  startTime          DateTime
+  endTime            DateTime
+  location           String   // 'before_and_afters' | 'dorothy_bus'
+  maxParticipants    Int?
+  currentParticipants Int     @default(0)
+  membershipRequired Boolean @default(false)
+  glitcoinCost       Int?    // Cost in Glitcoin
+  category           String
+  host               String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  participants EventParticipation[]
+
+  @@map("events")
+}
+
+model EventParticipation {
+  id       String @id @default(cuid())
+  eventId  String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  // Relations
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@map("event_participations")
+}

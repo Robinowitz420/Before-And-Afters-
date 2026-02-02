@@ -1,0 +1,30 @@
+
+# clerk configuration (can include secrets)
+/.clerk/
+
+# env
+.env
+.env.*
+!.env.example
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# vercel
+.vercel
