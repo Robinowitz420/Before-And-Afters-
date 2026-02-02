@@ -27,7 +27,7 @@ export function MembershipList() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [selectedTier, setSelectedTier] = useState<string>('')
+  const [selectedTier, setSelectedTier] = useState<MembershipTier | ''>('')
 
   useEffect(() => {
     setMounted(true)
@@ -221,7 +221,7 @@ export function MembershipList() {
               <Button
                 className="mt-6 w-full"
                 onClick={() => {
-                  setSelectedTier(tier)
+                  setSelectedTier(tier as MembershipTier)
                   setShowCreateForm(true)
                 }}
               >

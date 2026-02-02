@@ -57,7 +57,7 @@ interface MembershipSignupData {
   powerLetter: string
 
   // Membership
-  membershipTier: MembershipTier
+  membershipTier: MembershipTier | ''
 }
 
 type SignupStep = 'identity' | 'contact' | 'addresses' | 'style' | 'habits' | 'interests' | 'social' | 'membership'
@@ -84,7 +84,7 @@ export function MembershipSignupForm({
   onClose,
   onSuccess
 }: {
-  initialTier?: string
+  initialTier?: MembershipTier | ''
   onClose: () => void
   onSuccess: () => void
 }) {
@@ -116,6 +116,48 @@ export function MembershipSignupForm({
 
   const updateFormData = (updates: Partial<MembershipSignupData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
+  }
+
+  const canContinue = (step: SignupStep) => {
+    switch (step) {
+      case 'identity':
+        return Boolean(
+          formData.firstName.trim()
+          && formData.lastName.trim()
+          && formData.displayName.trim()
+        )
+      case 'contact':
+        return Boolean(
+          formData.email.trim()
+          && formData.phone.trim()
+        )
+      case 'addresses':
+        return Boolean(
+          formData.homeAddress.trim()
+          && formData.homeNeighborhood.trim()
+        )
+      case 'style':
+        return Boolean(
+          formData.styleDescription.trim()
+          && formData.signatureColor.trim()
+          && formData.sizing.trim()
+        )
+      case 'habits':
+        return formData.wardrobeSources.length > 0
+      case 'interests':
+        return Boolean(formData.borrowingExcitement.trim())
+      case 'social':
+        return Boolean(
+          formData.work.trim()
+          && formData.partyVibe.trim()
+          && formData.sleepSchedule.trim()
+          && formData.powerLetter.trim()
+        )
+      case 'membership':
+        return Boolean(formData.membershipTier)
+      default:
+        return false
+    }
   }
 
   const handleSubmit = async () => {
@@ -175,29 +217,6 @@ export function MembershipSignupForm({
         return <MembershipStep formData={formData} updateFormData={updateFormData} />
       default:
         return null
-    }
-  }
-
-  const canProceed = () => {
-    switch (currentStep) {
-      case 'identity':
-        return formData.firstName && formData.lastName && formData.displayName && formData.email && formData.phone
-      case 'contact':
-        return true // Optional fields
-      case 'addresses':
-        return formData.homeAddress && formData.homeNeighborhood
-      case 'style':
-        return formData.styleDescription && formData.signatureColor && formData.sizing
-      case 'habits':
-        return formData.wardrobeSources.length > 0
-      case 'interests':
-        return formData.borrowingExcitement
-      case 'social':
-        return formData.work && formData.partyVibe && formData.sleepSchedule && formData.powerLetter
-      case 'membership':
-        return formData.membershipTier
-      default:
-        return false
     }
   }
 
@@ -280,7 +299,7 @@ export function MembershipSignupForm({
 }
 
 // Step Components
-function IdentityStep({ formData, updateFormData }: any) {
+function IdentityStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -409,7 +428,7 @@ function IdentityStep({ formData, updateFormData }: any) {
   )
 }
 
-function ContactStep({ formData, updateFormData }: any) {
+function ContactStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -486,7 +505,7 @@ function ContactStep({ formData, updateFormData }: any) {
   )
 }
 
-function AddressesStep({ formData, updateFormData }: any) {
+function AddressesStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -540,7 +559,7 @@ function AddressesStep({ formData, updateFormData }: any) {
                 Places you spend significant time (work, partner, etc.)
               </p>
               <textarea
-                value={formData.additionalAddresses?.map(addr => `${addr.purpose}: ${addr.address}, ${addr.neighborhood}`).join('\n') || ''}
+                value={formData.additionalAddresses?.map((addr: { address: string; neighborhood: string; purpose: string }) => `${addr.purpose}: ${addr.address}, ${addr.neighborhood}`).join('\n') || ''}
                 onChange={(e) => {
                   // Simple parsing - in a real app you'd want better handling
                   const lines = e.target.value.split('\n')
@@ -574,7 +593,7 @@ function AddressesStep({ formData, updateFormData }: any) {
   )
 }
 
-function StyleStep({ formData, updateFormData }: any) {
+function StyleStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -657,7 +676,7 @@ function StyleStep({ formData, updateFormData }: any) {
   )
 }
 
-function HabitsStep({ formData, updateFormData }: any) {
+function HabitsStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -681,7 +700,7 @@ function HabitsStep({ formData, updateFormData }: any) {
                     const checked = e.target.checked
                     const sources = checked
                       ? [...formData.wardrobeSources, source]
-                      : formData.wardrobeSources.filter(s => s !== source)
+                      : formData.wardrobeSources.filter((s: string) => s !== source)
                     updateFormData({ wardrobeSources: sources })
                   }}
                   className="rounded border focus:ring-2 focus:ring-purple-500"
@@ -744,7 +763,7 @@ function HabitsStep({ formData, updateFormData }: any) {
   )
 }
 
-function InterestsStep({ formData, updateFormData }: any) {
+function InterestsStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -814,7 +833,7 @@ function InterestsStep({ formData, updateFormData }: any) {
   )
 }
 
-function SocialStep({ formData, updateFormData }: any) {
+function SocialStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
@@ -916,7 +935,7 @@ function SocialStep({ formData, updateFormData }: any) {
   )
 }
 
-function MembershipStep({ formData, updateFormData }: any) {
+function MembershipStep({ formData, updateFormData }: { formData: MembershipSignupData; updateFormData: (updates: Partial<MembershipSignupData>) => void }) {
   return (
     <div className="space-y-8">
       <div className="text-center mb-8">
