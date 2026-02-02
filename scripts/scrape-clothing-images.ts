@@ -65,7 +65,10 @@ async function searchUnsplash(query: string, perPage: number = 10): Promise<Unsp
 
     return response.data.results
   } catch (error) {
-    console.error(`Error searching for "${query}":`, error.message)
+    console.error(
+      `Error searching for "${query}":`,
+      error instanceof Error ? error.message : String(error)
+    )
     return []
   }
 }
@@ -86,7 +89,10 @@ async function downloadImage(url: string, filepath: string): Promise<void> {
     await fs.writeFile(filepath, imageBuffer)
     console.log(`✓ Downloaded: ${path.basename(filepath)}`)
   } catch (error) {
-    console.error(`✗ Failed to download ${url}:`, error.message)
+    console.error(
+      `✗ Failed to download ${url}:`,
+      error instanceof Error ? error.message : String(error)
+    )
   }
 }
 
