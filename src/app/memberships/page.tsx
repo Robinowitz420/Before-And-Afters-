@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { MembershipList } from './MembershipList'
 
 export default function MembershipsPage() {
@@ -13,7 +14,9 @@ export default function MembershipsPage() {
         </p>
       </div>
 
-      <MembershipList />
+      <Suspense fallback={<div className="text-muted-foreground">Loading tiers…</div>}>
+        <MembershipList />
+      </Suspense>
     </div>
   )
 }
