@@ -359,7 +359,7 @@ export default function SearchPage() {
   }
 
   const clearAll = () => {
-    const cleared = { tones: [], vibes: [], eras: [], sizes: [], garmentTypes: [], pockets: [] }
+    const cleared = { tones: [], vibes: [], eras: [], sizes: [], garmentTypes: [], pockets: [], enclosures: [] }
     savePreferences(cleared)
     setHasSearched(false)
   }
