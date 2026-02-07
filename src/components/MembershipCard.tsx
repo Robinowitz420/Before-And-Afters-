@@ -1,8 +1,16 @@
 'use client'
 
-import { MembershipLevel } from '@/types'
+import Image from 'next/image'
+import { MembershipLevel, type MembershipTier } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
+const TIER_IMAGE: Record<MembershipTier, string> = {
+  Eeeehs: '/images/MEMBERSHIPS/Eeeehs.png',
+  Oooohs: '/images/MEMBERSHIPS/Oooohs.png',
+  Aaaaahs: '/images/MEMBERSHIPS/Aaaahs.png',
+  Mmmmms: '/images/MEMBERSHIPS/Mmmms.png',
+}
 
 interface MembershipCardProps {
   membership: MembershipLevel
@@ -14,8 +22,21 @@ export function MembershipCard({ membership }: MembershipCardProps) {
     console.log(`Selected membership: ${membership.name}`)
   }
 
+  const tierImage = TIER_IMAGE[membership.id]
+
   return (
-    <Card className="transition-shadow hover:shadow-md">
+    <Card className="transition-shadow hover:shadow-md overflow-hidden">
+      {tierImage && (
+        <div className="relative w-full aspect-[3/2] bg-muted">
+          <Image
+            src={tierImage}
+            alt={membership.name.split(' - ')[0]}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 100vw, 33vw"
+          />
+        </div>
+      )}
       <CardHeader className="text-center">
         <CardTitle className="text-xl mb-2">{membership.name.split(' - ')[0]}</CardTitle>
         <CardDescription className="text-sm">

@@ -1,10 +1,18 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { MembershipSignupForm } from './MembershipSignupForm'
+
+const TIER_IMAGE: Record<MembershipTier, string> = {
+  Eeeehs: '/images/MEMBERSHIPS/Eeeehs.png',
+  Oooohs: '/images/MEMBERSHIPS/Oooohs.png',
+  Aaaaahs: '/images/MEMBERSHIPS/Aaaahs.png',
+  Mmmmms: '/images/MEMBERSHIPS/Mmmms.png',
+}
 
 interface Membership {
   id: string
@@ -28,16 +36,59 @@ export function MembershipList() {
   const [error, setError] = useState<string | null>(null)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedTier, setSelectedTier] = useState<MembershipTier | ''>('')
+  const [checkoutTier, setCheckoutTier] = useState<MembershipTier | null>(null)
+
+  const redirectToStripeCheckout = async (tier: MembershipTier) => {
+    setCheckoutTier(tier)
+    setError(null)
+    try {
+      const res = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tier }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (res.status === 401) {
+          setError('Please sign in to join a membership.')
+          return
+        }
+        setError(data?.error || 'Could not start checkout')
+        return
+      }
+      if (data?.url) {
+        window.location.href = data.url
+        return
+      }
+      setError('Invalid response from server')
+    } catch (e) {
+      console.error(e)
+      setError('Something went wrong. Please try again.')
+    } finally {
+      setCheckoutTier(null)
+    }
+  }
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (mounted) {
       fetchMemberships()
     }
   }, [mounted])
+
+  useEffect(() => {
+    if (!mounted) return
+    const paid = searchParams.get('paid')
+    const canceled = searchParams.get('canceled')
+    if (paid === '1') {
+      fetchMemberships()
+    }
+  }, [mounted, searchParams])
 
   const fetchMemberships = async () => {
     // Only run on client side
@@ -104,8 +155,21 @@ export function MembershipList() {
     )
   }
 
+  const paid = searchParams.get('paid') === '1'
+  const canceled = searchParams.get('canceled') === '1'
+
   return (
     <div className="space-y-8">
+      {paid && (
+        <div className="rounded-lg bg-green-500/10 text-green-800 dark:text-green-200 px-4 py-2 text-sm">
+          Payment successful. Your membership is being activated—refresh in a moment if you don’t see it yet.
+        </div>
+      )}
+      {canceled && (
+        <div className="rounded-lg bg-amber-500/10 text-amber-800 dark:text-amber-200 px-4 py-2 text-sm">
+          Checkout was canceled. You can pick a tier whenever you’re ready.
+        </div>
+      )}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Membership Plans</h1>
         {membership ? (
@@ -165,71 +229,39 @@ export function MembershipList() {
         </Card>
       ) : null}
 
-      {/* Memberships List */}
-      <div className="grid gap-6">
-        {Object.entries(MEMBERSHIP_LEVELS).map(([tier, level]) => (
-          <Card key={tier} className="overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-xl font-bold">{level.name.split(' - ')[0]}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {level.name.split(' - ')[1]}
-                  </p>
-                  <div className="mt-2 flex items-baseline gap-2">
-                    <span className="text-3xl font-bold">
-                      {level.glitcoinValue}Ġ
-                    </span>
-                    <span className="text-muted-foreground">/ month</span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {level.maxItems} item{level.maxItems !== 1 ? 's' : ''} at a time
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 items-end">
-                  <div className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                    {level.freeCheckMeowtItems} free Check Meowt
-                  </div>
-                  <div className="rounded-full bg-secondary/10 px-3 py-1 text-sm font-medium text-secondary-foreground">
-                    {level.freeMonthlyGlitcoins} free Ġ/month
-                  </div>
-                </div>
-              </div>
+      {error && (
+        <div className="rounded-lg bg-destructive/10 text-destructive px-4 py-2 text-sm mb-4">
+          {error}
+        </div>
+      )}
 
-              <ul className="mt-6 space-y-2">
-                {level.benefits.map((benefit, i) => (
-                  <li key={i} className="flex items-center">
-                    <svg
-                      className="mr-2 h-4 w-4 text-green-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span className="text-sm">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                className="mt-6 w-full"
-                onClick={() => {
-                  setSelectedTier(tier as MembershipTier)
-                  setShowCreateForm(true)
-                }}
-              >
-                Join {level.name.split(' - ')[0]}
-              </Button>
-            </div>
-          </Card>
-        ))}
+      {/* Memberships – image only, evenly across page, 45% bigger (72.5% = 50% × 1.45) */}
+      <div className="grid grid-cols-4 gap-8 w-[72.5%] max-w-5xl mx-auto">
+        {Object.entries(MEMBERSHIP_LEVELS).map(([tier, level]) => {
+          const tierKey = tier as MembershipTier
+          const isRedirecting = checkoutTier === tierKey
+          return (
+            <button
+              key={tier}
+              type="button"
+              disabled={isRedirecting}
+              className="block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden disabled:opacity-70"
+              onClick={() => redirectToStripeCheckout(tierKey)}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={TIER_IMAGE[tierKey]}
+                alt={level.name.split(' - ')[0]}
+                className="w-full h-auto block"
+              />
+              {isRedirecting && (
+                <span className="block text-center text-sm text-muted-foreground py-2">
+                  Redirecting to checkout…
+                </span>
+              )}
+            </button>
+          )
+        })}
       </div>
     </div>
   )

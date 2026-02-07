@@ -82,6 +82,16 @@ model User {
   @@map("users")
 }
 
+model Profile {
+  id          String   @id @default(cuid())
+  clerkUserId String   @unique
+  data        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("profiles")
+}
+
 model ClothingItem {
   id            String   @id @default(cuid())
   name          String

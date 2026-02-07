@@ -2,132 +2,13 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useUser, UserButton } from '@clerk/nextjs'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-type ClothingImage = {
-  src: string
-  category: string
-}
-
-function writeProfilePatch(patch: Partial<WizardProfile>): WizardProfile {
-  if (typeof window === 'undefined' || !window.localStorage) return patch
-  try {
-    const raw = window.localStorage.getItem(PROFILE_KEY)
-    const current = raw ? (JSON.parse(raw) as any) : {}
-    const next = { ...(current && typeof current === 'object' ? current : {}), ...patch } as WizardProfile
-    window.localStorage.setItem(PROFILE_KEY, JSON.stringify(next))
-    return next
-  } catch {
-    try {
-      window.localStorage.setItem(PROFILE_KEY, JSON.stringify(patch))
-    } catch {
-      // ignore
-    }
-    return patch
-  }
-}
-
-type WizardProfile = {
-  displayName?: string
-  avatar?: string
-  tones?: string[]
-  vibes?: string[]
-  eras?: string[]
-}
-
-type TasteTunerSave = {
-  likes: string[]
-  dislikes: string[]
-}
-
-const STORAGE_KEY = 'cyo_taste_tuner_v1'
-const PROFILE_KEY = 'cyo_profile_v1'
-
-const TONES = [
-  'Dark',
-  'Dark Hues',
-  'Light',
-  'Gothic',
-  'Muted',
-  'Soft Contrast',
-  'High Contrast',
-  'Bold',
-  'Metallic',
-  'Monochromatic',
-] as const
-
-const ERAS = ['60s', '70s', '80s', '90s', 'Y2K', '2010s', 'Contemporary'] as const
-
-const VIBES_GROUPS = [
-  {
-    title: 'Core',
-    options: ['Romantic', 'Goth', 'Avant-garde', 'Minimal', 'Maximal', 'Vintage', 'Futurist'] as const,
-  },
-  {
-    title: 'Contexts',
-    options: ['Party', 'Office', 'Formal', 'Casual', 'Loungewear', 'Performance'] as const,
-  },
-  {
-    title: 'Energy',
-    options: ['Soft', 'Hard', 'Playful', 'Sexy', 'Cozy', 'Powerful'] as const,
-  },
-  {
-    title: 'Personas',
-    options: ['Cowgirl', 'Sacred', 'Androgynous', 'Street', 'Grandpa', 'Daddy'] as const,
-  },
-  {
-    title: 'Archetypes',
-    options: ['Classic', 'Gentleman', 'Sleepover', 'Nautical', 'Main Character'] as const,
-  },
-  {
-    title: 'Attitude',
-    options: ['Trendy', 'Glam', 'Club Kid', 'Boss Bitch', 'Cunt'] as const,
-  },
-  {
-    title: 'Wildcards',
-    options: ['Acid Trip', 'Cougar', 'Y2K', 'Showgirl'] as const,
-  },
-] as const
-
-const ALL_VIBES = VIBES_GROUPS.flatMap((g) => g.options)
-const ALLOWED_VIBES_SET = new Set<string>(ALL_VIBES as readonly string[])
-
-function readTasteSave(): TasteTunerSave {
-  if (typeof window === 'undefined' || !window.localStorage) return { likes: [], dislikes: [] }
-  try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
-    if (!raw) return { likes: [], dislikes: [] }
-    const parsed = JSON.parse(raw) as Partial<TasteTunerSave>
-    return {
-      likes: Array.isArray(parsed.likes) ? parsed.likes.filter((v) => typeof v === 'string') : [],
-      dislikes: Array.isArray(parsed.dislikes) ? parsed.dislikes.filter((v) => typeof v === 'string') : [],
-    }
-  } catch {
-    return { likes: [], dislikes: [] }
-  }
-}
-
-function writeTasteSave(save: TasteTunerSave) {
-  if (typeof window === 'undefined' || !window.localStorage) return
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(save))
-}
-
-function readProfile(): WizardProfile {
-  if (typeof window === 'undefined' || !window.localStorage) return {}
-  try {
-    const raw = window.localStorage.getItem(PROFILE_KEY)
-    if (!raw) return {}
-    const parsed = JSON.parse(raw) as WizardProfile
-    return parsed && typeof parsed === 'object' ? parsed : {}
-  } catch {
-    return {}
-  }
-}
 
 function SelectedChip({ children }: { children: React.ReactNode }) {
   return (
@@ -213,9 +94,7 @@ function ToggleSwitch({
       <span
         className={cn(
           'relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors',
-          checked
-            ? 'border-transparent bg-primary'
-            : 'border-[color:var(--brand-border-hex)] bg-[hsl(var(--secondary))]'
+          checked ? 'border-transparent bg-primary' : 'border-[color:var(--brand-border-hex)] bg-[hsl(var(--secondary))] '
         )}
       >
         <span
@@ -229,10 +108,135 @@ function ToggleSwitch({
   )
 }
 
+type ClothingImage = {
+  src: string
+  category: string
+}
+
+async function fetchProfile(): Promise<WizardProfile | null> {
+  const res = await fetch('/api/profile', {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+
+  if (res.status === 401) {
+    return null
+  }
+
+  if (!res.ok) {
+    return null
+  }
+
+  const payload = (await res.json()) as { data?: unknown } | null
+  if (!payload?.data || typeof payload.data !== 'object') return null
+  return payload.data as WizardProfile
+}
+
+async function saveProfile(next: WizardProfile): Promise<WizardProfile> {
+  const res = await fetch('/api/profile', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(next ?? {}),
+  })
+
+  if (!res.ok) {
+    throw new Error('Failed to save profile')
+  }
+
+  const payload = (await res.json()) as { data?: unknown } | null
+  if (!payload?.data || typeof payload.data !== 'object') return next
+  return payload.data as WizardProfile
+}
+
+type WizardProfile = {
+  displayName?: string
+  avatar?: string
+  tones?: string[]
+  vibes?: string[]
+  eras?: string[]
+}
+
+type TasteTunerSave = {
+  likes: string[]
+  dislikes: string[]
+}
+
+const STORAGE_KEY = 'cyo_taste_tuner_v1'
+
+const TONES = [
+  'Dark',
+  'Dark Hues',
+  'Light',
+  'Gothic',
+  'Muted',
+  'Soft Contrast',
+  'High Contrast',
+  'Bold',
+  'Metallic',
+  'Monochromatic',
+] as const
+
+const ERAS = ['60s', '70s', '80s', '90s', 'Y2K', '2010s', 'Contemporary'] as const
+
+const VIBES_GROUPS = [
+  {
+    title: 'Core',
+    options: ['Romantic', 'Goth', 'Avant-garde', 'Minimal', 'Maximal', 'Vintage', 'Futurist'] as const,
+  },
+  {
+    title: 'Contexts',
+    options: ['Party', 'Office', 'Formal', 'Casual', 'Loungewear', 'Performance'] as const,
+  },
+  {
+    title: 'Energy',
+    options: ['Soft', 'Hard', 'Playful', 'Sexy', 'Cozy', 'Powerful'] as const,
+  },
+  {
+    title: 'Personas',
+    options: ['Cowgirl', 'Sacred', 'Androgynous', 'Street', 'Grandpa', 'Daddy'] as const,
+  },
+  {
+    title: 'Archetypes',
+    options: ['Classic', 'Gentleman', 'Sleepover', 'Nautical', 'Main Character'] as const,
+  },
+  {
+    title: 'Attitude',
+    options: ['Trendy', 'Glam', 'Club Kid', 'Boss Bitch', 'Cunt'] as const,
+  },
+  {
+    title: 'Wildcards',
+    options: ['Acid Trip', 'Cougar', 'Y2K', 'Showgirl'] as const,
+  },
+] as const
+
+const ALL_VIBES = VIBES_GROUPS.flatMap((g) => g.options)
+const ALLOWED_VIBES_SET = new Set<string>(ALL_VIBES as readonly string[])
+
+function readTasteSave(): TasteTunerSave {
+  if (typeof window === 'undefined' || !window.localStorage) return { likes: [], dislikes: [] }
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY)
+    if (!raw) return { likes: [], dislikes: [] }
+    const parsed = JSON.parse(raw) as Partial<TasteTunerSave>
+    return {
+      likes: Array.isArray(parsed.likes) ? parsed.likes.filter((v) => typeof v === 'string') : [],
+      dislikes: Array.isArray(parsed.dislikes) ? parsed.dislikes.filter((v) => typeof v === 'string') : [],
+    }
+  } catch {
+    return { likes: [], dislikes: [] }
+  }
+}
+
+function writeTasteSave(save: TasteTunerSave) {
+  if (typeof window === 'undefined' || !window.localStorage) return
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(save))
+}
+
 export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [mounted, setMounted] = useState(false)
   const [profile, setProfile] = useState<WizardProfile>({})
-  const { user } = useUser()
+  const { isLoaded, isSignedIn, user } = useUser()
+  const router = useRouter()
 
   const [editOpen, setEditOpen] = useState(false)
   const [editSection, setEditSection] = useState<'tones' | 'vibes' | 'eras' | null>(null)
@@ -265,8 +269,40 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   useEffect(() => {
     setMounted(true)
     setSave(readTasteSave())
-    setProfile(readProfile())
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!isLoaded) return
+
+    if (!isSignedIn) return
+
+    fetchProfile()
+      .then((data) => {
+        if (data) setProfile(data)
+      })
+      .catch(() => {
+        // ignore
+      })
+  }, [isLoaded, isSignedIn, mounted, user?.id])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!isLoaded) return
+
+    if (!isSignedIn) {
+      router.push(`/sign-in?redirect_url=${encodeURIComponent('/profile')}`)
+      return
+    }
+
+    fetchProfile()
+      .then((data) => {
+        if (!data) router.push('/profile-wizard')
+      })
+      .catch(() => {
+        router.push('/profile-wizard')
+      })
+  }, [isLoaded, isSignedIn, mounted, router, user?.id])
 
   useEffect(() => {
     if (!mounted) return
@@ -322,8 +358,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       }
     }
 
-    const next = writeProfilePatch(patch)
+    const next = { ...(profile || {}), ...patch } as WizardProfile
     setProfile(next)
+    saveProfile(next).catch(() => {
+      // ignore
+    })
     closeEditor()
   }
 
@@ -413,6 +452,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   return (
     <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
       <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
+        <Link href="/search">
+          <button className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors">
+            🔍 Search Clothing
+          </button>
+        </Link>
         <div className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md">
           <UserButton afterSignOutUrl="/" />
         </div>
@@ -683,113 +727,46 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       <div className="grid gap-8 lg:grid-cols-[360px,1fr,320px]">
         <aside className="lg:sticky lg:top-10 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
           <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-sm">
-            <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Taste map</div>
-            <div className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Your signals</div>
+            <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">My Closet</div>
+            <div className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Liked items & picks for you</div>
             <div className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
-              Edit any category without restarting onboarding.
+              Your saved likes and personalized recommendations.
             </div>
 
-            <div className="mt-6 space-y-4">
-              <div className="rounded-xl border border-[hsl(var(--border))] bg-white/50 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">Tones</div>
-                    <div className="mt-1 text-xs text-muted-foreground">Your palette energy.</div>
+            <div className="mt-6 space-y-6">
+              <div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">Liked items</div>
+                <div className="mt-2 text-xs text-muted-foreground">
+                  {save.likes.length} saved · Like cards in the tuner to add more
+                </div>
+                {savedItems.length ? (
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    {savedItems.map((src) => (
+                      <button
+                        key={src}
+                        type="button"
+                        onClick={() => openClosetItem(src)}
+                        className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
+                      >
+                        <Image src={src} alt="Liked item" width={240} height={320} className="h-24 w-full object-cover" />
+                      </button>
+                    ))}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => openEditor('tones')}
-                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-xs font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
-                  >
-                    Edit
-                  </button>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {(profile.tones || []).length ? (
-                    (profile.tones || []).map((t) => <SelectedChip key={t}>{t}</SelectedChip>)
-                  ) : (
-                    <MutedChip>Not set yet</MutedChip>
-                  )}
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-[hsl(var(--border))] bg-white/50 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">Vibes</div>
-                    <div className="mt-1 text-xs text-muted-foreground">Your music-to-style tags.</div>
+                ) : (
+                  <div className="mt-3 rounded-xl border border-dashed border-[hsl(var(--border))] bg-white/50 p-6 text-center text-sm text-muted-foreground">
+                    No liked items yet. Swipe right on pieces in the tuner to add them here.
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => openEditor('vibes')}
-                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-xs font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
-                  >
-                    Edit
-                  </button>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {(profile.vibes || []).length ? (
-                    (profile.vibes || []).map((v) => <SelectedChip key={v}>{v}</SelectedChip>)
-                  ) : (
-                    <MutedChip>Not set yet</MutedChip>
-                  )}
-                </div>
+                )}
               </div>
 
               <div className="rounded-xl border border-[hsl(var(--border))] bg-white/50 p-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">Eras</div>
-                    <div className="mt-1 text-xs text-muted-foreground">Your throwback timeline.</div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => openEditor('eras')}
-                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-xs font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
-                  >
-                    Edit
-                  </button>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">Recommendations</div>
+                <div className="mt-2 text-xs text-muted-foreground">
+                  Picks based on your likes and style — coming soon.
                 </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {(profile.eras || []).length ? (
-                    (profile.eras || []).map((e) => <SelectedChip key={e}>{e}</SelectedChip>)
-                  ) : (
-                    <MutedChip>Not set yet</MutedChip>
-                  )}
+                <div className="mt-4 rounded-lg border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30 p-6 text-center text-sm text-muted-foreground">
+                  Recommendations will appear here once we hook up the algorithm.
                 </div>
-              </div>
-
-              <div className="text-xs text-muted-foreground">
-                Liked: {save.likes.length} · Not for you: {save.dislikes.length}
-              </div>
-
-              <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/50 p-4">
-                <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">My Closet</div>
-                <div className="mt-2 text-lg font-semibold text-[hsl(var(--ink))]">Saved</div>
-                <div className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
-                  Your liked items live here.
-                </div>
-
-                <div className="mt-4">
-                  <div className="text-sm font-medium text-[hsl(var(--ink))]">Saved</div>
-                  {savedItems.length ? (
-                    <div className="mt-2 grid grid-cols-3 gap-2">
-                      {savedItems.slice(0, 6).map((src) => (
-                        <button
-                          key={src}
-                          type="button"
-                          onClick={() => openClosetItem(src)}
-                          className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
-                        >
-                          <Image src={src} alt="Saved item" width={240} height={320} className="h-24 w-full object-cover" />
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="mt-2 text-sm text-muted-foreground">Like items in the tuner to save them.</div>
-                  )}
-                </div>
-
               </div>
             </div>
           </div>
@@ -900,8 +877,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       reader.onload = () => {
                         const result = typeof reader.result === 'string' ? reader.result : ''
                         if (result) {
-                          const next = writeProfilePatch({ avatar: result })
+                          const next = { ...(profile || {}), avatar: result } as WizardProfile
                           setProfile(next)
+                          saveProfile(next).catch(() => {
+                            // ignore
+                          })
                         }
                         setAvatarUploading(false)
                       }
@@ -919,8 +899,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       variant="outline"
                       className="mt-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
                       onClick={() => {
-                        const next = writeProfilePatch({ avatar: '' })
+                        const next = { ...(profile || {}), avatar: '' } as WizardProfile
                         setProfile(next)
+                        saveProfile(next).catch(() => {
+                          // ignore
+                        })
                       }}
                     >
                       Remove photo
