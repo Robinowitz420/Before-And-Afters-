@@ -132,88 +132,74 @@ export const GLITCOIN_TO_DOLLAR = 5; // 1 Glitcoin = $5
 export const MEMBERSHIP_LEVELS: Record<MembershipTier, MembershipLevel> = {
   Eeeehs: {
     id: 'Eeeehs',
-    name: '🪄 Eeeehs - Easy Essentials & Everyday Enchantment',
+    name: '💙 Eeeehs — $50/mo',
     monthlyPrice: 50,
     yearlyPrice: 500,
     maxItems: 1,
     freeCheckMeowtItems: 1,
     glitcoinValue: 10,
-    freeMonthlyGlitcoins: 5,
+    freeMonthlyGlitcoins: 1,
     benefits: [
-      '🎩💃🏼 Joni\'s Closet Club - $50/month (1 item at a time, unlimited swap outs)',
-      '5 Gratis Glitcoins/month',
-      '🐯💎 Check Meowt Isle - 1 Glitcoin / $5 for everything ($10 for non members)',
-      '🪞💋 Spritz n Glitz Bar - Unlimited, subject to availability',
-      '🎉🪩 Free or discounted access to all Before & Afters event segments',
-      '🎢🎨 Collaborate on a signature segment',
-      '👠🚎 Dorothy the Dressup Bus on Demand!',
-      '🔮📲 Change Your Outfit Change The World App access for clothing browsing, reserving and storytelling',
-      '💫 👑 Starter 1:1 identity session with Michelle Joni'
+      '1 Closet Club item',
+      'Unlimited swap-outs',
+      '1 Check Me Out / month',
+      'Spritz & Glitz access (makeup & beauty hygiene bar)',
+      '1 Glitcoin / month'
     ]
   },
   Oooohs: {
     id: 'Oooohs',
-    name: '🪄 Oooohs - Outfit Obsession & Oracle Opus',
+    name: '💚 Oooohs — $100/mo',
     monthlyPrice: 100,
     yearlyPrice: 1000,
-    maxItems: 3,
-    freeCheckMeowtItems: 3,
+    maxItems: 2,
+    freeCheckMeowtItems: 2,
     glitcoinValue: 20,
-    freeMonthlyGlitcoins: 8,
+    freeMonthlyGlitcoins: 3,
     benefits: [
-      '🎩💃🏼 Joni\'s Closet Club - $100/month (3 items at a time, unlimited swap outs)',
-      '8 Gratis Glitcoins/month',
-      '🐯💎 Check Meowt Isle',
-      '🪞💋 Spritz n Glitz Bar - Unlimited',
-      '🎉🪩 Free or discounted access to all Before & Afters events and open hours',
-      '👠🚎 Dorothy the Dressup Bus on Demand',
-      '🔮📲 Change Your Outfit Change The World App access for clothing browsing, reserving and storytelling',
-      '💫👑 Starter 1:1 identity session with Michelle Joni'
+      '2 Closet Club items',
+      'Unlimited swap-outs',
+      '2 Check Me Out / month',
+      'Spritz & Glitz access (makeup & beauty hygiene bar)',
+      '3 Glitcoins / month'
     ]
   },
   Aaaaahs: {
     id: 'Aaaaahs',
-    name: '🪄 Aaaaahs - Adornment Alchemy & Aesthetic Ascension',
+    name: '💜 Aaaahs — $200/mo',
     monthlyPrice: 200,
     yearlyPrice: 2000,
     maxItems: 5,
     freeCheckMeowtItems: 5,
     glitcoinValue: 40,
-    freeMonthlyGlitcoins: 13,
+    freeMonthlyGlitcoins: 5,
     benefits: [
-      '🎩💃🏼 Joni\'s Closet Club - $200/month (5 items at a time, unlimited swap outs)',
-      '13 Gratis Glitcoins/month',
-      '🐯💎 Check Meowt Isle',
-      '🪞💋 Spritz n Glitz Bar - Unlimited +1',
-      '🎉🪩 Free or discounted access to all Before & Afters events and open hours',
-      '👠🚎 Dorothy the Dressup Bus on Demand',
-      '🔮📲 Change Your Outfit Change The World App access for clothing browsing, reserving and storytelling, with early access to new drip drops',
-      '💫👑 Seasonal 1:1 identity & styling sessions with Michelle Joni, plus one in-home visit',
-      '🌹🍾 Host seasonal events at Before & Afters',
-      '📸🎬 One professional photo/video shoot day with multi-outfit styling, hair and makeup'
+      '5 Closet Club items',
+      'Unlimited swap-outs',
+      '5 Check Me Out / month',
+      'Spritz & Glitz access (makeup & beauty hygiene bar)',
+      '5 Glitcoins / month',
+      '1 Fashion Photoshoot / month'
     ]
   },
   Mmmmms: {
     id: 'Mmmmms',
-    name: '🪄 Mmmmms - Magical Magnetic Manifestation & Myth-Maker Muse Mastery',
+    name: '💖 Mmmms — $500/mo',
     monthlyPrice: 500,
     yearlyPrice: 5000,
     maxItems: 10,
     freeCheckMeowtItems: 10,
     glitcoinValue: 100,
-    freeMonthlyGlitcoins: 18,
+    freeMonthlyGlitcoins: 10,
     benefits: [
-      '🎩💃🏼 Joni\'s Closet Club - $500/month (10 items at a time, unlimited swap outs)',
-      '18 Gratis Glitcoins/month',
-      '🐯💎 Check Meowt Isle - Club Prices',
-      '🪞💋 Spritz n Glitz Bar - Unlimited +1, priority entry in busy times',
-      '🎉🪩 Free or discounted access to all Before & Afters events and open hours',
-      '👠🚎 Dorothy the Dressup Bus on Demand, Priority Status',
-      '🔮📲 Change Your Outfit Change The World App access for clothing browsing, reserving and storytelling, with first access to new drip drops',
-      '💫👑 Monthly 1:1 immersion with Michelle Joni for styling, personal shopping, myth-sculpting, branding and legacy curation + several in-home visits for closet/space makeover magic',
-      '🌹🍾 Host monthly events at Before & Afters - work with Joni and the team to curate!',
-      '📸🎬 Seasonal (4) professional photo/video shoot days with multi-outfit styling, hair and makeup',
-      '💗📜 Use Grandma\'s Kitty Parlor as a meeting space upon request, weekly or as available'
+      '10 Closet Club items',
+      'Unlimited swap-outs',
+      'Unlimited Check Me Out',
+      'Spritz & Glitz access (makeup & beauty hygiene bar)',
+      '10 Glitcoins / month',
+      '4 Fashion Photoshoots / month',
+      'Priority rare drops',
+      'Ongoing coaching from Michelle herself'
     ]
   }
 };

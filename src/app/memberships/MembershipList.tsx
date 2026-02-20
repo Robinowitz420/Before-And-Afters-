@@ -235,8 +235,8 @@ export function MembershipList() {
         </div>
       )}
 
-      {/* Memberships – image only, evenly across page, 45% bigger (72.5% = 50% × 1.45) */}
-      <div className="grid grid-cols-4 gap-8 w-[72.5%] max-w-5xl mx-auto">
+      {/* Tiers – giant round buttons with data points inside */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl mx-auto">
         {Object.entries(MEMBERSHIP_LEVELS).map(([tier, level]) => {
           const tierKey = tier as MembershipTier
           const isRedirecting = checkoutTier === tierKey
@@ -245,19 +245,35 @@ export function MembershipList() {
               key={tier}
               type="button"
               disabled={isRedirecting}
-              className="block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden disabled:opacity-70"
+              className="relative w-full aspect-square rounded-full bg-gradient-to-br from-[hsl(var(--background))] to-[hsl(var(--border))] border-2 border-[hsl(var(--border))] hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 overflow-hidden group"
               onClick={() => redirectToStripeCheckout(tierKey)}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={TIER_IMAGE[tierKey]}
-                alt={level.name.split(' - ')[0]}
-                className="w-full h-auto block"
+                alt={level.name.split(' — ')[0]}
+                className="w-full h-full object-cover"
               />
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center pointer-events-none">
+                <div className="text-2xl font-bold text-[hsl(var(--ink))] mb-2">
+                  {level.name.split(' — ')[0]}
+                </div>
+                <div className="text-sm font-medium text-[hsl(var(--ink))] mb-4">
+                  ${level.monthlyPrice}/mo
+                </div>
+                <ul className="text-xs text-[hsl(var(--ink))] space-y-1">
+                  {level.benefits.map((benefit, idx) => (
+                    <li key={idx} className="flex items-start gap-1">
+                      <span className="text-[hsl(var(--accent))]">•</span>
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               {isRedirecting && (
-                <span className="block text-center text-sm text-muted-foreground py-2">
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-sm">
                   Redirecting to checkout…
-                </span>
+                </div>
               )}
             </button>
           )
