@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { MembershipSignupForm } from './MembershipSignupForm'
 
 const TIER_IMAGE: Record<MembershipTier, string> = {
@@ -171,16 +172,7 @@ export function MembershipList() {
         </div>
       )}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Membership Plans</h1>
-        {membership ? (
-          <div className="text-sm text-muted-foreground">
-            You already have a membership.
-          </div>
-        ) : (
-          <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-            {showCreateForm ? 'Cancel' : 'New Membership'}
-          </Button>
-        )}
+        <h1 className="text-2xl font-bold text-[hsl(var(--ink))]">Membership Tiers</h1>
       </div>
 
       <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
@@ -235,8 +227,8 @@ export function MembershipList() {
         </div>
       )}
 
-      {/* Tiers – giant round buttons with data points inside */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl mx-auto">
+      {/* Tiers – giant round buttons with badge benefits */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-12 w-full max-w-8xl mx-auto">
         {Object.entries(MEMBERSHIP_LEVELS).map(([tier, level]) => {
           const tierKey = tier as MembershipTier
           const isRedirecting = checkoutTier === tierKey
@@ -245,33 +237,32 @@ export function MembershipList() {
               key={tier}
               type="button"
               disabled={isRedirecting}
-              className="relative w-full aspect-square rounded-full bg-gradient-to-br from-[hsl(var(--background))] to-[hsl(var(--border))] border-2 border-[hsl(var(--border))] hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 overflow-hidden group"
+              className="relative w-full aspect-[4/3] rounded-full bg-gradient-to-br from-[hsl(var(--background))] to-[hsl(var(--border))] border-4 border-[hsl(var(--border))] hover:scale-105 transition-all focus:outline-none focus:ring-4 focus:ring-primary focus:ring-offset-4 disabled:opacity-70 overflow-hidden group shadow-lg"
               onClick={() => redirectToStripeCheckout(tierKey)}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={TIER_IMAGE[tierKey]}
                 alt={level.name.split(' — ')[0]}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
               />
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center pointer-events-none">
-                <div className="text-2xl font-bold text-[hsl(var(--ink))] mb-2">
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center pointer-events-none">
+                <div className="text-3xl font-bold text-[hsl(var(--ink))] mb-2 drop-shadow-lg">
                   {level.name.split(' — ')[0]}
                 </div>
-                <div className="text-sm font-medium text-[hsl(var(--ink))] mb-4">
+                <div className="text-lg font-bold text-[hsl(var(--accent))] mb-6 drop-shadow-md">
                   ${level.monthlyPrice}/mo
                 </div>
-                <ul className="text-xs text-[hsl(var(--ink))] space-y-1">
+                <div className="flex flex-wrap gap-2 justify-center max-w-[90%]">
                   {level.benefits.map((benefit, idx) => (
-                    <li key={idx} className="flex items-start gap-1">
-                      <span className="text-[hsl(var(--accent))]">•</span>
-                      <span>{benefit}</span>
-                    </li>
+                    <Badge key={idx} variant="accent" className="text-xs font-medium shadow-sm">
+                      {benefit}
+                    </Badge>
                   ))}
-                </ul>
+                </div>
               </div>
               {isRedirecting && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-sm">
+                <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-white text-lg font-medium">
                   Redirecting to checkout…
                 </div>
               )}
