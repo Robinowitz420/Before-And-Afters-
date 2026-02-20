@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
-import { MembershipList } from './MembershipList'
+import InteractiveMembershipList from './InteractiveMembershipList'
 
 export default function MembershipsPage() {
   return (
@@ -10,12 +10,12 @@ export default function MembershipsPage() {
         <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Membership</div>
         <h1 className="mt-2 text-3xl font-semibold text-[hsl(var(--ink))]">Tiers</h1>
         <p className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
-          Pick the level that matches your ritual.
+          Choose the membership that matches your style and ritual.
         </p>
       </div>
 
       <Suspense fallback={<div className="text-muted-foreground">Loading tiers…</div>}>
-        <MembershipList />
+        <InteractiveMembershipList />
       </Suspense>
     </div>
   )
