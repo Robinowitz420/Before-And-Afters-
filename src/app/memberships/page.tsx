@@ -50,13 +50,17 @@ export default function MembershipsPage() {
               key={faq.id}
               open={openItem === faq.id}
               onToggle={(open) => setOpenItem(open ? faq.id : null)}
-              className="group border border-[hsl(var(--border))] rounded-lg p-6 cursor-pointer"
+              className="group border border-[hsl(var(--border))] rounded-2xl bg-white/60 p-6 shadow-sm backdrop-blur cursor-pointer"
             >
-              <summary className="flex justify-between items-center font-medium text-[hsl(var(--ink))] list-none">
-                {faq.question}
-                <span className="text-muted-foreground transition-transform group-open:rotate-180">▼</span>
+              <summary className="flex justify-between items-center list-none">
+                <span className="inline-flex items-center rounded-full bg-[hsl(var(--accent))]/15 px-4 py-2 text-sm font-semibold text-[hsl(var(--ink))] ring-1 ring-[hsl(var(--accent))]/30">
+                  {faq.question}
+                </span>
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[hsl(var(--border))]/60 text-[hsl(var(--ink))] transition-transform group-open:rotate-180">
+                  ▼
+                </span>
               </summary>
-              <div className="mt-4 text-sm text-muted-foreground whitespace-pre-wrap">
+              <div className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]">
                 {faq.answer}
               </div>
             </details>
