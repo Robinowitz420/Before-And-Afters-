@@ -28,7 +28,7 @@ function MutedChip({ children }: { children: React.ReactNode }) {
     <span
       className={cn(
         'inline-flex items-center rounded-full border px-3 py-1.5 text-sm',
-        'border-[color:var(--brand-border-hex)] text-[color:var(--brand-text-secondary-hex)]'
+        'border-[color:var(--brand-border-hex)] text-[hsl(var(--ink))]'
       )}
     >
       {children}
@@ -53,7 +53,7 @@ function TogglePill({
         'rounded-full border px-3 py-1.5 text-sm transition-colors',
         selected
           ? 'border-transparent bg-primary text-primary-foreground shadow-[0_8px_20px_hsl(var(--primary)/0.22)]'
-          : 'border-[color:var(--brand-border-hex)] bg-transparent text-[color:var(--brand-text-secondary-hex)] hover:border-[hsl(var(--ink))/0.28]'
+          : 'border-[color:var(--brand-border-hex)] bg-transparent text-[hsl(var(--ink))] hover:border-[hsl(var(--ink))/0.28]'
       )}
     >
       {children}
@@ -66,7 +66,7 @@ function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputEleme
     <input
       {...props}
       className={cn(
-        'w-full rounded-md border border-[hsl(var(--border))] bg-white px-3 py-2 text-sm outline-none placeholder:text-[hsl(var(--muted-foreground))] focus-visible:ring-2 focus-visible:ring-ring',
+        'w-full rounded-md border border-[hsl(var(--border))] bg-white px-3 py-2 text-sm text-[hsl(var(--ink))] outline-none placeholder:text-[hsl(var(--ink))]/50 focus-visible:ring-2 focus-visible:ring-ring',
         className
       )}
     />
@@ -483,7 +483,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
             <div className="p-5 sm:p-6">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Edit</div>
+                  <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Edit</div>
                   <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">
                     {editSection === 'tones' ? 'Tones' : editSection === 'vibes' ? 'Vibes' : 'Eras'}
                   </div>
@@ -543,7 +543,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                           key={group.title}
                           className="rounded-2xl border border-[hsl(var(--border))] bg-white/40 p-4 shadow-sm"
                         >
-                          <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                          <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[hsl(var(--ink))]/70">
                             {group.title}
                           </div>
                           <div className="flex flex-wrap gap-2">
@@ -580,7 +580,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
                       {vibesOtherEnabled ? (
                         <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/40 p-4 shadow-sm">
-                          <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                          <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[hsl(var(--ink))]/70">
                             What’s the other vibe?
                           </div>
                           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -726,17 +726,17 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
       <div className="grid gap-8 lg:grid-cols-[360px,1fr,320px]">
         <aside className="lg:sticky lg:top-10 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
-          <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-sm">
-            <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">My Closet</div>
+          <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-6 shadow-sm">
+            <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
             <div className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Liked items & picks for you</div>
-            <div className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
+            <div className="mt-2 text-sm text-[hsl(var(--ink))]/80">
               Your saved likes and personalized recommendations.
             </div>
 
             <div className="mt-6 space-y-6">
               <div>
                 <div className="text-sm font-semibold text-[hsl(var(--ink))]">Liked items</div>
-                <div className="mt-2 text-xs text-muted-foreground">
+                <div className="mt-2 text-xs text-[hsl(var(--ink))]/70">
                   {save.likes.length} saved · Like cards in the tuner to add more
                 </div>
                 {savedItems.length ? (
@@ -759,7 +759,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 )}
               </div>
 
-              <div className="rounded-xl border border-[hsl(var(--border))] bg-white/50 p-4">
+              <div className="rounded-xl border-[3px] border-blue-600 bg-yellow-200 p-4">
                 <div className="text-sm font-semibold text-[hsl(var(--ink))]">Recommendations</div>
                 <div className="mt-2 text-xs text-muted-foreground">
                   Picks based on your likes and style — coming soon.
@@ -775,7 +775,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <section className="flex items-start justify-center">
           <div className="w-full max-w-[520px]">
             {!current ? (
-              <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-8 text-center shadow-sm">
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-8 text-center shadow-sm">
                 <div className="text-lg font-semibold text-[hsl(var(--ink))]">No items found</div>
                 <div className="mt-2 text-sm text-muted-foreground">
                   Add images to <code className="font-mono">/public/images/clothing</code> and refresh.
@@ -785,7 +785,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               <>
                 <div
                   className={cn(
-                    'relative select-none rounded-3xl border border-[hsl(var(--border))] bg-white shadow-[0_20px_60px_rgba(0,0,0,0.12)]',
+                    'relative select-none rounded-3xl border-[3px] border-blue-600 bg-yellow-100 shadow-[0_20px_60px_rgba(0,0,0,0.12)]',
                     'touch-none'
                   )}
                   style={{
@@ -848,7 +848,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         <aside className="lg:sticky lg:top-10 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
           <div className="space-y-4">
-            <div className="rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-sm">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-6 shadow-sm">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
               <div className="mt-2 text-lg font-semibold text-[hsl(var(--ink))]">Profile photo</div>
               <div className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
@@ -915,7 +915,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               <div className="mt-5" />
             </div>
 
-            <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-100 p-6 shadow-sm">
               <div className="text-sm font-medium text-[hsl(var(--ink))]">Not a member? Join here</div>
               <Button asChild className="mt-3 w-full">
                 <Link href="/memberships">Memberships</Link>

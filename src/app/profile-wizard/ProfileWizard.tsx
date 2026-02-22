@@ -87,7 +87,7 @@ function TogglePill({ selected, onClick, children, disabled }: TogglePillProps) 
         'rounded-full border px-3 py-1.5 text-sm transition-colors',
         selected
           ? 'border-transparent bg-primary text-primary-foreground shadow-[0_8px_20px_hsl(var(--primary)/0.22)]'
-          : 'border-[color:var(--brand-border-hex)] bg-transparent text-[color:var(--brand-text-secondary-hex)] hover:border-[hsl(var(--ink))/0.28]',
+          : 'border-[color:var(--brand-border-hex)] bg-transparent text-[hsl(var(--ink))] hover:border-[hsl(var(--ink))/0.28]',
         disabled && 'opacity-50 cursor-not-allowed'
       )}
     >
@@ -135,7 +135,7 @@ function FieldLabel({ title, hint }: { title: string; hint?: string }) {
   return (
     <div className="space-y-1">
       <div className="text-sm font-medium">{title}</div>
-      {hint ? <div className="text-xs text-muted-foreground">{hint}</div> : null}
+      {hint ? <div className="text-xs text-[hsl(var(--ink))]/70">{hint}</div> : null}
     </div>
   )
 }
@@ -276,7 +276,7 @@ export function ProfileWizard() {
               <CardDescription>Let’s get the essentials so the rest can feel effortless.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="text-center text-muted-foreground">Loading your profile wizard...</div>
+              <div className="text-center text-[hsl(var(--ink))]/70">Loading your profile wizard...</div>
             </CardContent>
           </Card>
         </div>
@@ -325,7 +325,7 @@ export function ProfileWizard() {
               <div className="space-y-4">
                 <div className="rounded-xl border border-black/10 bg-white/60 p-6 shadow-sm">
                   <div className="text-lg font-semibold">Profile saved ✨</div>
-                  <div className="mt-2 text-sm text-muted-foreground">
+                  <div className="mt-2 text-sm text-[hsl(var(--ink))]/80">
                     You can revisit this anytime — your answers are stored locally for now (MVP).
                   </div>
                 </div>
@@ -375,7 +375,7 @@ export function ProfileWizard() {
                   </div>
 
                   {!canContinue(step) ? (
-                    <div className="mt-3 text-xs text-muted-foreground">
+                    <div className="mt-3 text-xs text-[hsl(var(--ink))]/70">
                       {step === 1 && 'Fill in your magical bubbles: display name, email, and phone are required.'}
                       {step === 2 && 'Select your height range and top size to help us find the perfect fit.'}
                     </div>
@@ -430,18 +430,18 @@ function BubbleComponent({
           {!expanded ? (
             <>
               <div className="text-xl mb-2">{icon}</div>
-              <div className="text-xs font-bold text-center text-gray-800">{label}</div>
+              <div className="text-xs font-bold text-center text-[hsl(var(--ink))]">{label}</div>
               {contentExists ? (
                 <div className="mt-2 px-3 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 max-w-full">
                   <div className={`text-center font-medium ${
                     value.length > 20 ? 'text-xs' : value.length > 12 ? 'text-sm' : 'text-base'
-                  } text-gray-800 leading-tight break-all`}>
+                  } text-[hsl(var(--ink))] leading-tight break-all`}>
                     {value}
                   </div>
                 </div>
               ) : (
                 <div className="mt-2 px-2 py-1 bg-gray-50 rounded-full border-2 border-dashed border-gray-300">
-                  <div className="text-xs text-center text-gray-400">
+                  <div className="text-xs text-center text-[hsl(var(--ink))]/50">
                     Click to add
                   </div>
                 </div>
@@ -455,7 +455,7 @@ function BubbleComponent({
           ) : (
             <div className="w-full text-center">
               <div className="text-2xl mb-4">{icon}</div>
-              <label className="block text-sm font-bold text-gray-800 mb-3">
+              <label className="block text-sm font-bold text-[hsl(var(--ink))] mb-3">
                 {label}
               </label>
               <input
@@ -463,7 +463,7 @@ function BubbleComponent({
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className={`w-full bg-transparent border-0 text-center ${expandedTextSize} font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0`}
+                className={`w-full bg-transparent border-0 text-center ${expandedTextSize} font-semibold text-[hsl(var(--ink))] placeholder:text-[hsl(var(--ink))]/50 focus:outline-none focus:ring-0`}
                 autoFocus
                 required={required}
                 onKeyDown={(e) => {
@@ -505,7 +505,7 @@ function Step1({ data, setData, expandedBubble, setExpandedBubble }: {
         <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
           ✨ Welcome to the Endless Closet
         </h2>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-lg text-[hsl(var(--ink))]/80">
           Click the bubbles to expand them and enter your information
         </p>
       </div>
@@ -682,7 +682,7 @@ function Step7({ data, setData }: { data: WizardData; setData: (v: WizardData) =
         <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-teal-500 to-blue-600 bg-clip-text text-transparent">
           📏 Your Body & Fit Reality
         </h2>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-lg text-[hsl(var(--ink))]/80">
           Help us find pieces that fit you perfectly
         </p>
       </div>

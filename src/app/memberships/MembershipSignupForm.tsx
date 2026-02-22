@@ -227,7 +227,7 @@ export function MembershipSignupForm({
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Join the Endless Closet</h1>
-            <p className="text-muted-foreground">
+            <p className="text-[hsl(var(--ink))]/80">
               Step {currentStepIndex + 1} of {steps.length}: {currentStep.replace('-', ' ').toUpperCase()}
             </p>
           </div>
@@ -262,7 +262,7 @@ export function MembershipSignupForm({
             </Button>
 
             {!canContinue(currentStep) && (
-              <div className="text-sm text-muted-foreground text-center flex-1 mx-8">
+              <div className="text-sm text-[hsl(var(--ink))]/70 text-center flex-1 mx-8">
                 {currentStep === 'identity' && 'Please fill in your name and contact information'}
                 {currentStep === 'contact' && 'Please complete your contact details'}
                 {currentStep === 'addresses' && 'Please provide your home address'}
@@ -304,7 +304,7 @@ function IdentityStep({ formData, updateFormData }: { formData: MembershipSignup
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">🙂 Let&apos;s Get to Know You</h2>
-        <p className="text-muted-foreground">Start building your magical profile in the endless closet</p>
+        <p className="text-[hsl(var(--ink))]/80">Start building your magical profile in the endless closet</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -318,7 +318,7 @@ function IdentityStep({ formData, updateFormData }: { formData: MembershipSignup
                   {formData.avatar ? (
                     <div className="text-green-600 text-2xl">✓</div>
                   ) : (
-                    <div className="text-gray-400 text-center">
+                    <div className="text-[hsl(var(--ink))]/50 text-center">
                       <div className="text-2xl mb-1">📷</div>
                       <div className="text-xs">Click to upload</div>
                     </div>
@@ -335,7 +335,7 @@ function IdentityStep({ formData, updateFormData }: { formData: MembershipSignup
                 />
               </label>
             </div>
-            <p className="text-sm text-muted-foreground text-center">Upload a selfie or photo that represents you</p>
+            <p className="text-sm text-[hsl(var(--ink))]/80 text-center">Upload a selfie or photo that represents you</p>
             {formData.avatar && (
               <p className="text-sm text-green-600 text-center">✓ {formData.avatar.name} uploaded</p>
             )}
@@ -433,7 +433,7 @@ function ContactStep({ formData, updateFormData }: { formData: MembershipSignupD
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">📱 How Can We Reach You?</h2>
-        <p className="text-muted-foreground">Your contact information helps us connect and communicate</p>
+        <p className="text-[hsl(var(--ink))]/80">Your contact information helps us connect and communicate</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -496,7 +496,7 @@ function ContactStep({ formData, updateFormData }: { formData: MembershipSignupD
                 rows={4}
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
               />
-              <p className="text-xs text-muted-foreground mt-1">One link per line with platform name</p>
+              <p className="text-xs text-[hsl(var(--ink))]/70 mt-1">One link per line with platform name</p>
             </div>
           </div>
         </div>
@@ -510,7 +510,7 @@ function AddressesStep({ formData, updateFormData }: { formData: MembershipSignu
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">🏠 Where Are You?</h2>
-        <p className="text-muted-foreground">Help us understand your location for delivery and events</p>
+        <p className="text-[hsl(var(--ink))]/80">Help us understand your location for delivery and events</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -555,7 +555,7 @@ function AddressesStep({ formData, updateFormData }: { formData: MembershipSignu
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Additional Addresses</label>
-              <p className="text-sm text-muted-foreground mb-3">
+              <p className="text-sm text-[hsl(var(--ink))]/80 mb-3">
                 Places you spend significant time (work, partner, etc.)
               </p>
               <textarea
@@ -582,7 +582,7 @@ function AddressesStep({ formData, updateFormData }: { formData: MembershipSignu
                 rows={6}
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
               />
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-[hsl(var(--ink))]/70 mt-2">
                 Format: Location: Address, Neighborhood
               </p>
             </div>
@@ -598,7 +598,7 @@ function StyleStep({ formData, updateFormData }: { formData: MembershipSignupDat
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">💃 Your Style Story</h2>
-        <p className="text-muted-foreground">Tell us about your unique fashion personality</p>
+        <p className="text-[hsl(var(--ink))]/80">Tell us about your unique fashion personality</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -681,14 +681,14 @@ function HabitsStep({ formData, updateFormData }: { formData: MembershipSignupDa
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">🛍️ Your Wardrobe Journey</h2>
-        <p className="text-muted-foreground">How do you build and maintain your style?</p>
+        <p className="text-[hsl(var(--ink))]/80">How do you build and maintain your style?</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Wardrobe Sources */}
         <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border">
           <h3 className="text-lg font-semibold mb-4">📦 How You Shop</h3>
-          <p className="text-sm text-muted-foreground mb-4">Select all that apply to your wardrobe building</p>
+          <p className="text-sm text-[hsl(var(--ink))]/80 mb-4">Select all that apply to your wardrobe building</p>
           <div className="grid grid-cols-1 gap-3 max-h-64 overflow-y-auto">
             {WARDROBE_SOURCES.map((source) => (
               <div key={source} className="flex items-center space-x-3 p-2 rounded hover:bg-white/50">
@@ -768,14 +768,14 @@ function InterestsStep({ formData, updateFormData }: { formData: MembershipSignu
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">🎨 Your Creative World</h2>
-        <p className="text-muted-foreground">Tell us about your hands-on creativity and what draws you to borrowing</p>
+        <p className="text-[hsl(var(--ink))]/80">Tell us about your hands-on creativity and what draws you to borrowing</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Crafting */}
         <div className="bg-gradient-to-br from-emerald-50 to-green-50 p-6 rounded-lg border">
           <h3 className="text-lg font-semibold mb-4">🧵 Do You Create?</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-sm text-[hsl(var(--ink))]/80 mb-4">
             Do you make clothes, upcycle, craft, or create fashion?
           </p>
           <div className="grid grid-cols-2 gap-4">
@@ -811,7 +811,7 @@ function InterestsStep({ formData, updateFormData }: { formData: MembershipSignu
         {/* Excitement About Borrowing */}
         <div className="bg-gradient-to-br from-violet-50 to-purple-50 p-6 rounded-lg border">
           <h3 className="text-lg font-semibold mb-4">✨ Why Borrow?</h3>
-          <p className="text-sm text-muted-foreground mb-4">
+          <p className="text-sm text-[hsl(var(--ink))]/80 mb-4">
             What excites you most about endless clothing access?
           </p>
           <label htmlFor="borrowingExcitement" className="block text-sm font-medium mb-2">Share your excitement *</label>
@@ -824,7 +824,7 @@ function InterestsStep({ formData, updateFormData }: { formData: MembershipSignu
             required
             className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring resize-none"
           />
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs text-[hsl(var(--ink))]/70 mt-2">
             Help us understand what makes the endless closet magical for you
           </p>
         </div>
@@ -838,7 +838,7 @@ function SocialStep({ formData, updateFormData }: { formData: MembershipSignupDa
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">🌟 Your World & Energy</h2>
-        <p className="text-muted-foreground">Complete your profile with your life rhythm and creative spirit</p>
+        <p className="text-[hsl(var(--ink))]/80">Complete your profile with your life rhythm and creative spirit</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -904,7 +904,7 @@ function SocialStep({ formData, updateFormData }: { formData: MembershipSignupDa
 
           <div className="bg-gradient-to-br from-magenta-50 to-purple-50 p-6 rounded-lg border">
             <h3 className="text-lg font-semibold mb-4">🔮 Power Letter</h3>
-            <p className="text-sm text-muted-foreground mb-3">
+            <p className="text-sm text-[hsl(var(--ink))]/80 mb-3">
               Choose the letter that resonates most with your energy *
             </p>
             <div className="grid grid-cols-6 md:grid-cols-9 gap-2">
@@ -940,7 +940,7 @@ function MembershipStep({ formData, updateFormData }: { formData: MembershipSign
     <div className="space-y-8">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2">🪄 Choose Your Magical Path</h2>
-        <p className="text-muted-foreground">Select the membership tier that calls to your endless closet journey</p>
+        <p className="text-[hsl(var(--ink))]/80">Select the membership tier that calls to your endless closet journey</p>
       </div>
 
       {/* Deposit Notice */}
@@ -972,13 +972,13 @@ function MembershipStep({ formData, updateFormData }: { formData: MembershipSign
               {/* Header */}
               <div className="text-center mb-6">
                 <h3 className="text-xl font-bold mb-1">{level.name.split(' - ')[0]}</h3>
-                <p className="text-sm text-muted-foreground italic">
+                <p className="text-sm text-[hsl(var(--ink))]/70 italic">
                   {level.name.split(' - ')[1]}
                 </p>
                 <div className="text-3xl font-bold glitcoin-text mt-3">
                   {level.glitcoinValue}Ġ/month
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-sm text-[hsl(var(--ink))]/80">
                   ${level.monthlyPrice}/month
                 </div>
               </div>
