@@ -33,19 +33,11 @@ section[id] {
 
 
 .app-atmosphere {
-  background: radial-gradient(
-    circle at top left,
-    #4A1F57 0%,
-    #2A0F2E 45%,
-    #140018 100%
-  );
+  background: #ffe4f0;
 }
 
 .app-sunset {
-  background:
-    radial-gradient(circle at 18% 10%, rgba(255, 182, 193, 0.55) 0%, rgba(255, 182, 193, 0) 55%),
-    radial-gradient(circle at 82% 12%, rgba(255, 173, 121, 0.52) 0%, rgba(255, 173, 121, 0) 58%),
-    linear-gradient(180deg, #1b0a10 0%, #11060a 100%);
+  background: #ffe4f0;
 }
 
 .wizard-soft-orange {
@@ -63,24 +55,24 @@ section[id] {
     --ink-dark: 292 51% 12%;
     --ink-hover: 286 47% 23%;
 
-    --background: 39 44% 94%;
+    --background: 335 100% 95%;
     --foreground: 0 0% 10%;
-    --card: 39 44% 94%;
+    --card: 0 0% 100%;
     --card-foreground: 0 0% 10%;
-    --popover: 39 44% 94%;
+    --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
 
     --primary: 338 74% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 38 37% 90%;
-    --secondary-foreground: 0 0% 10%;
+    --secondary: 335 85% 92%;
+    --secondary-foreground: 289 52% 17%;
 
-    --muted: 38 37% 90%;
-    --muted-foreground: 0 0% 54%;
+    --muted: 335 40% 92%;
+    --muted-foreground: 289 35% 22%;
 
-    --accent: 38 37% 90%;
-    --accent-foreground: 0 0% 10%;
+    --accent: 334 85% 90%;
+    --accent-foreground: 289 52% 17%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
