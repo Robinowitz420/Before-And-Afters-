@@ -27,20 +27,20 @@ export default function MembershipsPage() {
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
       <div className="mb-8">
-        <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Membership</div>
+        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
         <h1 className="mt-2 text-3xl font-semibold text-[hsl(var(--ink))]">Tiers</h1>
-        <p className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
+        <p className="mt-2 text-sm text-[hsl(var(--ink))]/80">
           Choose the membership that matches your style and ritual.
         </p>
       </div>
 
-      <Suspense fallback={<div className="text-muted-foreground">Loading tiers…</div>}>
+      <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
         <InteractiveMembershipList />
       </Suspense>
 
       <div className="mt-12">
         <div className="mb-6">
-          <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">FAQ</div>
+          <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
           <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h2>
         </div>
 

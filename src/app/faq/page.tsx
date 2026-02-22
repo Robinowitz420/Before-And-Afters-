@@ -64,9 +64,9 @@ It is important to note that this is a business model based on TRUST and INTEGRI
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-10">
       <div className="mb-8">
-        <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">FAQ</div>
+        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
         <h1 className="mt-2 text-3xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h1>
-        <p className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
+        <p className="mt-2 text-sm text-[hsl(var(--ink))]/80">
           Everything you need to know about Joni&apos;s Closet Club.
         </p>
       </div>
@@ -81,11 +81,11 @@ It is important to note that this is a business model based on TRUST and INTEGRI
           >
             <summary className="flex justify-between items-center font-medium text-[hsl(var(--ink))] list-none">
               {faq.question}
-              <span className="text-muted-foreground transition-transform group-open:rotate-180">
+              <span className="text-[hsl(var(--ink))]/70 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
-            <div className="mt-4 text-sm text-muted-foreground whitespace-pre-wrap">
+            <div className="mt-4 text-sm text-[hsl(var(--ink))]/80 whitespace-pre-wrap">
               {faq.answer}
             </div>
           </details>
