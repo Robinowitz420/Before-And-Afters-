@@ -32,17 +32,10 @@ function LandingClient() {
           </div>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Button type="button" onClick={onEnterCloset}>
-              Enter the Closet
+              Enter
             </Button>
             <Button asChild variant="secondary">
               <a href="/memberships">Join the Club</a>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              className={cn('bg-[hsl(var(--background))] text-[hsl(var(--ink))] hover:bg-[hsl(var(--background))]/90')}
-            >
-              <a href="#learn-more">Learn More</a>
             </Button>
           </div>
         </div>
@@ -102,7 +95,7 @@ function LandingClient() {
         </div>
         <div className="mx-auto max-w-6xl px-6 pb-20">
           <Button type="button" onClick={onEnterCloset} size="lg">
-            Create Your Free Profile
+            Enter
           </Button>
         </div>
       </section>
