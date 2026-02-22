@@ -11,13 +11,30 @@ import { cn } from '@/lib/utils'
 function LandingClient() {
   const router = useRouter()
   const { isLoaded, isSignedIn } = useUser()
+  const [entering, setEntering] = useState(false)
 
-  const onEnterCloset = () => {
-    if (!isLoaded) return
+  const onEnterCloset = async () => {
+    if (!isLoaded || entering) return
 
     if (!isSignedIn) {
       router.push('/sign-in')
       return
+    }
+
+    setEntering(true)
+    try {
+      const res = await fetch('/api/profile')
+      if (res.ok) {
+        const profile = await res.json().catch(() => null)
+        if (profile && typeof profile === 'object' && 'clerkUserId' in profile) {
+          router.push('/profile')
+          return
+        }
+      }
+    } catch {
+      // ignore
+    } finally {
+      setEntering(false)
     }
 
     router.push('/profile-wizard')
@@ -28,7 +45,16 @@ function LandingClient() {
       <section id="portal" className="relative">
         <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
           <div className="overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-white shadow-sm">
-            <Image src="/images/LANDING/1.jpg" alt="Landing page section 1" width={2025} height={1141} className="h-auto w-full" priority />
+            <Image
+              src="/images/LANDING/1.jpg"
+              alt="Landing page section 1"
+              width={2025}
+              height={1141}
+              sizes="100vw"
+              quality={75}
+              className="h-auto w-full"
+              priority
+            />
           </div>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <Button type="button" onClick={onEnterCloset}>
@@ -43,55 +69,136 @@ function LandingClient() {
 
       <section id="learn-more" className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/2.jpg" alt="Landing page section 2" width={2025} height={1141} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/2.jpg"
+            alt="Landing page section 2"
+            width={2025}
+            height={1141}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/3.jpg" alt="Landing page section 3" width={2025} height={1141} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/3.jpg"
+            alt="Landing page section 3"
+            width={2025}
+            height={1141}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/4.jpg" alt="Landing page section 4" width={2025} height={1359} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/4.jpg"
+            alt="Landing page section 4"
+            width={2025}
+            height={1359}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/5.jpg" alt="Landing page section 5" width={2025} height={1141} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/5.jpg"
+            alt="Landing page section 5"
+            width={2025}
+            height={1141}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/6.jpg" alt="Landing page section 6" width={2025} height={1141} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/6.jpg"
+            alt="Landing page section 6"
+            width={2025}
+            height={1141}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/7.jpg" alt="Landing page section 7" width={2025} height={1514} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/7.jpg"
+            alt="Landing page section 7"
+            width={2025}
+            height={1514}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/8.jpg" alt="Landing page section 8" width={2025} height={1350} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/8.jpg"
+            alt="Landing page section 8"
+            width={2025}
+            height={1350}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/9.jpg" alt="Landing page section 9" width={2025} height={1141} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/9.jpg"
+            alt="Landing page section 9"
+            width={2025}
+            height={1141}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
       </section>
 
       <section className="relative">
         <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image src="/images/LANDING/10.jpg" alt="Landing page section 10" width={2025} height={1141} className="h-auto w-full" loading="lazy" />
+          <Image
+            src="/images/LANDING/10.jpg"
+            alt="Landing page section 10"
+            width={2025}
+            height={1141}
+            sizes="100vw"
+            quality={60}
+            className="h-auto w-full"
+            loading="lazy"
+          />
         </div>
         <div className="mx-auto max-w-6xl px-6 pb-20">
           <Button type="button" onClick={onEnterCloset} size="lg">
