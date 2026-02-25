@@ -855,10 +855,19 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 Upload a photo so your profile feels personal.
               </div>
 
-              <div className="mt-4 flex items-center gap-4">
-                <div className="h-36 w-36 overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-white">
+              <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div
+                  className="w-full max-w-[240px] overflow-hidden border border-[hsl(var(--border))] bg-white"
+                  style={{ aspectRatio: '9 / 16', clipPath: 'polygon(50% 3%, 62% 6%, 70% 14%, 74% 24%, 78% 40%, 84% 58%, 82% 70%, 74% 83%, 62% 92%, 50% 97%, 38% 92%, 26% 83%, 18% 70%, 16% 58%, 22% 40%, 26% 24%, 30% 14%, 38% 6%)' }}
+                >
                   {profile.avatar ? (
-                    <Image src={profile.avatar} alt="Your avatar" width={360} height={360} className="h-full w-full object-cover" />
+                    <Image
+                      src={profile.avatar}
+                      alt="Your avatar"
+                      width={540}
+                      height={960}
+                      className="h-full w-full object-cover"
+                    />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
                   )}
