@@ -16,9 +16,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div
       className={cn(
         'min-h-screen',
-        isLanding ? 'app-atmosphere' : 'app-sunset'
+        isTasteTuner ? 'bg-transparent' : isLanding ? 'app-atmosphere' : 'app-sunset'
       )}
     >
+      {isTasteTuner ? (
+        <div
+          className="fixed inset-0 -z-10"
+          style={{
+            backgroundImage: "url('/images/Boxes/checkerboard.svg')",
+            backgroundSize: '200px 200px',
+            backgroundRepeat: 'repeat',
+          }}
+        />
+      ) : null}
       <div className={cn('mx-auto flex min-h-screen w-full', !isImmersive && 'max-w-[1600px]')}>
         {isImmersive && (
           <div className="pointer-events-none fixed left-0 top-0 z-40 w-full">
