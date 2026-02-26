@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 const TIER_IMAGE: Record<MembershipTier, string> = {
-  Eeeehs: '/images/MEMBERSHIPS/Eeeehs.png',
-  Oooohs: '/images/MEMBERSHIPS/Oooohs.png',
-  Aaaaahs: '/images/MEMBERSHIPS/Aaaahs.png',
-  Mmmmms: '/images/MEMBERSHIPS/Mmmms.png',
+  Eeeehs: '/images/Membership Images/EeeehsSelected.png',
+  Oooohs: '/images/Membership Images/OooohsSelected.png',
+  Aaaaahs: '/images/Membership Images/AaaagsSelected.png',
+  Mmmmms: '/images/Membership Images/MmmmsSelected.png',
 }
 
 interface MembershipCardProps {
