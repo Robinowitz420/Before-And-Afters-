@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost', 'storage.googleapis.com'],
+    domains: ['localhost', 'storage.googleapis.com', 'wardrobe-manager2.vercel.app'],
   },
 }
 
