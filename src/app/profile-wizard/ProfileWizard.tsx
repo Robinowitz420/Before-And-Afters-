@@ -58,12 +58,23 @@ function defaultData(): WizardData {
   }
 }
 
-async function saveProfile(data: WizardData) {
-  await fetch('/api/profile', {
-    method: 'PUT',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(data ?? {}),
-  })
+async function saveProfile(data: WizardData): Promise<{ success: boolean; error?: string }> {
+  try {
+    const res = await fetch('/api/profile', {
+      method: 'PUT',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(data ?? {}),
+    })
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}))
+      return { success: false, error: errorData?.error || `Save failed with status ${res.status}` }
+    }
+
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Network error' }
+  }
 }
 
 function clampStep(step: number) {
@@ -186,6 +197,8 @@ export function ProfileWizard() {
   const [data, setData] = useState<WizardData>(defaultData())
   const [submitted, setSubmitted] = useState(false)
   const [expandedBubble, setExpandedBubble] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const totalSteps = 2
   const progressPct = Math.round((step / totalSteps) * 100)
@@ -227,11 +240,17 @@ export function ProfileWizard() {
   const goBack = () => setStep((s) => clampStep(s - 1))
 
   const onSubmit = async () => {
-    try {
-      await saveProfile(data)
-    } catch {
-      // ignore
+    setSaving(true)
+    setSaveError(null)
+    
+    const result = await saveProfile(data)
+    
+    if (!result.success) {
+      setSaving(false)
+      setSaveError(result.error || 'Failed to save profile. Please try again.')
+      return
     }
+    
     router.push('/profile')
     setSubmitted(true)
   }
@@ -367,12 +386,18 @@ export function ProfileWizard() {
                           Next
                         </Button>
                       ) : (
-                        <Button type="button" onClick={onSubmit} disabled={!canContinue(step)}>
-                          Complete profile
+                        <Button type="button" onClick={onSubmit} disabled={!canContinue(step) || saving}>
+                          {saving ? 'Saving...' : 'Complete profile'}
                         </Button>
                       )}
                     </div>
                   </div>
+
+                  {saveError && (
+                    <div className="mt-3 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+                      {saveError}
+                    </div>
+                  )}
 
                   {!canContinue(step) ? (
                     <div className="mt-3 text-xs text-[hsl(var(--ink))]/70">
