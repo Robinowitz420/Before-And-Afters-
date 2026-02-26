@@ -1,12 +1,14 @@
 'use client'
 
 import { Suspense, useState } from 'react'
+import { QRCodeCanvas } from 'qrcode.react'
 import InteractiveMembershipList from './InteractiveMembershipList'
 
 export const dynamic = 'force-dynamic'
 
 export default function MembershipsPage() {
   const [openItem, setOpenItem] = useState<string | null>(null)
+  const membershipUrl = 'https://beforeandafters.vercel.app/memberships'
 
   const faqs = [
     {
@@ -39,6 +41,22 @@ export default function MembershipsPage() {
       <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
         <InteractiveMembershipList />
       </Suspense>
+
+      <div className="mt-10 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur">
+        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">QR</div>
+        <h2 className="mt-2 text-xl font-semibold text-[hsl(var(--ink))]">Open this page on your phone</h2>
+        <p className="mt-2 text-sm text-[hsl(var(--ink))]/80">Scan to open: {membershipUrl}</p>
+
+        <a
+          href={membershipUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-5 inline-flex items-center justify-center rounded-xl bg-white p-4 ring-1 ring-[hsl(var(--border))]"
+          aria-label="Open memberships page"
+        >
+          <QRCodeCanvas value={membershipUrl} size={180} bgColor="#ffffff" fgColor="#000000" />
+        </a>
+      </div>
 
       <div className="mt-12">
         <div className="mb-6">
