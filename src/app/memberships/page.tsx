@@ -17,7 +17,17 @@ export default function MembershipsPage() {
     {
       id: 'lust-lost',
       question: 'What is the Lust it / Lost it fee?',
-      answer: `Joni truly not looking to sell off things in this closet game! (If I was willing to part with things forever I woulda opened a regular store, duh.) Here we are looking for client-collaborators with integrity, deep respect for wardrobe collecting, and want to specifically play in the clothing-sharing sandbox with us. And so, the L/L price will likely be well above market value. You'll know it's a cherished piece if the L/L price is a small fortune. If the L/L price is reasonable it's probably something we can get again or wouldn't be totally torn up about losing from the collection. Either way, your card will be on file -- so if you convince Joni of your lust and that it must be yours, you'll know the price! If something horrible happens and you lose the piece or you yourself get lost in the abyss, you'll know what the charge back to your account will be.\n\nWe'll have Dorothy in action to make returns/swap-outs easier... if you can't make it to the store and time's up on a piece, we will likely warn you of a drive by to collect first rather than just charging you.\n\nLate fees will also apply after a month  - $5/day for the first week, $10/day for the second week... or until the L/L fee is fulfilled. Unless otherwise arranged in advance due to travel schedule, or some other loophole that makes having an item for over a month make sense.\n\nWhen we want to put things up for sale, we will do so!\n\nIt is important to note that this is a business model based on TRUST and INTEGRITY. We want to get to know and grow with everyone who feels the call to be part of this! We always start with a baseline of trust for all - but will still leave it up to experience to see. If we are just getting to know you there may be limits on the pieces you can take out at first. If you are sloppy about it and lose things or make us hunt you down for a return past due, you will be limited in the future. If you are consistently stealth and proactive about your swap-outs you will earn more and more privileges and leeway!`,
+      answer: `Joni is truly not looking to sell things off in this closet game! (If I were willing to part with things forever, I would’ve opened a regular store, duh.) We’re looking for client-collaborators with integrity and deep respect for wardrobe collecting—people who want to play in the clothing-sharing sandbox with us.
+
+If you “lust it” and want to keep a piece, the Lust It / Lost It (L/L) price will likely be well above market value. You’ll know it’s a cherished piece if the L/L price is a small fortune. Either way, your card will be on file—so if you decide it must be yours, you’ll know the price.
+
+If you run off with our clothing (or an item isn’t returned), you will be charged the L/L fee for that piece.
+
+We’ll have Dorothy in action to make returns and swap-outs easier. If you can’t make it to the store and a piece is past due, we may reach out to coordinate a pickup before charging you.
+
+Late fees are $5/day starting the day after the due date. If an item is not returned after two weeks late, we consider it lost and the L/L fee will be charged (in addition to any accrued late fees).
+
+It’s important to note that this business model is based on trust and integrity. We always start with a baseline of trust, and experience helps shape privileges over time. If we’re just getting to know you, there may be limits on which pieces you can take out at first. If you’re consistently proactive and on time with swap-outs, you’ll earn more and more privileges and leeway.`,
     },
     {
       id: 'glitcoin',
