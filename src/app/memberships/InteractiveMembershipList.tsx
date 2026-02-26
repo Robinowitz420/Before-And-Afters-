@@ -66,7 +66,7 @@ export default function InteractiveMembershipList() {
           width={1024}
           height={576}
           priority
-          className="h-auto w-full scale-[1.3] select-none"
+          className="h-auto w-full scale-[1.95] select-none"
         />
 
         {/* Clickable quadrants */}
