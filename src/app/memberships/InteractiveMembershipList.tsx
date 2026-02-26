@@ -146,7 +146,7 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
       ) : null}
 
-      <div className="relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
+      <div className="relative mx-auto w-full border-y border-[hsl(var(--border))] shadow-lg sm:bg-black">
         <div className="flex min-h-[100svh] items-center justify-center sm:min-h-0">
           <div className="h-[100vw] w-[100vh] sm:h-auto sm:w-full sm:rotate-0" style={{ transform: 'rotate(90deg)' }}>
             <Image
@@ -155,7 +155,7 @@ All borrowed items must be returned before cancellation is finalized.
               width={1024}
               height={576}
               priority
-              className="h-full w-full select-none object-contain sm:h-auto"
+              className="h-full w-full select-none object-cover sm:object-contain sm:h-auto"
             />
           </div>
         </div>
