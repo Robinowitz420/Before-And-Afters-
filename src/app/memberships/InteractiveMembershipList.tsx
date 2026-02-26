@@ -147,104 +147,101 @@ All borrowed items must be returned before cancellation is finalized.
       ) : null}
 
       <div className="relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
-        <div className="relative h-[100vw] sm:h-auto">
-          <div
-            className="relative h-[100vw] w-[100vh] origin-top-left rotate-90 sm:h-auto sm:w-auto sm:rotate-0"
-            style={{ transform: 'rotate(90deg) translateY(-100%)' }}
-          >
-            <div className="flex min-h-[80vh] items-center justify-center sm:min-h-0">
-              <Image
-                src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
-                alt="Membership tiers"
-                width={1024}
-                height={576}
-                priority
-                className="h-auto w-full select-none object-contain"
-              />
-            </div>
-
-            {/* Clickable quadrants */}
-            <div className="absolute inset-0">
-          {/* Top-left: Eeeehs */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Eeeehs.name}
-            className="absolute left-0 top-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-            onMouseEnter={() => setHoveredTier('Eeeehs')}
-            onMouseLeave={() => setHoveredTier(null)}
-            onClick={() => {
-              if (selectedTier === 'Eeeehs') {
-                openDisclaimerForTier('Eeeehs')
-                return
-              }
-              setSelectedTier('Eeeehs')
-              setHoveredTier('Eeeehs')
-            }}
-            disabled={checkoutTier !== null}
-          />
-
-          {/* Top-right: Oooohs */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Oooohs.name}
-            className="absolute right-0 top-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-            onMouseEnter={() => setHoveredTier('Oooohs')}
-            onMouseLeave={() => setHoveredTier(null)}
-            onClick={() => {
-              if (selectedTier === 'Oooohs') {
-                openDisclaimerForTier('Oooohs')
-                return
-              }
-              setSelectedTier('Oooohs')
-              setHoveredTier('Oooohs')
-            }}
-            disabled={checkoutTier !== null}
-          />
-
-          {/* Bottom-left: Aaaaahs */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Aaaaahs.name}
-            className="absolute left-0 bottom-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-            onMouseEnter={() => setHoveredTier('Aaaaahs')}
-            onMouseLeave={() => setHoveredTier(null)}
-            onClick={() => {
-              if (selectedTier === 'Aaaaahs') {
-                openDisclaimerForTier('Aaaaahs')
-                return
-              }
-              setSelectedTier('Aaaaahs')
-              setHoveredTier('Aaaaahs')
-            }}
-            disabled={checkoutTier !== null}
-          />
-
-          {/* Bottom-right: Mmmmms */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Mmmmms.name}
-            className="absolute right-0 bottom-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-            onMouseEnter={() => setHoveredTier('Mmmmms')}
-            onMouseLeave={() => setHoveredTier(null)}
-            onClick={() => {
-              if (selectedTier === 'Mmmmms') {
-                openDisclaimerForTier('Mmmmms')
-                return
-              }
-              setSelectedTier('Mmmmms')
-              setHoveredTier('Mmmmms')
-            }}
-            disabled={checkoutTier !== null}
-          />
-            </div>
-
-            {checkoutTier && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
-                Redirecting to checkout…
-              </div>
-            )}
+        <div className="flex min-h-[100svh] items-center justify-center sm:min-h-0">
+          <div className="h-[100vw] w-[100vh] sm:h-auto sm:w-full sm:rotate-0" style={{ transform: 'rotate(90deg)' }}>
+            <Image
+              src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
+              alt="Membership tiers"
+              width={1024}
+              height={576}
+              priority
+              className="h-full w-full select-none object-contain sm:h-auto"
+            />
           </div>
         </div>
+
+        {/* Clickable quadrants - rotated for mobile */}
+        <div className="absolute inset-0 sm:not-rotate">
+          <div className="h-full w-full sm:rotate-0" style={{ transform: 'rotate(90deg)' }}>
+            {/* Top-left: Eeeehs */}
+            <button
+              type="button"
+              aria-label={MEMBERSHIP_LEVELS.Eeeehs.name}
+              className="absolute left-0 top-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
+              onMouseEnter={() => setHoveredTier('Eeeehs')}
+              onMouseLeave={() => setHoveredTier(null)}
+              onClick={() => {
+                if (selectedTier === 'Eeeehs') {
+                  openDisclaimerForTier('Eeeehs')
+                  return
+                }
+                setSelectedTier('Eeeehs')
+                setHoveredTier('Eeeehs')
+              }}
+              disabled={checkoutTier !== null}
+            />
+
+            {/* Top-right: Oooohs */}
+            <button
+              type="button"
+              aria-label={MEMBERSHIP_LEVELS.Oooohs.name}
+              className="absolute right-0 top-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
+              onMouseEnter={() => setHoveredTier('Oooohs')}
+              onMouseLeave={() => setHoveredTier(null)}
+              onClick={() => {
+                if (selectedTier === 'Oooohs') {
+                  openDisclaimerForTier('Oooohs')
+                  return
+                }
+                setSelectedTier('Oooohs')
+                setHoveredTier('Oooohs')
+              }}
+              disabled={checkoutTier !== null}
+            />
+
+            {/* Bottom-left: Aaaaahs */}
+            <button
+              type="button"
+              aria-label={MEMBERSHIP_LEVELS.Aaaaahs.name}
+              className="absolute left-0 bottom-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
+              onMouseEnter={() => setHoveredTier('Aaaaahs')}
+              onMouseLeave={() => setHoveredTier(null)}
+              onClick={() => {
+                if (selectedTier === 'Aaaaahs') {
+                  openDisclaimerForTier('Aaaaahs')
+                  return
+                }
+                setSelectedTier('Aaaaahs')
+                setHoveredTier('Aaaaahs')
+              }}
+              disabled={checkoutTier !== null}
+            />
+
+            {/* Bottom-right: Mmmmms */}
+            <button
+              type="button"
+              aria-label={MEMBERSHIP_LEVELS.Mmmmms.name}
+              className="absolute right-0 bottom-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
+              onMouseEnter={() => setHoveredTier('Mmmmms')}
+              onMouseLeave={() => setHoveredTier(null)}
+              onClick={() => {
+                if (selectedTier === 'Mmmmms') {
+                  openDisclaimerForTier('Mmmmms')
+                  return
+                }
+                setSelectedTier('Mmmmms')
+                setHoveredTier('Mmmmms')
+              }}
+              disabled={checkoutTier !== null}
+            />
+          </div>
+        </div>
+
+        {checkoutTier && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
+            Redirecting to checkout…
+          </div>
+        )}
       </div>
 
       {selectedTier && (

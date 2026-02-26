@@ -3,6 +3,18 @@
 import { Suspense, useState } from 'react'
 import InteractiveMembershipList from './InteractiveMembershipList'
 
+function MobileMembershipsOnly() {
+  return (
+    <div className="relative left-1/2 h-[100svh] w-screen -translate-x-1/2 bg-black">
+      <div className="flex h-full w-full items-center justify-center">
+        <div className="w-full">
+          <InteractiveMembershipList />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export const dynamic = 'force-dynamic'
 
 export default function MembershipsPage() {
@@ -37,58 +49,68 @@ It’s important to note that this business model is based on trust and integrit
   ]
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-0 py-10 sm:px-6">
-      <div className="mb-10">
-        <div className="px-6 sm:px-0">
-          <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
-        </div>
+    <>
+      <div className="sm:hidden">
+        <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
+          <MobileMembershipsOnly />
+        </Suspense>
       </div>
 
-      <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
-        <InteractiveMembershipList />
-      </Suspense>
+      <div className="hidden sm:block">
+        <div className="mx-auto w-full max-w-5xl px-0 py-10 sm:px-6">
+          <div className="mb-10">
+            <div className="px-6 sm:px-0">
+              <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
+            </div>
+          </div>
 
-      <div className="mt-12 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur mx-6 sm:mx-0">
-        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Mission</div>
-        <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Make wardrobe-sharing a form of care</h2>
-        <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]/85">
-          Before & Afters is a clothing-sharing clubhouse built on trust, creativity, and community.
+          <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
+            <InteractiveMembershipList />
+          </Suspense>
 
-          Your membership supports more than outfits—it helps us keep the closet stocked, cleaned, repaired, and accessible, and it funds the behind-the-scenes labor that makes the magic possible.
+          <div className="mt-12 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur mx-6 sm:mx-0">
+            <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Mission</div>
+            <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Make wardrobe-sharing a form of care</h2>
+            <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]/85">
+              Before & Afters is a clothing-sharing clubhouse built on trust, creativity, and community.
 
-          We see this as a kind of mutual-aid / charity model: members help sustain the collection, and we use that support to keep prices grounded, offer leeway when life happens, and make space for more people to participate.
+              Your membership supports more than outfits—it helps us keep the closet stocked, cleaned, repaired, and accessible, and it funds the behind-the-scenes labor that makes the magic possible.
+
+              We see this as a kind of mutual-aid / charity model: members help sustain the collection, and we use that support to keep prices grounded, offer leeway when life happens, and make space for more people to participate.
+            </div>
+          </div>
+
+          <div className="mt-16 px-6 sm:px-0">
+            <div className="mb-6">
+              <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
+              <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h2>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq) => (
+                <details
+                  key={faq.id}
+                  open={openItem === faq.id}
+                  onToggle={(open) => setOpenItem(open ? faq.id : null)}
+                  className="group border border-[hsl(var(--border))] rounded-2xl bg-white/60 p-6 shadow-sm backdrop-blur cursor-pointer"
+                >
+                  <summary className="flex justify-between items-center list-none">
+                    <span className="inline-flex items-center rounded-full bg-[hsl(var(--accent))]/15 px-4 py-2 text-sm font-semibold text-[hsl(var(--ink))] ring-1 ring-[hsl(var(--accent))]/30">
+                      {faq.question}
+                    </span>
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[hsl(var(--border))]/60 text-[hsl(var(--ink))] transition-transform group-open:rotate-180">
+                      ▼
+                    </span>
+                  </summary>
+                  <div className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="mt-16 px-6 sm:px-0">
-        <div className="mb-6">
-          <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
-          <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h2>
-        </div>
-
-        <div className="space-y-4">
-          {faqs.map((faq) => (
-            <details
-              key={faq.id}
-              open={openItem === faq.id}
-              onToggle={(open) => setOpenItem(open ? faq.id : null)}
-              className="group border border-[hsl(var(--border))] rounded-2xl bg-white/60 p-6 shadow-sm backdrop-blur cursor-pointer"
-            >
-              <summary className="flex justify-between items-center list-none">
-                <span className="inline-flex items-center rounded-full bg-[hsl(var(--accent))]/15 px-4 py-2 text-sm font-semibold text-[hsl(var(--ink))] ring-1 ring-[hsl(var(--accent))]/30">
-                  {faq.question}
-                </span>
-                <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[hsl(var(--border))]/60 text-[hsl(var(--ink))] transition-transform group-open:rotate-180">
-                  ▼
-                </span>
-              </summary>
-              <div className="mt-5 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]">
-                {faq.answer}
-              </div>
-            </details>
-          ))}
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
