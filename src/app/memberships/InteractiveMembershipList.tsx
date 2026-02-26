@@ -147,18 +147,20 @@ All borrowed items must be returned before cancellation is finalized.
       ) : null}
 
       {/* MOBILE: Full-screen rotated */}
-      <div className="md:hidden fixed inset-0 overflow-hidden">
-        <Image
-          src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
-          alt="Membership tiers"
-          width={1024}
-          height={576}
-          priority
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 min-w-[100vh] min-h-[100vw] object-cover"
-        />
+      <div className="md:hidden fixed inset-0 z-40">
+        <div className="absolute inset-0 rotate-90">
+          <Image
+            src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
+            alt="Membership tiers"
+            fill
+            priority
+            className="object-cover"
+            sizes="100vh"
+          />
+        </div>
 
         {/* Tap zones - rotated to match image */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 w-[100vh] h-[100vw]">
+        <div className="absolute inset-0 rotate-90">
           {/* Top-left: Eeeehs */}
           <button
             type="button"
