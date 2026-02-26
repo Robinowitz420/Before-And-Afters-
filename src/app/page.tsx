@@ -46,7 +46,7 @@ function LandingClient() {
       <section id="portal" className="relative bg-[hsl(var(--ink-dark))] text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
           <h1 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            Joni&apos;s Closet Club
+            Joni&apos;s Dress Up Box
           </h1>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <p>Born from loving clothes too much to ever let them go.</p>
