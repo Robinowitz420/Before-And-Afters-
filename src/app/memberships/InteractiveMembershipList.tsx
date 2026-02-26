@@ -52,21 +52,21 @@ export default function InteractiveMembershipList() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6">
+    <div className="relative left-1/2 w-screen -translate-x-1/2 px-0">
       {error && (
-        <div className="mb-6 rounded-lg bg-destructive/10 text-destructive px-4 py-2 text-sm">
+        <div className="mx-auto mb-6 max-w-6xl rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive">
           {error}
         </div>
       )}
 
-      <div className="relative mx-auto w-full overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-black shadow-lg">
+      <div className="relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
         <Image
           src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
           alt="Membership tiers"
           width={1024}
           height={576}
           priority
-          className="h-auto w-full scale-[1.95] select-none"
+          className="h-auto w-full select-none object-contain"
         />
 
         {/* Clickable quadrants */}
@@ -152,7 +152,7 @@ export default function InteractiveMembershipList() {
       </div>
 
       {selectedTier && (
-        <div className="mt-6 text-center text-sm text-muted-foreground">
+        <div className="mx-auto mt-6 max-w-6xl px-6 text-center text-sm text-muted-foreground">
           Tap/click the same tier again to continue to checkout.
         </div>
       )}
