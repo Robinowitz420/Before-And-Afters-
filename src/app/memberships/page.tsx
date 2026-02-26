@@ -37,16 +37,18 @@ It’s important to note that this business model is based on trust and integrit
   ]
 
   return (
-    <div className="mx-auto w-full max-w-5xl px-6 py-10">
+    <div className="mx-auto w-full max-w-5xl px-0 py-10 sm:px-6">
       <div className="mb-10">
-        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
+        <div className="px-6 sm:px-0">
+          <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
+        </div>
       </div>
 
       <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
         <InteractiveMembershipList />
       </Suspense>
 
-      <div className="mt-12 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur">
+      <div className="mt-12 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur mx-6 sm:mx-0">
         <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Mission</div>
         <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Make wardrobe-sharing a form of care</h2>
         <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]/85">
@@ -58,7 +60,7 @@ It’s important to note that this business model is based on trust and integrit
         </div>
       </div>
 
-      <div className="mt-16">
+      <div className="mt-16 px-6 sm:px-0">
         <div className="mb-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
           <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h2>
