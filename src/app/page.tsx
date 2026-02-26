@@ -49,13 +49,17 @@ function LandingClient() {
             Joni&apos;s Dress Up Box
           </h1>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
-            <p className="text-xl font-bold text-white sm:text-2xl md:text-3xl">Change Your Outfit. Change The World.</p>
-            <p>
-              Clothing isn&apos;t just a basic need — it can transform how you experience life.
-              Play is a tool for personal development.
-              Experimentation creates new opportunities.
-              Intention builds embodiment.
-              Ritual breeds enlightenment.
+            <p>Born from loving clothes too much to ever let them go.</p>
+            <p className="font-semibold">A solution for:</p>
+            <div className="mx-auto grid max-w-xl gap-2 text-lg font-semibold sm:text-xl md:grid-cols-2">
+              <div>Collectors</div>
+              <div>Thrillers</div>
+              <div>Glamour hoarders</div>
+              <div>Those who live light but want access to everything</div>
+            </div>
+            <p>This is a clothing-sharing ecosystem built on trust, care, and endless swap-outs.</p>
+            <p className="text-xl font-bold text-white sm:text-2xl md:text-3xl">
+              Your closet just got a lot bigger — without taking over your house.
             </p>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
