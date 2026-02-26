@@ -10,7 +10,7 @@ export default function FAQPage() {
   const faqs = [
     {
       id: 'club-details',
-      question: "Joni's Closet Club details",
+      question: "Joni's Dress Up Box details",
       answer: `Laundry is included! Just bring your item back and we'll take care of the rest.
 
 The # of items included in your membership are how many things you take out at one time. You bring your last items back in order to take out new ones - that's a "swap-out". You can choose and change up your flow - come back daily if you like, keep your things for up to two weeks, or swap-hop any timing in between. You may also swap out some of your items and keep others for longer if you'd like.
@@ -69,7 +69,7 @@ It is important to note that this is a business model based on TRUST and INTEGRI
         <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
         <h1 className="mt-2 text-3xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h1>
         <p className="mt-2 text-sm text-[hsl(var(--ink))]/80">
-          Everything you need to know about Joni&apos;s Closet Club.
+          Everything you need to know about Joni&apos;s Dress Up Box.
         </p>
       </div>
 
