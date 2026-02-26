@@ -3,10 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
-import Image from 'next/image'
 
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,169 +41,88 @@ function LandingClient() {
   }
 
   return (
-    <main className="bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
-      <section id="portal" className="relative">
-        <div className="mx-auto max-w-6xl px-6 py-16 md:py-20">
-          <div className="overflow-hidden rounded-3xl border border-[hsl(var(--border))] bg-white shadow-sm">
-            <Image
-              src="/images/LANDING/1.jpg"
-              alt="Landing page section 1"
-              width={2025}
-              height={1141}
-              sizes="100vw"
-              quality={75}
-              className="h-auto w-full"
-              priority
-            />
+    <main className="text-[hsl(var(--foreground))]">
+      {/* Hero Section */}
+      <section id="portal" className="relative bg-[hsl(var(--ink-dark))] text-white">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
+          <h1 className="text-balance text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl md:text-7xl">
+            Joni&apos;s Closet Club
+          </h1>
+          <div className="mt-10 max-w-4xl space-y-8 text-lg leading-relaxed text-white/85 md:text-xl">
+            <p>Born from loving clothes too much to ever let them go.</p>
+            <p className="font-semibold">A solution for:</p>
+            <div className="grid gap-3 text-xl font-semibold md:grid-cols-2">
+              <div>Collectors</div>
+              <div>Thrillers</div>
+              <div>Glamour hoarders</div>
+              <div>And those who live light but still want access to everything</div>
+            </div>
+            <p>This is a clothing-sharing ecosystem built on trust, care, and endless swap-outs.</p>
+            <p className="text-2xl font-bold text-white md:text-3xl">
+              Your closet just got a lot bigger — without taking over your house.
+            </p>
           </div>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset}>
-              Enter
+        </div>
+      </section>
+
+      {/* App Section */}
+      <section id="app" className="relative bg-[hsl(var(--secondary))] text-[hsl(var(--foreground))]">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
+          <h2 className="text-balance text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl md:text-7xl">
+            Change Your Outfit
+            <br />
+            Change The World
+            <span className="block text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl">(The App)</span>
+          </h2>
+          <div className="mt-10 max-w-4xl space-y-8 text-lg leading-relaxed md:text-xl">
+            <p>Browse the closet.</p>
+            <p>Reserve pieces.</p>
+            <p>Track your looks.</p>
+            <p>Tell the stories your outfits unlock.</p>
+            <p className="text-2xl font-black tracking-tight md:text-3xl">Clothing lives longer when its stories are shared.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Culture Section */}
+      <section id="culture" className="relative bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
+          <h2 className="text-balance text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">A 24-Hour Culture Experiment</h2>
+          <div className="mt-10 max-w-4xl space-y-8 text-lg leading-relaxed md:text-xl">
+            <p>Before &amp; Afters runs on shared presence.</p>
+            <p>
+              Members plug into weekly time slots — leading, supporting, co-creating — to simulate a living, breathing 24-hour culture.
+            </p>
+            <p>
+              From meditation naptime to character balls, from sparkle sessions to closet karaoke,
+              this is where clothing meets community.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Invitation Section */}
+      <section id="invitation" className="relative bg-[hsl(var(--ink-dark))] text-white">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-28">
+          <h2 className="text-balance text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl md:text-7xl">Let&apos;s Play Dress Up</h2>
+          <div className="mt-10 max-w-3xl space-y-8 text-lg leading-relaxed text-white/85 md:text-xl">
+            <p>
+              This is a trust-based ecosystem.
+              <br />
+              A shared wardrobe.
+              <br />
+              A collective story.
+            </p>
+            <p className="text-2xl font-bold text-white md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
+          </div>
+          <div className="mt-12 flex flex-col gap-4 sm:flex-row">
+            <Button type="button" onClick={onEnterCloset} size="lg">
+              Enter the Closet
             </Button>
-            <Button asChild variant="secondary">
+            <Button asChild variant="secondary" size="lg">
               <a href="/memberships">Join the Club</a>
             </Button>
           </div>
-        </div>
-      </section>
-
-      <section id="learn-more" className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/2.jpg"
-            alt="Landing page section 2"
-            width={2025}
-            height={1141}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/3.jpg"
-            alt="Landing page section 3"
-            width={2025}
-            height={1141}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/4.jpg"
-            alt="Landing page section 4"
-            width={2025}
-            height={1359}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/5.jpg"
-            alt="Landing page section 5"
-            width={2025}
-            height={1141}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/6.jpg"
-            alt="Landing page section 6"
-            width={2025}
-            height={1141}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/7.jpg"
-            alt="Landing page section 7"
-            width={2025}
-            height={1514}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/8.jpg"
-            alt="Landing page section 8"
-            width={2025}
-            height={1350}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/9.jpg"
-            alt="Landing page section 9"
-            width={2025}
-            height={1141}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-      </section>
-
-      <section className="relative">
-        <div className="mx-auto max-w-6xl px-6 pb-10">
-          <Image
-            src="/images/LANDING/10.jpg"
-            alt="Landing page section 10"
-            width={2025}
-            height={1141}
-            sizes="100vw"
-            quality={60}
-            className="h-auto w-full"
-            loading="lazy"
-          />
-        </div>
-        <div className="mx-auto max-w-6xl px-6 pb-20">
-          <Button type="button" onClick={onEnterCloset} size="lg">
-            Enter
-          </Button>
         </div>
       </section>
     </main>

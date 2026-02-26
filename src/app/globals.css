@@ -55,23 +55,23 @@ section[id] {
     --ink-dark: 292 51% 12%;
     --ink-hover: 286 47% 23%;
 
-    --background: 335 100% 95%;
+    --background: 0 0% 100% / 0.85;
     --foreground: 0 0% 10%;
-    --card: 0 0% 100%;
+    --card: 0 0% 100% / 0.9;
     --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
+    --popover: 0 0% 100% / 0.95;
     --popover-foreground: 0 0% 10%;
 
     --primary: 338 74% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 335 85% 92%;
+    --secondary: 335 85% 92% / 0.9;
     --secondary-foreground: 289 52% 17%;
 
-    --muted: 335 40% 92%;
+    --muted: 335 40% 92% / 0.8;
     --muted-foreground: 289 35% 22%;
 
-    --accent: 334 85% 90%;
+    --accent: 334 85% 90% / 0.9;
     --accent-foreground: 289 52% 17%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -83,23 +83,23 @@ section[id] {
   }
 
   .dark {
-    --background: var(--ink-dark);
+    --background: var(--ink-dark) / 0.9;
     --foreground: 0 0% 100%;
-    --card: var(--ink);
+    --card: var(--ink) / 0.9;
     --card-foreground: 0 0% 100%;
-    --popover: var(--ink);
+    --popover: var(--ink) / 0.95;
     --popover-foreground: 0 0% 100%;
 
     --primary: 338 74% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: var(--ink-hover);
+    --secondary: var(--ink-hover) / 0.9;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: var(--ink-hover);
+    --muted: var(--ink-hover) / 0.8;
     --muted-foreground: 0 0% 75%;
 
-    --accent: var(--ink-hover);
+    --accent: var(--ink-hover) / 0.9;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
