@@ -318,6 +318,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const { isLoaded, isSignedIn, user } = useUser()
   const router = useRouter()
 
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [detailsDraftDisplayName, setDetailsDraftDisplayName] = useState('')
+  const [detailsDraftAvatar, setDetailsDraftAvatar] = useState('')
+  const [detailsSaving, setDetailsSaving] = useState(false)
+
   const [catalogueItems, setCatalogueItems] = useState<CatalogueGarmentCard[]>([])
   const [catalogueLoading, setCatalogueLoading] = useState(true)
   const [catalogueError, setCatalogueError] = useState<string | null>(null)
@@ -502,6 +507,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   useEffect(() => {
     if (!mounted) return
+    if (!detailsOpen) return
+
+    setDetailsDraftDisplayName(typeof profile.displayName === 'string' ? profile.displayName : '')
+    setDetailsDraftAvatar(typeof profile.avatar === 'string' ? profile.avatar : '')
+  }, [detailsOpen, mounted, profile.avatar, profile.displayName])
+
+  useEffect(() => {
+    if (!mounted) return
     // Membership fetch removed from this page for now. `/memberships` shows tiers.
   }, [mounted])
 
@@ -553,6 +566,25 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       // ignore
     })
     closeEditor()
+  }
+
+  const saveDetails = async () => {
+    const patch: Partial<WizardProfile> = {
+      displayName: detailsDraftDisplayName.trim() || undefined,
+      avatar: detailsDraftAvatar.trim() || undefined,
+    }
+
+    const next = { ...(profile || {}), ...patch } as WizardProfile
+    setDetailsSaving(true)
+    try {
+      setProfile(next)
+      await saveProfile(next)
+      setDetailsOpen(false)
+    } catch {
+      // ignore
+    } finally {
+      setDetailsSaving(false)
+    }
   }
 
   const pageName =
@@ -743,7 +775,88 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </div>
       ) : null}
 
+      <Dialog.Root open={detailsOpen} onOpenChange={setDetailsOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay
+            className={cn(
+              'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+              'transition-opacity duration-200 ease-out',
+              'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
+            )}
+          />
+          <Dialog.Content
+            className={cn(
+              'fixed left-1/2 top-1/2 z-50 w-[min(720px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2',
+              'rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-2xl',
+              'transition-[opacity,transform] duration-200 ease-out will-change-transform',
+              'data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+              'data-[state=open]:scale-100 data-[state=closed]:scale-95'
+            )}
+          >
+            <div className="p-5 sm:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Profile</div>
+                  <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Edit your details</div>
+                </div>
+                <Dialog.Close asChild>
+                  <button
+                    type="button"
+                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-sm font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
+                    disabled={detailsSaving}
+                  >
+                    Close
+                  </button>
+                </Dialog.Close>
+              </div>
+
+              <div className="mt-5 space-y-4">
+                <div>
+                  <div className="text-sm font-medium text-[hsl(var(--ink))]">Display name</div>
+                  <Input
+                    value={detailsDraftDisplayName}
+                    onChange={(e) => setDetailsDraftDisplayName(e.target.value)}
+                    placeholder="Your name"
+                    disabled={detailsSaving}
+                    className="mt-2"
+                  />
+                </div>
+
+                <div>
+                  <div className="text-sm font-medium text-[hsl(var(--ink))]">Avatar image URL</div>
+                  <Input
+                    value={detailsDraftAvatar}
+                    onChange={(e) => setDetailsDraftAvatar(e.target.value)}
+                    placeholder="https://..."
+                    disabled={detailsSaving}
+                    className="mt-2"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <Dialog.Close asChild>
+                  <Button type="button" variant="outline" disabled={detailsSaving}>
+                    Cancel
+                  </Button>
+                </Dialog.Close>
+                <Button type="button" onClick={saveDetails} disabled={detailsSaving}>
+                  {detailsSaving ? 'Saving…' : 'Save'}
+                </Button>
+              </div>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
       <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
+        <button
+          type="button"
+          onClick={() => setDetailsOpen(true)}
+          className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors"
+        >
+          ✏️ Edit profile
+        </button>
         <Link href="/search">
           <button className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors">
             🔍 Search Clothing

@@ -38,19 +38,27 @@ It’s important to note that this business model is based on trust and integrit
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-10">
-      <div className="mb-8">
+      <div className="mb-10">
         <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
-        <h1 className="mt-2 text-3xl font-semibold text-[hsl(var(--ink))]">Tiers</h1>
-        <p className="mt-2 text-sm text-[hsl(var(--ink))]/80">
-          Choose the membership that matches your style and ritual.
-        </p>
       </div>
 
       <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
         <InteractiveMembershipList />
       </Suspense>
 
-      <div className="mt-12">
+      <div className="mt-12 rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur">
+        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Mission</div>
+        <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Make wardrobe-sharing a form of care</h2>
+        <div className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-[hsl(var(--ink))]/85">
+          Before & Afters is a clothing-sharing clubhouse built on trust, creativity, and community.
+
+          Your membership supports more than outfits—it helps us keep the closet stocked, cleaned, repaired, and accessible, and it funds the behind-the-scenes labor that makes the magic possible.
+
+          We see this as a kind of mutual-aid / charity model: members help sustain the collection, and we use that support to keep prices grounded, offer leeway when life happens, and make space for more people to participate.
+        </div>
+      </div>
+
+      <div className="mt-16">
         <div className="mb-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
           <h2 className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h2>
