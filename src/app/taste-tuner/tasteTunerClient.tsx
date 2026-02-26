@@ -689,7 +689,15 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
+    <div 
+      className="mx-auto w-full max-w-[1600px] px-6 py-10 min-h-screen"
+      style={{
+        backgroundImage: "url('/images/Boxes/Background.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
         <Link href="/search">
           <button className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors">
