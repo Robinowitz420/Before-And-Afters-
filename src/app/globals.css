@@ -27,17 +27,22 @@ html {
   scroll-behavior: smooth;
 }
 
+html,
+body {
+  background: transparent;
+}
+
 section[id] {
   scroll-margin-top: 88px;
 }
 
 
 .app-atmosphere {
-  background: #ffe4f0;
+  background: transparent;
 }
 
 .app-sunset {
-  background: #ffe4f0;
+  background: transparent;
 }
 
 .wizard-soft-orange {

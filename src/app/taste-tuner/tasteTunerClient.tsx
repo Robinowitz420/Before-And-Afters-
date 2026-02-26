@@ -689,14 +689,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   }
 
   return (
-    <div 
-      className="min-h-screen w-full"
-      style={{
-        backgroundImage: "url('/images/Boxes/checkerboard.svg')",
-        backgroundSize: '200px 200px',
-        backgroundRepeat: 'repeat',
-      }}
-    >
+    <div className="min-h-screen w-full">
       <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
       <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
         <Link href="/search">
