@@ -23,8 +23,6 @@ export default function InteractiveMembershipList() {
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false)
   const [pendingTier, setPendingTier] = useState<MembershipTier | null>(null)
 
-  const [mobileLandscape, setMobileLandscape] = useState(false)
-
   const membershipDisclaimer = `Membership Agreement & Disclaimer
 Please read carefully before completing your purchase.
 
@@ -101,17 +99,6 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
       )}
 
-      <div className="mx-auto w-full px-6 pb-4 sm:hidden">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => setMobileLandscape((v) => !v)}
-          className="w-full"
-        >
-          {mobileLandscape ? 'Exit landscape view' : 'View full-screen landscape'}
-        </Button>
-      </div>
-
       {disclaimerOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-10">
           <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-2xl">
@@ -160,33 +147,24 @@ All borrowed items must be returned before cancellation is finalized.
       ) : null}
 
       <div className="relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
-        <div
-          className={
-            mobileLandscape
-              ? 'relative h-[100vw] w-[100vh] origin-top-left rotate-90'
-              : 'relative'
-          }
-          style={
-            mobileLandscape
-              ? {
-                  transform: 'rotate(90deg) translateY(-100%)',
-                }
-              : undefined
-          }
-        >
-          <div className="flex min-h-[80vh] items-center justify-center sm:min-h-0">
-            <Image
-              src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
-              alt="Membership tiers"
-              width={1024}
-              height={576}
-              priority
-              className="h-auto w-full select-none object-contain"
-            />
-          </div>
+        <div className="relative h-[100vw] sm:h-auto">
+          <div
+            className="relative h-[100vw] w-[100vh] origin-top-left rotate-90 sm:h-auto sm:w-auto sm:rotate-0"
+            style={{ transform: 'rotate(90deg) translateY(-100%)' }}
+          >
+            <div className="flex min-h-[80vh] items-center justify-center sm:min-h-0">
+              <Image
+                src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
+                alt="Membership tiers"
+                width={1024}
+                height={576}
+                priority
+                className="h-auto w-full select-none object-contain"
+              />
+            </div>
 
-          {/* Clickable quadrants */}
-          <div className="absolute inset-0">
+            {/* Clickable quadrants */}
+            <div className="absolute inset-0">
           {/* Top-left: Eeeehs */}
           <button
             type="button"
@@ -258,13 +236,14 @@ All borrowed items must be returned before cancellation is finalized.
             }}
             disabled={checkoutTier !== null}
           />
-          </div>
-
-          {checkoutTier && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
-              Redirecting to checkout…
             </div>
-          )}
+
+            {checkoutTier && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
+                Redirecting to checkout…
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
