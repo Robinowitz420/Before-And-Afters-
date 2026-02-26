@@ -156,12 +156,69 @@ type WizardProfile = {
   eras?: string[]
 }
 
+type CatalogueGarmentCard = {
+  id: string
+  name?: string | null
+  brand?: string | null
+  category?: string | null
+  size?: string | null
+  availabilityStatus?: string
+  primaryPhotoUrl?: string | null
+  photoUrls?: string[]
+  tags?: Record<string, unknown>
+}
+
+type CatalogueListResponse = {
+  data: CatalogueGarmentCard[]
+  nextCursor?: string | null
+}
+
+type CatalogueDetailResponse = {
+  data: CatalogueGarmentCard & Record<string, unknown>
+}
+
+type CatalogueAlternativeResponse = {
+  data: CatalogueGarmentCard[]
+}
+
 type TasteTunerSave = {
   likes: string[]
   dislikes: string[]
 }
 
 const STORAGE_KEY = 'cyo_taste_tuner_v1'
+const RESERVED_KEY = 'cyo_reserved_v1'
+const REQUESTED_KEY = 'cyo_requested_v1'
+const RESERVATION_TOKEN_KEY = 'cyo_reservation_token_v1'
+
+function readStringArray(key: string): string[] {
+  if (typeof window === 'undefined' || !window.localStorage) return []
+  try {
+    const raw = window.localStorage.getItem(key)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed.filter((v) => typeof v === 'string') : []
+  } catch {
+    return []
+  }
+}
+
+function writeStringArray(key: string, value: string[]) {
+  if (typeof window === 'undefined' || !window.localStorage) return
+  window.localStorage.setItem(key, JSON.stringify(value))
+}
+
+function getReservationToken(): string {
+  if (typeof window === 'undefined' || !window.localStorage) return 'anon'
+  const existing = window.localStorage.getItem(RESERVATION_TOKEN_KEY)
+  if (existing && existing.trim()) return existing
+  const token =
+    typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `anon_${Date.now()}_${Math.random().toString(16).slice(2)}`
+  window.localStorage.setItem(RESERVATION_TOKEN_KEY, token)
+  return token
+}
 
 const TONES = [
   'Dark',
@@ -238,6 +295,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const { isLoaded, isSignedIn, user } = useUser()
   const router = useRouter()
 
+  const [catalogueItems, setCatalogueItems] = useState<CatalogueGarmentCard[]>([])
+  const [catalogueLoading, setCatalogueLoading] = useState(true)
+  const [catalogueError, setCatalogueError] = useState<string | null>(null)
+
   const [editOpen, setEditOpen] = useState(false)
   const [editSection, setEditSection] = useState<'tones' | 'vibes' | 'eras' | null>(null)
   const [draftTones, setDraftTones] = useState<string[]>([])
@@ -251,6 +312,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [closetOpen, setClosetOpen] = useState(false)
   const [closetItemSrc, setClosetItemSrc] = useState<string | null>(null)
 
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailGarmentId, setDetailGarmentId] = useState<string | null>(null)
+  const [detailGarment, setDetailGarment] = useState<(CatalogueGarmentCard & Record<string, unknown>) | null>(null)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [detailError, setDetailError] = useState<string | null>(null)
+
+  const [reservedIds, setReservedIds] = useState<string[]>([])
+  const [requestedIds, setRequestedIds] = useState<string[]>([])
+  const [reservePopup, setReservePopup] = useState<{ type: 'accepted' | 'unavailable'; message: string; alternatives: CatalogueGarmentCard[] } | null>(null)
+
   const [save, setSave] = useState<TasteTunerSave>({ likes: [], dislikes: [] })
   const [index, setIndex] = useState(0)
 
@@ -258,18 +329,66 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [dragging, setDragging] = useState(false)
   const dragStartX = useRef<number | null>(null)
 
+  const usingCatalogue = images.length === 0
+
   const deck = useMemo(() => {
+    if (usingCatalogue) {
+      const seen = new Set([...save.likes, ...save.dislikes])
+      const filtered = catalogueItems.filter((g) => !seen.has(g.id))
+      return filtered.length ? filtered : catalogueItems
+    }
     const seen = new Set([...save.likes, ...save.dislikes])
     const filtered = images.filter((img) => !seen.has(img.src))
     return filtered.length ? filtered : images
-  }, [images, save.dislikes, save.likes])
+  }, [catalogueItems, images, save.dislikes, save.likes, usingCatalogue])
 
-  const current = deck[index % Math.max(1, deck.length)]
+  const current = deck[index % Math.max(1, deck.length)] as any
+
+  const currentCard: { id: string; src: string; category: string } | null = useMemo(() => {
+    if (!current) return null
+    if (usingCatalogue) {
+      const g = current as CatalogueGarmentCard
+      return {
+        id: g.id,
+        src: typeof g.primaryPhotoUrl === 'string' && g.primaryPhotoUrl ? g.primaryPhotoUrl : (Array.isArray(g.photoUrls) && g.photoUrls[0] ? g.photoUrls[0] : ''),
+        category: typeof g.category === 'string' && g.category ? g.category : 'Garment',
+      }
+    }
+    const img = current as ClothingImage
+    return { id: img.src, src: img.src, category: img.category }
+  }, [current, usingCatalogue])
 
   useEffect(() => {
     setMounted(true)
     setSave(readTasteSave())
+    setReservedIds(readStringArray(RESERVED_KEY))
+    setRequestedIds(readStringArray(REQUESTED_KEY))
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!usingCatalogue) return
+    setCatalogueLoading(true)
+    setCatalogueError(null)
+
+    fetch('/api/catalog/garments?limit=60', {
+      method: 'GET',
+      headers: { accept: 'application/json' },
+      cache: 'no-store',
+    })
+      .then(async (res) => {
+        const json = (await res.json().catch(() => null)) as CatalogueListResponse | null
+        if (!res.ok || !json || !Array.isArray(json.data)) {
+          throw new Error('Failed to load catalogue')
+        }
+        setCatalogueItems(json.data.filter((g) => g && typeof g.id === 'string' && g.id))
+      })
+      .catch((err) => {
+        const msg = err instanceof Error ? err.message : 'Failed to load catalogue'
+        setCatalogueError(msg)
+      })
+      .finally(() => setCatalogueLoading(false))
+  }, [mounted, usingCatalogue])
 
   useEffect(() => {
     if (!mounted) return
@@ -295,6 +414,9 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       return
     }
 
+    // Skip wizard redirect when using catalogue mode - allow browsing without completed profile
+    if (usingCatalogue) return
+
     fetchProfile()
       .then((data) => {
         if (!data) router.push('/profile-wizard')
@@ -302,7 +424,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       .catch(() => {
         router.push('/profile-wizard')
       })
-  }, [isLoaded, isSignedIn, mounted, router, user?.id])
+  }, [isLoaded, isSignedIn, mounted, router, user?.id, usingCatalogue])
 
   useEffect(() => {
     if (!mounted) return
@@ -330,6 +452,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     if (!mounted) return
     writeTasteSave(save)
   }, [mounted, save])
+
+  useEffect(() => {
+    if (!mounted) return
+    writeStringArray(RESERVED_KEY, reservedIds)
+  }, [mounted, reservedIds])
+
+  useEffect(() => {
+    if (!mounted) return
+    writeStringArray(REQUESTED_KEY, requestedIds)
+  }, [mounted, requestedIds])
 
   const openEditor = (section: 'tones' | 'vibes' | 'eras') => {
     setEditSection(section)
@@ -374,12 +506,23 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const closetItem = useMemo(() => {
     if (!closetItemSrc) return null
+    if (usingCatalogue) {
+      const match = catalogueItems.find((g) => g.id === closetItemSrc)
+      const src = match
+        ? typeof match.primaryPhotoUrl === 'string' && match.primaryPhotoUrl
+          ? match.primaryPhotoUrl
+          : Array.isArray(match.photoUrls) && match.photoUrls[0]
+            ? match.photoUrls[0]
+            : ''
+        : ''
+      return { src, category: match?.category ?? 'Garment', name: match?.name ?? null, id: closetItemSrc }
+    }
     const match = images.find((img) => img.src === closetItemSrc)
-    return match || { src: closetItemSrc, category: 'Closet item' }
-  }, [closetItemSrc, images])
+    return match || { src: closetItemSrc, category: 'Closet item', id: closetItemSrc }
+  }, [catalogueItems, closetItemSrc, images, usingCatalogue])
 
-  const openClosetItem = (src: string) => {
-    setClosetItemSrc(src)
+  const openClosetItem = (idOrSrc: string) => {
+    setClosetItemSrc(idOrSrc)
     setClosetOpen(true)
   }
 
@@ -405,21 +548,102 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   }
 
   const onLike = () => {
-    if (!current) return
+    if (!currentCard) return
     setSave((prev) => ({
-      likes: prev.likes.includes(current.src) ? prev.likes : [...prev.likes, current.src],
+      likes: prev.likes.includes(currentCard.id) ? prev.likes : [...prev.likes, currentCard.id],
       dislikes: prev.dislikes,
     }))
     advance()
   }
 
   const onDislike = () => {
-    if (!current) return
+    if (!currentCard) return
     setSave((prev) => ({
       likes: prev.likes,
-      dislikes: prev.dislikes.includes(current.src) ? prev.dislikes : [...prev.dislikes, current.src],
+      dislikes: prev.dislikes.includes(currentCard.id) ? prev.dislikes : [...prev.dislikes, currentCard.id],
     }))
     advance()
+  }
+
+  const openGarmentDetails = (garmentId: string) => {
+    setDetailGarmentId(garmentId)
+    setDetailOpen(true)
+  }
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!detailOpen || !detailGarmentId) return
+    if (!usingCatalogue) return
+
+    setDetailLoading(true)
+    setDetailError(null)
+    setDetailGarment(null)
+
+    fetch(`/api/catalog/garments/${encodeURIComponent(detailGarmentId)}`, {
+      method: 'GET',
+      headers: { accept: 'application/json' },
+      cache: 'no-store',
+    })
+      .then(async (res) => {
+        const json = (await res.json().catch(() => null)) as CatalogueDetailResponse | null
+        if (!res.ok || !json || !json.data || typeof json.data !== 'object') {
+          throw new Error('Failed to load garment')
+        }
+        setDetailGarment(json.data)
+      })
+      .catch((err) => {
+        const msg = err instanceof Error ? err.message : 'Failed to load garment'
+        setDetailError(msg)
+      })
+      .finally(() => setDetailLoading(false))
+  }, [detailGarmentId, detailOpen, mounted, usingCatalogue])
+
+  const reserveCurrent = async (garmentId: string) => {
+    if (!usingCatalogue) return
+    const token = getReservationToken()
+
+    setReservePopup(null)
+
+    const res = await fetch(`/api/catalog/garments/${encodeURIComponent(garmentId)}/reserve`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({ reservationToken: token }),
+      cache: 'no-store',
+    })
+
+    if (res.ok) {
+      setReservedIds((prev) => (prev.includes(garmentId) ? prev : [...prev, garmentId]))
+      setRequestedIds((prev) => prev.filter((id) => id !== garmentId))
+      setReservePopup({ type: 'accepted', message: 'Reservation accepted', alternatives: [] })
+      return
+    }
+
+    if (res.status === 409) {
+      setRequestedIds((prev) => (prev.includes(garmentId) ? prev : [...prev, garmentId]))
+
+      const altRes = await fetch(`/api/catalog/garments/${encodeURIComponent(garmentId)}/alternatives?limit=3`, {
+        method: 'GET',
+        headers: { accept: 'application/json' },
+        cache: 'no-store',
+      })
+
+      let alternatives: CatalogueGarmentCard[] = []
+      if (altRes.ok) {
+        const json = (await altRes.json().catch(() => null)) as CatalogueAlternativeResponse | null
+        if (json && Array.isArray(json.data)) alternatives = json.data
+      }
+
+      setReservePopup({
+        type: 'unavailable',
+        message: 'Sorry, not available at the moment',
+        alternatives,
+      })
+
+      return
+    }
+
+    const raw = await res.text().catch(() => '')
+    throw new Error(raw || 'Failed to reserve item')
   }
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -707,10 +931,12 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     const src = closetItemSrc
                     if (!src) return
                     setSave((prev) => {
-                      const inLikes = prev.likes.includes(src)
-                      const likes = inLikes ? prev.likes.filter((v) => v !== src) : prev.likes
+                      const idOrSrc = closetItemSrc
+                      if (!idOrSrc) return prev
+                      const inLikes = prev.likes.includes(idOrSrc)
+                      const likes = inLikes ? prev.likes.filter((v) => v !== idOrSrc) : prev.likes
                       const dislikes =
-                        inLikes || prev.dislikes.includes(src) ? prev.dislikes : [...prev.dislikes, src]
+                        inLikes || prev.dislikes.includes(idOrSrc) ? prev.dislikes : [...prev.dislikes, idOrSrc]
                       return { likes, dislikes }
                     })
                     closeClosetItem()
@@ -745,10 +971,22 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       <button
                         key={src}
                         type="button"
-                        onClick={() => openClosetItem(src)}
+                        onClick={() => {
+                          if (usingCatalogue) {
+                            openGarmentDetails(src)
+                            return
+                          }
+                          openClosetItem(src)
+                        }}
                         className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
                       >
-                        <Image src={src} alt="Liked item" width={240} height={320} className="h-24 w-full object-cover" />
+                        <Image
+                          src={usingCatalogue ? (catalogueItems.find((g) => g.id === src)?.primaryPhotoUrl ?? '/placeholder.png') : src}
+                          alt="Liked item"
+                          width={240}
+                          height={320}
+                          className="h-24 w-full object-cover"
+                        />
                       </button>
                     ))}
                   </div>
@@ -758,6 +996,64 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 )}
               </div>
+
+              {usingCatalogue ? (
+                <div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">Reserved</div>
+                  <div className="mt-2 text-xs text-[hsl(var(--ink))]/70">{reservedIds.length} items</div>
+                  {reservedIds.length ? (
+                    <div className="mt-3 grid grid-cols-3 gap-2">
+                      {reservedIds.slice(0, 12).map((id) => {
+                        const g = catalogueItems.find((x) => x.id === id)
+                        const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => openGarmentDetails(id)}
+                            className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
+                          >
+                            {img ? <Image src={img} alt="Reserved item" width={240} height={320} className="h-24 w-full object-cover" /> : null}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="mt-3 rounded-xl border border-dashed border-[hsl(var(--border))] bg-white/50 p-6 text-center text-sm text-muted-foreground">
+                      No reserved items yet.
+                    </div>
+                  )}
+                </div>
+              ) : null}
+
+              {usingCatalogue ? (
+                <div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">Requested</div>
+                  <div className="mt-2 text-xs text-[hsl(var(--ink))]/70">{requestedIds.length} items</div>
+                  {requestedIds.length ? (
+                    <div className="mt-3 grid grid-cols-3 gap-2">
+                      {requestedIds.slice(0, 12).map((id) => {
+                        const g = catalogueItems.find((x) => x.id === id)
+                        const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => openGarmentDetails(id)}
+                            className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
+                          >
+                            {img ? <Image src={img} alt="Requested item" width={240} height={320} className="h-24 w-full object-cover" /> : null}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="mt-3 rounded-xl border border-dashed border-[hsl(var(--border))] bg-white/50 p-6 text-center text-sm text-muted-foreground">
+                      No requested items yet.
+                    </div>
+                  )}
+                </div>
+              ) : null}
 
               <div className="rounded-xl border-[3px] border-blue-600 bg-yellow-200 p-4">
                 <div className="text-sm font-semibold text-[hsl(var(--ink))]">Recommendations</div>
@@ -774,7 +1070,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         <section className="flex items-start justify-center">
           <div className="w-full max-w-[520px]">
-            {!current ? (
+            {catalogueLoading ? (
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-8 text-center shadow-sm">
+                <div className="text-lg font-semibold text-[hsl(var(--ink))]">Loading catalogue…</div>
+              </div>
+            ) : catalogueError ? (
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-8 text-center shadow-sm">
+                <div className="text-lg font-semibold text-[hsl(var(--ink))]">Failed to load items</div>
+                <div className="mt-2 text-sm text-muted-foreground">{catalogueError}</div>
+              </div>
+            ) : !currentCard || !currentCard.src ? (
               <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-8 text-center shadow-sm">
                 <div className="text-lg font-semibold text-[hsl(var(--ink))]">No items found</div>
                 <div className="mt-2 text-sm text-muted-foreground">
@@ -798,7 +1103,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   onPointerCancel={onPointerUp}
                 >
                   <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-                    {current.category}
+                    {currentCard.category}
                   </div>
 
                   <div
@@ -815,14 +1120,24 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
 
                   <div className="relative aspect-[3/4] overflow-hidden rounded-3xl">
-                    <Image
-                      src={current.src}
-                      alt="Clothing item"
-                      fill
-                      sizes="(max-width: 1024px) 90vw, 520px"
-                      className="object-cover"
-                      priority
-                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (usingCatalogue) {
+                          openGarmentDetails(currentCard.id)
+                        }
+                      }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src={currentCard.src}
+                        alt="Clothing item"
+                        fill
+                        sizes="(max-width: 1024px) 90vw, 520px"
+                        className="object-cover"
+                        priority
+                      />
+                    </button>
                   </div>
                 </div>
 
@@ -840,11 +1155,185 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </Button>
                 </div>
 
+                {usingCatalogue ? (
+                  <div className="mt-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                      onClick={() => {
+                        if (!currentCard) return
+                        reserveCurrent(currentCard.id).catch(() => {
+                          // ignore
+                        })
+                      }}
+                    >
+                      Reserve item
+                    </Button>
+                  </div>
+                ) : null}
+
                 <div className="mt-4 text-center text-sm text-muted-foreground">Swipe left or right. No wrong answers.</div>
               </>
             )}
           </div>
         </section>
+
+        <Dialog.Root open={detailOpen} onOpenChange={(open) => (open ? setDetailOpen(true) : setDetailOpen(false))}>
+          <Dialog.Portal>
+            <Dialog.Overlay
+              className={cn(
+                'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+                'transition-opacity duration-200 ease-out',
+                'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
+              )}
+            />
+            <Dialog.Content
+              className={cn(
+                'fixed left-1/2 top-1/2 z-50 w-[min(980px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2',
+                'rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-2xl',
+                'transition-[opacity,transform] duration-200 ease-out will-change-transform',
+                'data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+                'data-[state=open]:scale-100 data-[state=closed]:scale-95'
+              )}
+            >
+              <div className="p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Garment</div>
+                    <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">
+                      {detailGarment?.name ?? 'Details'}
+                    </div>
+                  </div>
+                  <Dialog.Close asChild>
+                    <button
+                      type="button"
+                      className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-sm font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
+                    >
+                      Close
+                    </button>
+                  </Dialog.Close>
+                </div>
+
+                <div className="mt-5 grid gap-6 md:grid-cols-[360px,1fr]">
+                  <div className="relative overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-white">
+                    <div className="relative aspect-[3/4]">
+                      {detailLoading ? (
+                        <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">Loading…</div>
+                      ) : detailError ? (
+                        <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">{detailError}</div>
+                      ) : detailGarment ? (
+                        <Image
+                          src={
+                            (typeof detailGarment.primaryPhotoUrl === 'string' && detailGarment.primaryPhotoUrl) ||
+                            (Array.isArray(detailGarment.photoUrls) && detailGarment.photoUrls[0] ? detailGarment.photoUrls[0] : '')
+                          }
+                          alt={detailGarment.name ?? 'Garment'}
+                          fill
+                          sizes="360px"
+                          className="object-cover"
+                        />
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/40 p-4">
+                      <div className="text-sm font-semibold text-[hsl(var(--ink))]">Details</div>
+                      <div className="mt-2 text-sm text-[hsl(var(--ink))]/80">
+                        {detailGarment?.brand ? `Brand: ${detailGarment.brand}` : null}
+                        {detailGarment?.size ? ` • Size: ${detailGarment.size}` : null}
+                      </div>
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        {detailGarment?.category ? detailGarment.category : null}
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      {detailGarmentId ? (
+                        <Button
+                          type="button"
+                          className="w-full"
+                          onClick={() => {
+                            reserveCurrent(detailGarmentId).catch(() => {
+                              // ignore
+                            })
+                          }}
+                        >
+                          Reserve item
+                        </Button>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+
+        <Dialog.Root open={Boolean(reservePopup)} onOpenChange={(open) => (!open ? setReservePopup(null) : null)}>
+          <Dialog.Portal>
+            <Dialog.Overlay
+              className={cn(
+                'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+                'transition-opacity duration-200 ease-out',
+                'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
+              )}
+            />
+            <Dialog.Content
+              className={cn(
+                'fixed left-1/2 top-1/2 z-50 w-[min(720px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2',
+                'rounded-3xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-2xl',
+                'transition-[opacity,transform] duration-200 ease-out will-change-transform',
+                'data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+                'data-[state=open]:scale-100 data-[state=closed]:scale-95'
+              )}
+            >
+              <div className="p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="text-lg font-semibold text-[hsl(var(--ink))]">{reservePopup?.message ?? ''}</div>
+                  <Dialog.Close asChild>
+                    <button
+                      type="button"
+                      className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-sm font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
+                    >
+                      Close
+                    </button>
+                  </Dialog.Close>
+                </div>
+
+                {reservePopup?.type === 'unavailable' ? (
+                  <div className="mt-4">
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">Alternatives</div>
+                    {reservePopup.alternatives.length ? (
+                      <div className="mt-3 grid grid-cols-3 gap-3">
+                        {reservePopup.alternatives.slice(0, 3).map((g) => {
+                          const img = g.primaryPhotoUrl ?? (Array.isArray(g.photoUrls) ? g.photoUrls[0] : null)
+                          return (
+                            <button
+                              key={g.id}
+                              type="button"
+                              onClick={() => {
+                                setReservePopup(null)
+                                openGarmentDetails(g.id)
+                              }}
+                              className="overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-white text-left hover:shadow-sm"
+                            >
+                              {img ? <Image src={img} alt={g.name ?? 'Alternative'} width={240} height={320} className="h-28 w-full object-cover" /> : null}
+                              <div className="p-2 text-xs text-[hsl(var(--ink))]">{g.name ?? 'View'}</div>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : (
+                      <div className="mt-2 text-sm text-muted-foreground">No alternatives found.</div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
 
         <aside className="lg:sticky lg:top-10 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
           <div className="space-y-4">

@@ -8,6 +8,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
+export const dynamic = 'force-dynamic'
+
 function LandingClient() {
   const router = useRouter()
   const { isLoaded, isSignedIn } = useUser()

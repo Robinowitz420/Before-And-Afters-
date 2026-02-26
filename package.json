@@ -40,6 +40,7 @@
     "date-fns": "^3.0.6",
     "dotenv": "^17.2.3",
     "firebase": "^12.8.0",
+    "firebase-admin": "^13.6.1",
     "fs-extra": "^11.3.3",
     "lucide-react": "^0.303.0",
     "next": "^14.2.25",

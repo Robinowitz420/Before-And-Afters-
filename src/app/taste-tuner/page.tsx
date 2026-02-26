@@ -3,6 +3,8 @@ import path from 'path'
 
 import { TasteTunerClient } from './tasteTunerClient'
 
+export const dynamic = 'force-dynamic'
+
 type ClothingImage = {
   src: string
   category: string

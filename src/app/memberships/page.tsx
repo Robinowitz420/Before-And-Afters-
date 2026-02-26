@@ -3,6 +3,8 @@
 import { Suspense, useState } from 'react'
 import InteractiveMembershipList from './InteractiveMembershipList'
 
+export const dynamic = 'force-dynamic'
+
 export default function MembershipsPage() {
   const [openItem, setOpenItem] = useState<string | null>(null)
 

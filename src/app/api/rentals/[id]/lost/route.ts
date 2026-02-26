@@ -6,12 +6,12 @@ import { calculateLostItemFee } from '@/lib/business-rules'
 // POST /api/rentals/[id]/lost - Mark item as lost
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await auth.protect()
     const { userId } = await auth()
-    const rentalId = params.id
+    const { id: rentalId } = await params
 
     if (!userId) {
       return NextResponse.json(

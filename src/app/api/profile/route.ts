@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { prisma } from '@/lib/prisma'
+import { getAdminFirestore } from '@/lib/firebase/admin'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -14,17 +14,23 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const profile = await prisma.profile.findUnique({
-      where: { clerkUserId: userId },
-      select: {
-        clerkUserId: true,
-        data: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    })
+    const db = getAdminFirestore()
+    if (!db) {
+      return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+    }
 
-    return NextResponse.json(profile)
+    const snap = await db.collection('profiles').doc(userId).get()
+    
+    if (!snap.exists) {
+      return NextResponse.json(null)
+    }
+
+    return NextResponse.json({
+      clerkUserId: userId,
+      data: snap.data()?.data ?? {},
+      createdAt: snap.data()?.createdAt,
+      updatedAt: snap.data()?.updatedAt,
+    })
   } catch (error) {
     console.error('Error fetching profile:', error)
     return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
@@ -41,25 +47,26 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json()
+    const db = getAdminFirestore()
+    
+    if (!db) {
+      return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+    }
 
-    const profile = await prisma.profile.upsert({
-      where: { clerkUserId: userId },
-      create: {
-        clerkUserId: userId,
-        data: body ?? {},
-      },
-      update: {
-        data: body ?? {},
-      },
-      select: {
-        clerkUserId: true,
-        data: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+    const now = new Date().toISOString()
+    
+    await db.collection('profiles').doc(userId).set({
+      clerkUserId: userId,
+      data: body ?? {},
+      createdAt: now,
+      updatedAt: now,
+    }, { merge: true })
+
+    return NextResponse.json({
+      clerkUserId: userId,
+      data: body ?? {},
+      updatedAt: now,
     })
-
-    return NextResponse.json(profile)
   } catch (error) {
     console.error('Error saving profile:', error)
     return NextResponse.json({ error: 'Failed to save profile' }, { status: 500 })
