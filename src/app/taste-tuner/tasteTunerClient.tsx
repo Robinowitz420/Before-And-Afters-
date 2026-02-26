@@ -690,15 +690,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   return (
     <div 
-      className="mx-auto w-full max-w-[1600px] px-6 py-10 min-h-screen"
+      className="min-h-screen w-full"
       style={{
-        backgroundImage: "url('/images/Boxes/wavy-bg.svg')",
-        backgroundColor: '#ffffff',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
+        backgroundImage: "url('/images/Boxes/checkerboard.svg')",
+        backgroundSize: '200px 200px',
+        backgroundRepeat: 'repeat',
       }}
     >
+      <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
       <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
         <Link href="/search">
           <button className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors">
@@ -1458,6 +1457,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
             </div>
           </div>
         </aside>
+      </div>
       </div>
     </div>
   )
