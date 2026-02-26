@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} min-h-screen bg-background text-foreground`}>
+        <body className={`${inter.className} min-h-screen text-foreground`}>
           <AppShell>{children}</AppShell>
         </body>
       </html>
