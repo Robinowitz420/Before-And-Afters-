@@ -100,11 +100,11 @@ All borrowed items must be returned before cancellation is finalized.
       )}
 
       {disclaimerOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-10">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-4 pt-10">
           <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-2xl">
             <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership Agreement</div>
             <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))]">Membership Agreement & Disclaimer</div>
-            <div className="mt-4 max-h-[60vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-4 text-sm leading-relaxed text-[hsl(var(--ink))]">
+            <div className="mt-4 max-h-[40vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-4 text-sm leading-relaxed text-[hsl(var(--ink))]">
               {membershipDisclaimer}
             </div>
 
@@ -150,7 +150,7 @@ All borrowed items must be returned before cancellation is finalized.
       <div className="md:hidden fixed inset-0 z-40">
         <div 
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
-          style={{ width: '100vh', height: '100vw' }}
+          style={{ width: '100vh', height: '100vw', transform: 'rotate(90deg) translate(-50%, -50%) translateX(-2px)' }}
         >
           <Image
             src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
@@ -165,7 +165,7 @@ All borrowed items must be returned before cancellation is finalized.
         {/* Tap zones - rotated to match image */}
         <div 
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
-          style={{ width: '100vh', height: '100vw' }}
+          style={{ width: '100vh', height: '100vw', transform: 'rotate(90deg) translate(-50%, -50%) translateX(-2px)' }}
         >
           {/* Top-left: Eeeehs */}
           <button
