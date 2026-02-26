@@ -322,6 +322,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [requestedIds, setRequestedIds] = useState<string[]>([])
   const [reservePopup, setReservePopup] = useState<{ type: 'accepted' | 'unavailable'; message: string; alternatives: CatalogueGarmentCard[] } | null>(null)
 
+  const [browseMode, setBrowseMode] = useState(false)
+
   const [save, setSave] = useState<TasteTunerSave>({ likes: [], dislikes: [] })
   const [index, setIndex] = useState(0)
 
@@ -330,6 +332,19 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const dragStartX = useRef<number | null>(null)
 
   const usingCatalogue = images.length === 0
+
+  // Group garments by category for browse mode
+  const garmentsByCategory = useMemo(() => {
+    if (!usingCatalogue) return new Map<string, CatalogueGarmentCard[]>()
+    const map = new Map<string, CatalogueGarmentCard[]>()
+    for (const g of catalogueItems) {
+      const cat = g.category || 'Other'
+      const list = map.get(cat) || []
+      list.push(g)
+      map.set(cat, list)
+    }
+    return map
+  }, [catalogueItems, usingCatalogue])
 
   const deck = useMemo(() => {
     if (usingCatalogue) {
@@ -1050,7 +1065,31 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </div>
         </aside>
 
-        <section className="flex items-start justify-center">
+        <section className="flex flex-col items-start justify-center">
+          {/* Mode toggle */}
+          {usingCatalogue && !catalogueLoading && !catalogueError ? (
+            <div className="mb-4 flex gap-2">
+              <Button
+                type="button"
+                variant={browseMode ? 'outline' : 'default'}
+                size="sm"
+                onClick={() => setBrowseMode(false)}
+                className={!browseMode ? '' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]'}
+              >
+                Swipe
+              </Button>
+              <Button
+                type="button"
+                variant={browseMode ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setBrowseMode(true)}
+                className={browseMode ? '' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]'}
+              >
+                Browse All
+              </Button>
+            </div>
+          ) : null}
+
           <div className="w-full max-w-[520px]">
             {catalogueLoading ? (
               <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-8 text-center shadow-sm">
@@ -1067,6 +1106,37 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 <div className="mt-2 text-sm text-muted-foreground">
                   Add images to <code className="font-mono">/public/images/clothing</code> and refresh.
                 </div>
+              </div>
+            ) : browseMode ? (
+              /* Browse mode - categorized grid */
+              <div className="space-y-6">
+                {Array.from(garmentsByCategory.entries()).map(([category, items]) => (
+                  <div key={category}>
+                    <div className="mb-2 text-sm font-semibold text-[hsl(var(--ink))]">{category} <span className="font-normal text-muted-foreground">({items.length})</span></div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {items.map((g) => {
+                        const img = g.primaryPhotoUrl || (Array.isArray(g.photoUrls) ? g.photoUrls[0] : null)
+                        if (!img) return null
+                        return (
+                          <button
+                            key={g.id}
+                            type="button"
+                            onClick={() => openGarmentDetails(g.id)}
+                            className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-md"
+                          >
+                            <div className="relative aspect-[3/4]">
+                              <Image src={img} alt={g.name || 'Garment'} fill sizes="160px" className="object-cover" />
+                            </div>
+                            <div className="p-2">
+                              <div className="text-xs font-medium text-[hsl(var(--ink))] truncate">{g.name || 'Untitled'}</div>
+                              {g.brand ? <div className="text-xs text-muted-foreground truncate">{g.brand}</div> : null}
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <>
