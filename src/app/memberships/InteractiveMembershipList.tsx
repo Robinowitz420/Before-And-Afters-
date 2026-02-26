@@ -147,14 +147,16 @@ All borrowed items must be returned before cancellation is finalized.
       ) : null}
 
       <div className="relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
-        <Image
-          src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
-          alt="Membership tiers"
-          width={1024}
-          height={576}
-          priority
-          className="h-auto w-full select-none object-contain"
-        />
+        <div className="flex min-h-[420px] items-center justify-center sm:min-h-0">
+          <Image
+            src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
+            alt="Membership tiers"
+            width={1024}
+            height={576}
+            priority
+            className="h-auto w-full select-none object-contain"
+          />
+        </div>
 
         {/* Clickable quadrants */}
         <div className="absolute inset-0">

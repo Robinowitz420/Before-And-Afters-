@@ -764,11 +764,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 sm:py-10">
       {membershipTitle ? (
-        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur">
+        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-4 shadow-sm backdrop-blur sm:p-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
-          <div className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">{membershipTitle}</div>
+          <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))] sm:text-2xl">{membershipTitle}</div>
           {membershipSubtitle ? (
             <div className="mt-1 text-sm text-[hsl(var(--ink))]/75">{membershipSubtitle}</div>
           ) : null}
@@ -849,20 +849,20 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
+      <div className="mb-6 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-end sm:gap-6">
         <button
           type="button"
           onClick={() => setDetailsOpen(true)}
-          className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors"
+          className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto"
         >
           ✏️ Edit profile
         </button>
-        <Link href="/search">
-          <button className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors">
+        <Link href="/search" className="w-full sm:w-auto">
+          <button className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto">
             🔍 Search Clothing
           </button>
         </Link>
-        <div className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md">
+        <div className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md sm:w-auto">
           <UserButton afterSignOutUrl="/" />
         </div>
       </div>
