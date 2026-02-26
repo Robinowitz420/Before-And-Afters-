@@ -148,7 +148,10 @@ All borrowed items must be returned before cancellation is finalized.
 
       {/* MOBILE: Full-screen rotated */}
       <div className="md:hidden fixed inset-0 z-40">
-        <div className="absolute inset-0 rotate-90">
+        <div 
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
+          style={{ width: '100vh', height: '100vw' }}
+        >
           <Image
             src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
             alt="Membership tiers"
@@ -160,7 +163,10 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
 
         {/* Tap zones - rotated to match image */}
-        <div className="absolute inset-0 rotate-90">
+        <div 
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
+          style={{ width: '100vh', height: '100vw' }}
+        >
           {/* Top-left: Eeeehs */}
           <button
             type="button"
@@ -227,7 +233,7 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
 
         {checkoutTier && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white z-50">
             Redirecting to checkout…
           </div>
         )}
