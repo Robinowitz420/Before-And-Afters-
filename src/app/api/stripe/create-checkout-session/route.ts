@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
           },
         },
       ],
-      success_url: `${baseUrl}/memberships?paid=1&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${baseUrl}/post-checkout?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/memberships?canceled=1`,
       metadata: {
         clerkUserId: userId,

@@ -9,6 +9,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 
 function SelectedChip({ children }: { children: React.ReactNode }) {
   return (
@@ -111,6 +112,27 @@ function ToggleSwitch({
 type ClothingImage = {
   src: string
   category: string
+}
+
+type MembershipSummary = {
+  membershipTier: MembershipTier
+} | null
+
+async function fetchMembership(): Promise<MembershipSummary> {
+  const res = await fetch('/api/memberships', {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+  })
+
+  if (!res.ok) return null
+  const data = (await res.json().catch(() => null)) as any
+  if (!data || typeof data !== 'object') return null
+
+  const tier = data.membershipTier
+  if (typeof tier !== 'string') return null
+  if (!(tier in MEMBERSHIP_LEVELS)) return null
+
+  return { membershipTier: tier as MembershipTier }
 }
 
 async function fetchProfile(): Promise<WizardProfile | null> {
@@ -292,6 +314,7 @@ function writeTasteSave(save: TasteTunerSave) {
 export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [mounted, setMounted] = useState(false)
   const [profile, setProfile] = useState<WizardProfile>({})
+  const [membership, setMembership] = useState<MembershipSummary>(null)
   const { isLoaded, isSignedIn, user } = useUser()
   const router = useRouter()
 
@@ -419,6 +442,25 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         // ignore
       })
   }, [isLoaded, isSignedIn, mounted, user?.id])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!isLoaded) return
+    if (!isSignedIn) return
+
+    fetchMembership()
+      .then((data) => setMembership(data))
+      .catch(() => {
+        setMembership(null)
+      })
+  }, [isLoaded, isSignedIn, mounted, user?.id])
+
+  const membershipLabel = membership?.membershipTier
+    ? MEMBERSHIP_LEVELS[membership.membershipTier]?.name
+    : null
+
+  const membershipTitle = membershipLabel ? membershipLabel.split(' — ')[0] : null
+  const membershipSubtitle = membershipLabel ? membershipLabel.split(' — ')[1] : null
 
   useEffect(() => {
     if (!mounted) return
@@ -691,6 +733,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   return (
     <div className="min-h-screen w-full">
       <div className="mx-auto w-full max-w-[1600px] px-6 py-10">
+      {membershipTitle ? (
+        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur">
+          <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
+          <div className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">{membershipTitle}</div>
+          {membershipSubtitle ? (
+            <div className="mt-1 text-sm text-[hsl(var(--ink))]/75">{membershipSubtitle}</div>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="mb-6 flex flex-wrap items-center justify-end gap-6">
         <Link href="/search">
           <button className="rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md hover:bg-black/40 transition-colors">
