@@ -692,7 +692,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     <div 
       className="mx-auto w-full max-w-[1600px] px-6 py-10 min-h-screen"
       style={{
-        backgroundImage: "url('/images/Boxes/Background.jpg')",
+        backgroundImage: "url('/images/Boxes/wavy-bg.svg')",
+        backgroundColor: '#ffffff',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
