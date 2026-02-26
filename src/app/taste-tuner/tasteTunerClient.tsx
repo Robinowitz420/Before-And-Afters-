@@ -950,24 +950,18 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-8 lg:grid-cols-[360px,1fr,320px]">
-        <aside className="lg:sticky lg:top-10 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
-          <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-6 shadow-sm">
+      <div className="grid gap-6 lg:grid-cols-[280px,1fr,260px]">
+        <aside className="lg:sticky lg:top-6">
+          <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
             <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
-            <div className="mt-2 text-2xl font-semibold text-[hsl(var(--ink))]">Liked items & picks for you</div>
-            <div className="mt-2 text-sm text-[hsl(var(--ink))]/80">
-              Your saved likes and personalized recommendations.
-            </div>
+            <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
-            <div className="mt-6 space-y-6">
+            <div className="mt-4 space-y-4">
               <div>
-                <div className="text-sm font-semibold text-[hsl(var(--ink))]">Liked items</div>
-                <div className="mt-2 text-xs text-[hsl(var(--ink))]/70">
-                  {save.likes.length} saved · Like cards in the tuner to add more
-                </div>
+                <div className="text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
                 {savedItems.length ? (
-                  <div className="mt-3 grid grid-cols-3 gap-2">
-                    {savedItems.map((src) => (
+                  <div className="mt-2 grid grid-cols-4 gap-1.5">
+                    {savedItems.slice(0, 8).map((src) => (
                       <button
                         key={src}
                         type="button"
@@ -978,32 +972,31 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                           }
                           openClosetItem(src)
                         }}
-                        className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
+                        className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
                       >
                         <Image
                           src={usingCatalogue ? (catalogueItems.find((g) => g.id === src)?.primaryPhotoUrl ?? '/placeholder.png') : src}
-                          alt="Liked item"
-                          width={240}
-                          height={320}
-                          className="h-24 w-full object-cover"
+                          alt="Liked"
+                          width={80}
+                          height={80}
+                          className="h-14 w-full object-cover"
                         />
                       </button>
                     ))}
                   </div>
                 ) : (
-                  <div className="mt-3 rounded-xl border border-dashed border-[hsl(var(--border))] bg-white/50 p-6 text-center text-sm text-muted-foreground">
-                    No liked items yet. Swipe right on pieces in the tuner to add them here.
+                  <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                    Swipe right to like
                   </div>
                 )}
               </div>
 
               {usingCatalogue ? (
                 <div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">Reserved</div>
-                  <div className="mt-2 text-xs text-[hsl(var(--ink))]/70">{reservedIds.length} items</div>
+                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
                   {reservedIds.length ? (
-                    <div className="mt-3 grid grid-cols-3 gap-2">
-                      {reservedIds.slice(0, 12).map((id) => {
+                    <div className="mt-2 grid grid-cols-4 gap-1.5">
+                      {reservedIds.slice(0, 4).map((id) => {
                         const g = catalogueItems.find((x) => x.id === id)
                         const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
                         return (
@@ -1011,16 +1004,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             key={id}
                             type="button"
                             onClick={() => openGarmentDetails(id)}
-                            className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
+                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
                           >
-                            {img ? <Image src={img} alt="Reserved item" width={240} height={320} className="h-24 w-full object-cover" /> : null}
+                            {img ? <Image src={img} alt="Reserved" width={80} height={80} className="h-14 w-full object-cover" /> : null}
                           </button>
                         )
                       })}
                     </div>
                   ) : (
-                    <div className="mt-3 rounded-xl border border-dashed border-[hsl(var(--border))] bg-white/50 p-6 text-center text-sm text-muted-foreground">
-                      No reserved items yet.
+                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                      No reserved items
                     </div>
                   )}
                 </div>
@@ -1028,11 +1021,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
               {usingCatalogue ? (
                 <div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">Requested</div>
-                  <div className="mt-2 text-xs text-[hsl(var(--ink))]/70">{requestedIds.length} items</div>
+                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
                   {requestedIds.length ? (
-                    <div className="mt-3 grid grid-cols-3 gap-2">
-                      {requestedIds.slice(0, 12).map((id) => {
+                    <div className="mt-2 grid grid-cols-4 gap-1.5">
+                      {requestedIds.slice(0, 4).map((id) => {
                         const g = catalogueItems.find((x) => x.id === id)
                         const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
                         return (
@@ -1040,30 +1032,20 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             key={id}
                             type="button"
                             onClick={() => openGarmentDetails(id)}
-                            className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white text-left transition hover:shadow-sm"
+                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
                           >
-                            {img ? <Image src={img} alt="Requested item" width={240} height={320} className="h-24 w-full object-cover" /> : null}
+                            {img ? <Image src={img} alt="Requested" width={80} height={80} className="h-14 w-full object-cover" /> : null}
                           </button>
                         )
                       })}
                     </div>
                   ) : (
-                    <div className="mt-3 rounded-xl border border-dashed border-[hsl(var(--border))] bg-white/50 p-6 text-center text-sm text-muted-foreground">
-                      No requested items yet.
+                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                      No requested items
                     </div>
                   )}
                 </div>
               ) : null}
-
-              <div className="rounded-xl border-[3px] border-blue-600 bg-yellow-200 p-4">
-                <div className="text-sm font-semibold text-[hsl(var(--ink))]">Recommendations</div>
-                <div className="mt-2 text-xs text-muted-foreground">
-                  Picks based on your likes and style — coming soon.
-                </div>
-                <div className="mt-4 rounded-lg border border-dashed border-[hsl(var(--border))] bg-[hsl(var(--muted))]/30 p-6 text-center text-sm text-muted-foreground">
-                  Recommendations will appear here once we hook up the algorithm.
-                </div>
-              </div>
             </div>
           </div>
         </aside>
@@ -1335,26 +1317,22 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </Dialog.Portal>
         </Dialog.Root>
 
-        <aside className="lg:sticky lg:top-10 lg:h-[calc(100vh-5rem)] lg:overflow-y-auto">
-          <div className="space-y-4">
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-6 shadow-sm">
+        <aside className="lg:sticky lg:top-6">
+          <div className="space-y-3">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
-              <div className="mt-2 text-lg font-semibold text-[hsl(var(--ink))]">Profile photo</div>
-              <div className="mt-2 text-sm text-[color:var(--brand-text-secondary-hex)]">
-                Upload a photo so your profile feels personal.
-              </div>
+              <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
-              <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="mt-3 flex items-center gap-3">
                 <div
-                  className="w-full max-w-[240px] overflow-hidden border border-[hsl(var(--border))] bg-white"
-                  style={{ aspectRatio: '9 / 16', clipPath: 'polygon(50% 3%, 62% 6%, 70% 14%, 74% 24%, 78% 40%, 84% 58%, 82% 70%, 74% 83%, 62% 92%, 50% 97%, 38% 92%, 26% 83%, 18% 70%, 16% 58%, 22% 40%, 26% 24%, 30% 14%, 38% 6%)' }}
+                  className="h-20 w-16 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
                 >
                   {profile.avatar ? (
                     <Image
                       src={profile.avatar}
-                      alt="Your avatar"
-                      width={540}
-                      height={960}
+                      alt="Avatar"
+                      width={64}
+                      height={80}
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -1362,7 +1340,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   )}
                 </div>
                 <div className="flex flex-1 flex-col gap-2">
-                  <label className="text-sm font-medium text-[hsl(var(--ink))]">Upload</label>
                   <input
                     type="file"
                     accept="image/*"
@@ -1388,35 +1365,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       }
                       reader.readAsDataURL(file)
                     }}
-                    className="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border file:border-[hsl(var(--border))] file:bg-white file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-[hsl(var(--ink))] hover:file:bg-[hsl(var(--secondary))]"
+                    className="block w-full text-xs text-muted-foreground file:rounded-lg file:border file:border-[hsl(var(--border))] file:bg-white file:px-2 file:py-1 file:text-xs file:font-medium file:text-[hsl(var(--ink))] hover:file:bg-[hsl(var(--secondary))]"
                   />
-
-                  {profile.avatar ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="mt-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
-                      onClick={() => {
-                        const next = { ...(profile || {}), avatar: '' } as WizardProfile
-                        setProfile(next)
-                        saveProfile(next).catch(() => {
-                          // ignore
-                        })
-                      }}
-                    >
-                      Remove photo
-                    </Button>
-                  ) : null}
                 </div>
               </div>
-
-              <div className="mt-5" />
             </div>
 
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-100 p-6 shadow-sm">
-              <div className="text-sm font-medium text-[hsl(var(--ink))]">Not a member? Join here</div>
-              <Button asChild className="mt-3 w-full">
-                <Link href="/memberships">Memberships</Link>
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-100 p-4 shadow-sm">
+              <div className="text-xs font-medium text-[hsl(var(--ink))]">Not a member?</div>
+              <Button asChild className="mt-2 w-full" size="sm">
+                <Link href="/memberships">Join here</Link>
               </Button>
             </div>
           </div>
