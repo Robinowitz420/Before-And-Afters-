@@ -26,6 +26,12 @@ export default function MembershipsPage() {
       question: "Joni's Dress Up Box details",
       answer: `Laundry is included! Just bring your item back and we'll take care of the rest.\n\nThe # of items included in your membership are how many things you take out at one time. You bring the last items back in order to take out new ones - the "swap-out". You can choose and change up your flow - come back daily if you like, keep your things up to two weeks, or swap-hop anytiming in between. You may also swap out some of your items and keep others for longer if you'd like.\n\nIf you want to get more pieces at a time beyond your membership you can!, it is $10 more for the first extra piece, $15 for the second, $20 for the third, and $25 for the fourth, etc.\n\nIf you find yourself always wanting more pieces such that it makes sense to increase your membership, you are welcome upgrade to a higher level at any time!\n\nItems will be marked per piece with any additional charge. Many many pieces will be included with no extra charge. More sentimental, fragile, rare, dry-clean-only, designer, or otherwise high end pieces will be marked with additional cost per borrow, such as $5, $10, $15 and ranging upwards from there.`,
     },
+    
+    
+    
+    
+    
+    
     {
       id: 'lust-lost',
       question: 'What is the Lust it / Lost it fee?',
