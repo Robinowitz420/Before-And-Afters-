@@ -1173,7 +1173,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       <div className="grid gap-6 lg:grid-cols-[280px,1fr,260px]">
         <aside className="lg:sticky lg:top-6">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/70 p-4 shadow-sm backdrop-blur">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
               <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
@@ -1622,7 +1622,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <aside className="lg:sticky lg:top-6">
           <div className="space-y-3">
             <FrameBox frameClassName="scale-[1.10] rotate-[1.2deg]">
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/70 p-4 shadow-sm backdrop-blur">
                 <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
                 <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
