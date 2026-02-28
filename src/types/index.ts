@@ -150,7 +150,7 @@ export const MEMBERSHIP_LEVELS: Record<MembershipTier, MembershipLevel> = {
   Oooohs: {
     id: 'Oooohs',
     name: '💚 Oooohs — $100/mo',
-    monthlyPrice: 100,
+    monthlyPrice: 75,
     yearlyPrice: 1000,
     maxItems: 2,
     freeCheckMeowtItems: 2,
