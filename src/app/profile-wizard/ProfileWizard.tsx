@@ -676,195 +676,79 @@ function Step2({ data, setData }: { data: WizardData; setData: (v: WizardData) =
   ]
 
   return (
-    <div className="space-y-8">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-teal-500 to-blue-600 bg-clip-text text-transparent">
-          📏 Your Body & Fit Reality
-        </h2>
-        <p className="text-lg text-[hsl(var(--ink))]/80">
-          Help us find pieces that fit you perfectly
-        </p>
+    <div className="space-y-6">
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <FieldLabel title="Height" />
+          <Select value={data.heightRange} onChange={(e) => setData({ ...data, heightRange: e.target.value })}>
+            <option value="">Select</option>
+            {HEIGHT_RANGES.map((h) => (
+              <option key={h} value={h}>
+                {h}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <FieldLabel title="Top Size" />
+          <Select value={data.topSizeRange} onChange={(e) => setData({ ...data, topSizeRange: e.target.value })}>
+            <option value="">Select</option>
+            {SIZE_RANGES_TOP.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <FieldLabel title="Bottom Size" />
+          <Input
+            value={data.bottomSizeRange}
+            onChange={(e) => setData({ ...data, bottomSizeRange: e.target.value })}
+            placeholder="8, M, varies..."
+          />
+        </div>
+
+        <div className="space-y-2">
+          <FieldLabel title="Shoe Size" />
+          <Input
+            value={data.shoeSize}
+            onChange={(e) => setData({ ...data, shoeSize: e.target.value })}
+            placeholder="8, 8.5..."
+          />
+        </div>
       </div>
 
-      {/* Dynamic overlapping sizing bubbles */}
-      <div className="relative max-w-6xl mx-auto h-80 flex items-center justify-center">
-        {/* Top Size Bubble - Large center bubble */}
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
-          <div className="relative">
-            <div className="absolute -inset-2 bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-600 rounded-full blur-lg opacity-60 animate-pulse"></div>
-            <div className="relative bg-white rounded-full w-44 h-44 p-6 shadow-2xl border-4 border-transparent bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex flex-col items-center justify-center hover:scale-110 transition-transform duration-300">
-              <div className="text-xl mb-2">👕</div>
-              <label className="block text-center text-sm font-bold text-gray-800 mb-2">
-                Top Size
-              </label>
-              <select
-                value={data.topSizeRange}
-                onChange={(e) => setData({ ...data, topSizeRange: e.target.value })}
-                className="w-full bg-transparent border-0 text-center text-base font-semibold text-gray-900 focus:outline-none focus:ring-0"
+      <div className="space-y-2">
+        <FieldLabel title="Fit Notes & Preferences" />
+        <Textarea
+          value={data.fitNotes}
+          onChange={(e) => setData({ ...data, fitNotes: e.target.value })}
+          placeholder="Any special fit preferences?"
+          rows={4}
+          className="resize-none"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <FieldLabel title="Fabric allergies / sensitivities" />
+        <div className="flex flex-wrap gap-2">
+          {sensitivityButtons.map((b) => {
+            const selected = data.fabricSensitivities.includes(b.value)
+            return (
+              <Button
+                key={b.value}
+                type="button"
+                variant={selected ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => toggleSensitivity(b.value)}
               >
-                <option value="">Select size</option>
-                {SIZE_RANGES_TOP.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              <div className="text-xs text-center text-indigo-600 font-medium mt-1">Required</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Height Range Bubble - Top left */}
-        <div className="absolute left-16 top-4 z-10">
-          <div className="relative">
-            <div className="absolute -inset-2 bg-gradient-to-r from-teal-400 via-blue-500 to-cyan-600 rounded-full blur-lg opacity-50"></div>
-            <div className="relative bg-white rounded-full w-36 h-36 p-5 shadow-2xl border-4 border-transparent bg-gradient-to-br from-teal-50 via-blue-50 to-cyan-50 flex flex-col items-center justify-center hover:scale-105 transition-transform duration-300">
-              <div className="text-lg mb-1">📏</div>
-              <label className="block text-center text-xs font-bold text-gray-800 mb-1">
-                Height
-              </label>
-              <select
-                value={data.heightRange}
-                onChange={(e) => setData({ ...data, heightRange: e.target.value })}
-                className="w-full bg-transparent border-0 text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0"
-              >
-                <option value="">Select</option>
-                {HEIGHT_RANGES.map((h) => (
-                  <option key={h} value={h}>{h}</option>
-                ))}
-              </select>
-              <div className="text-xs text-center text-teal-600 font-medium mt-1">Optional</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Size Bubble - Bottom right */}
-        <div className="absolute right-12 bottom-4 z-30">
-          <div className="relative">
-            <div className="absolute -inset-2 bg-gradient-to-r from-pink-400 via-rose-500 to-red-600 rounded-full blur-lg opacity-55"></div>
-            <div className="relative bg-white rounded-full w-32 h-32 p-4 shadow-2xl border-4 border-transparent bg-gradient-to-br from-pink-50 via-rose-50 to-red-50 flex flex-col items-center justify-center hover:scale-105 transition-transform duration-300">
-              <div className="text-base mb-1">👖</div>
-              <label className="block text-center text-xs font-bold text-gray-800 mb-1">
-                Bottom Size
-              </label>
-              <input
-                type="text"
-                value={data.bottomSizeRange}
-                onChange={(e) => setData({ ...data, bottomSizeRange: e.target.value })}
-                placeholder="8, M, varies..."
-                className="w-full bg-transparent border-0 text-center text-sm font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
-              />
-              <div className="text-xs text-center text-pink-600 font-medium mt-1">Optional</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Shoe Size Bubble - Top right */}
-        <div className="absolute right-8 top-8 z-40">
-          <div className="relative">
-            <div className="absolute -inset-2 bg-gradient-to-r from-orange-400 via-amber-500 to-yellow-600 rounded-full blur-lg opacity-65 animate-pulse"></div>
-            <div className="relative bg-white rounded-full w-28 h-28 p-4 shadow-2xl border-4 border-transparent bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 flex flex-col items-center justify-center hover:scale-105 transition-transform duration-300">
-              <div className="text-base mb-1">👟</div>
-              <label className="block text-center text-xs font-bold text-gray-800 mb-1">
-                Shoe Size
-              </label>
-              <input
-                type="text"
-                value={data.shoeSize}
-                onChange={(e) => setData({ ...data, shoeSize: e.target.value })}
-                placeholder="8, 8.5..."
-                className="w-full bg-transparent border-0 text-center text-xs font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
-              />
-              <div className="text-xs text-center text-orange-600 font-medium mt-1">Optional</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Fit Notes Bubble */}
-      <div className="max-w-2xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-green-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-r from-emerald-50 to-green-50">
-            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
-              💭 Fit Notes & Preferences
-            </label>
-            <textarea
-              value={data.fitNotes}
-              onChange={(e) => setData({ ...data, fitNotes: e.target.value })}
-              placeholder="Any special fit preferences? Like preferring high-rise jeans, avoiding tight necklines, or loving stretchy fabrics..."
-              rows={4}
-              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
-            />
-            <div className="text-xs text-center text-gray-500 mt-3">Optional - helps us find better fits</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Fabric allergies / sensitivities (optional) */}
-      <div className="max-w-4xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 via-purple-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white/80 rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-pink-50 via-purple-50 to-fuchsia-50">
-            <div className="text-center">
-              <div className="text-2xl mb-2">🧶</div>
-              <h3 className="text-lg font-bold text-gray-900">Fabric allergies / sensitivities</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Optional — helps us avoid itchy pieces and sensory nightmares.
-              </p>
-              <div className="mt-2 text-xs font-medium text-pink-700">
-                {data.fabricSensitivities.length > 0
-                  ? `${data.fabricSensitivities.length} selected`
-                  : 'Tap any that apply (or Skip)'}
-              </div>
-            </div>
-
-            <div className="mt-6 flex flex-wrap justify-center gap-4">
-              {sensitivityButtons.map((b) => {
-                const selected = data.fabricSensitivities.includes(b.value)
-                return (
-                  <button
-                    key={b.value}
-                    type="button"
-                    onClick={() => toggleSensitivity(b.value)}
-                    className={`relative rounded-full w-24 h-24 p-3 shadow-2xl border-4 flex flex-col items-center justify-center hover:scale-110 transition-all duration-300 ${
-                      selected ? b.selectedClass : b.unselectedClass
-                    }`}
-                  >
-                    <div className="text-lg mb-1">{b.icon}</div>
-                    <div className="text-[11px] font-bold text-center leading-tight">{b.label}</div>
-                  </button>
-                )
-              })}
-            </div>
-
-            {data.fabricSensitivities.length > 0 ? (
-              <div className="mt-5 text-center text-xs text-muted-foreground">
-                Selected: <span className="font-medium text-gray-900">{data.fabricSensitivities.join(', ')}</span>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </div>
-
-      {/* Dynamic floating decorations */}
-      <div className="relative mt-8">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-28 h-28 bg-teal-200 rounded-full opacity-20 animate-ping"></div>
-          <div className="w-20 h-20 bg-blue-200 rounded-full opacity-25 animate-pulse ml-12"></div>
-          <div className="w-16 h-16 bg-purple-200 rounded-full opacity-20 animate-bounce ml-6"></div>
-        </div>
-
-        <div className="relative text-center">
-          <div className="inline-flex items-center space-x-4 text-3xl">
-            <span className="animate-bounce hover:animate-spin">📏</span>
-            <span className="animate-bounce delay-100 hover:scale-125 transition-transform">✨</span>
-            <span className="animate-bounce delay-200 hover:animate-spin">👗</span>
-            <span className="animate-bounce delay-300 hover:scale-125 transition-transform">📐</span>
-          </div>
-
-          <div className="absolute -top-3 left-1/4 text-sm animate-pulse">📏</div>
-          <div className="absolute -top-1 right-1/3 text-xs animate-bounce delay-700">📐</div>
-          <div className="absolute -bottom-2 left-1/3 text-sm animate-pulse delay-300">👖</div>
-          <div className="absolute -bottom-3 right-1/4 text-xs animate-bounce delay-500">👕</div>
+                {b.icon} {b.label}
+              </Button>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -883,139 +767,71 @@ function Step3({ data, setData }: { data: WizardData; setData: (v: WizardData) =
   }
 
   return (
-    <div className="space-y-8">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 bg-clip-text text-transparent">
-          👗 Your Style & Vibe
-        </h2>
-        <p className="text-lg text-[hsl(var(--ink))]/80">
-          Help us understand your fashion energy
-        </p>
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <FieldLabel title="What's your style vibe?" />
+        <Textarea
+          value={data.styleVibe}
+          onChange={(e) => setData({ ...data, styleVibe: e.target.value })}
+          placeholder="Describe your aesthetic..."
+          rows={3}
+          className="resize-none"
+        />
       </div>
 
-      {/* Style Vibe */}
-      <div className="max-w-2xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 via-purple-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-pink-50 via-purple-50 to-fuchsia-50">
-            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
-              ✨ What&apos;s your style vibe?
-            </label>
-            <textarea
-              value={data.styleVibe}
-              onChange={(e) => setData({ ...data, styleVibe: e.target.value })}
-              placeholder="Describe your aesthetic—vintage glam, streetwear, minimalist, maximalist, cottagecore, dark academia..."
-              rows={3}
-              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
-            />
-            <div className="text-xs text-center text-pink-600 mt-3 font-medium">Required</div>
-          </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <FieldLabel title="About you" />
+          <Textarea
+            value={data.aboutYou}
+            onChange={(e) => setData({ ...data, aboutYou: e.target.value })}
+            placeholder="Anything you'd like us to know..."
+            rows={4}
+            className="resize-none"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <FieldLabel title="Wardrobe gripes" />
+          <Textarea
+            value={data.wardrobeGripes}
+            onChange={(e) => setData({ ...data, wardrobeGripes: e.target.value })}
+            placeholder="Fit issues, style ruts, etc."
+            rows={4}
+            className="resize-none"
+          />
         </div>
       </div>
 
-      {/* Tell us more about you */}
-      <div className="max-w-2xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50">
-            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
-              💫 Tell us more about yourself
-            </label>
-            <textarea
-              value={data.aboutYou}
-              onChange={(e) => setData({ ...data, aboutYou: e.target.value })}
-              placeholder="Share anything else you&apos;d like us to know about you..."
-              rows={3}
-              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
-            />
-            <div className="text-xs text-center text-teal-600 mt-3">Optional</div>
-          </div>
-        </div>
+      <div className="space-y-2">
+        <FieldLabel title="Favorite stores / brands" />
+        <Textarea
+          value={data.favoriteStores}
+          onChange={(e) => setData({ ...data, favoriteStores: e.target.value })}
+          placeholder="Stores, boutiques, designers..."
+          rows={3}
+          className="resize-none"
+        />
       </div>
 
-      {/* Wardrobe Gripes */}
-      <div className="max-w-2xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 via-red-500 to-pink-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-orange-50 via-red-50 to-pink-50">
-            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
-              😤 What gripes do you have about your current wardrobe?
-            </label>
-            <textarea
-              value={data.wardrobeGripes}
-              onChange={(e) => setData({ ...data, wardrobeGripes: e.target.value })}
-              placeholder="Shopping habits, getting dressed, fit issues, style ruts..."
-              rows={3}
-              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
-            />
-            <div className="text-xs text-center text-orange-600 mt-3">Optional</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Favorite Stores */}
-      <div className="max-w-2xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-400 via-purple-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-indigo-50 via-purple-50 to-fuchsia-50">
-            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
-              🛍️ Any fave stores, boutiques, brands or designers?
-            </label>
-            <textarea
-              value={data.favoriteStores}
-              onChange={(e) => setData({ ...data, favoriteStores: e.target.value })}
-              placeholder="We want to know where you love to shop!"
-              rows={3}
-              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
-            />
-            <div className="text-xs text-center text-indigo-600 mt-3">Optional</div>
-          </div>
-        </div>
-      </div>
-
-      {/* What excites you */}
-      <div className="max-w-4xl mx-auto">
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-rose-400 via-pink-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
-          <div className="relative bg-white/80 rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50">
-            <div className="text-center">
-              <div className="text-2xl mb-2">🎉</div>
-              <h3 className="text-lg font-bold text-gray-900">What excites you about joining Joni&apos;s Dressup Box?</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Select all that apply — we want to know what you&apos;re most excited about!
-              </p>
-              <div className="mt-2 text-xs font-medium text-pink-700">
-                {data.excitementReasons.length > 0
-                  ? `${data.excitementReasons.length} selected`
-                  : 'Select at least one to continue'}
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {EXCITEMENT_OPTIONS.map((option: string) => {
-                const selected = data.excitementReasons.includes(option)
-                return (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => toggleExcitement(option as typeof EXCITEMENT_OPTIONS[number])}
-                    className={`relative rounded-xl p-4 shadow-md border-2 text-left hover:scale-[1.02] transition-all duration-200 ${
-                      selected
-                        ? 'bg-gradient-to-br from-pink-500 to-fuchsia-600 text-white border-pink-500'
-                        : 'bg-white border-gray-200 hover:border-pink-300'
-                    }`}
-                  >
-                    <div className="text-sm font-medium leading-snug">{option}</div>
-                    {selected && (
-                      <div className="absolute top-2 right-2 w-5 h-5 bg-white rounded-full flex items-center justify-center text-pink-600 text-xs font-bold">
-                        ✓
-                      </div>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
+      <div className="space-y-2">
+        <FieldLabel title="What excites you about joining?" />
+        <div className="grid gap-2 sm:grid-cols-2">
+          {EXCITEMENT_OPTIONS.map((option: string) => {
+            const selected = data.excitementReasons.includes(option)
+            return (
+              <Button
+                key={option}
+                type="button"
+                variant={selected ? 'default' : 'outline'}
+                size="sm"
+                className="justify-start whitespace-normal h-auto"
+                onClick={() => toggleExcitement(option as typeof EXCITEMENT_OPTIONS[number])}
+              >
+                {option}
+              </Button>
+            )
+          })}
         </div>
       </div>
     </div>
@@ -1050,7 +866,6 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
               placeholder="Your full name"
               className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
             />
-            <div className="text-xs text-center text-blue-600 mt-2 font-medium">Required</div>
           </div>
         </div>
 
@@ -1068,7 +883,6 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
               placeholder="Your artist/party name"
               className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
             />
-            <div className="text-xs text-center text-pink-600 mt-2">Optional</div>
           </div>
         </div>
       </div>
@@ -1089,7 +903,6 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
               placeholder="@yourhandle"
               className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
             />
-            <div className="text-xs text-center text-purple-600 mt-2">Optional</div>
           </div>
         </div>
 
@@ -1106,7 +919,6 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
               onChange={(e) => setData({ ...data, birthday: e.target.value })}
               className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
             />
-            <div className="text-xs text-center text-amber-600 mt-2">Optional</div>
           </div>
         </div>
       </div>
@@ -1126,7 +938,6 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
               placeholder="Where do you hang?"
               className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
             />
-            <div className="text-xs text-center text-green-600 mt-2 font-medium">Required</div>
           </div>
         </div>
       </div>
