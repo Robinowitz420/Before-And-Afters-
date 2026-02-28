@@ -261,7 +261,7 @@ export function ProfileWizard() {
       <div className="grid gap-6 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <div className="sticky top-6 space-y-4">
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-[url('/images/Membership Images/Backgrounds/plain wallpaper.png')] bg-cover bg-center bg-no-repeat p-6 text-white shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-[url('/images/Membership%20Images/Backgrounds/plain%20wallpaper.png')] bg-cover bg-center bg-no-repeat p-6 text-white shadow-sm">
               <div className="text-sm font-medium opacity-90">Profile Ritual</div>
               <div className="mt-1 text-2xl font-semibold">Step {step} of 2</div>
               <div className="mt-2 text-sm opacity-90">
