@@ -664,7 +664,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
             ? match.photoUrls[0]
             : ''
         : ''
-      return { src, category: match?.category ?? 'Garment', name: match?.name ?? null, id: closetItemSrc }
+      return { src, category: match?.category ?? 'Garment', name: match?.name ?? null, id: closetItemSrc, missing: !match }
     }
     const match = images.find((img) => img.src === closetItemSrc)
     return match || { src: closetItemSrc, category: 'Closet item', id: closetItemSrc }
@@ -673,6 +673,21 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const openClosetItem = (idOrSrc: string) => {
     setClosetItemSrc(idOrSrc)
     setClosetOpen(true)
+  }
+
+  const removeFromSaved = (idOrSrc: string) => {
+    setSave((prev) => ({
+      likes: prev.likes.filter((v) => v !== idOrSrc),
+      dislikes: prev.dislikes,
+    }))
+  }
+
+  const removeFromReserved = (id: string) => {
+    setReservedIds((prev) => prev.filter((v) => v !== id))
+  }
+
+  const removeFromRequested = (id: string) => {
+    setRequestedIds((prev) => prev.filter((v) => v !== id))
   }
 
   const closeClosetItem = () => {
@@ -1165,27 +1180,29 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       sizes="520px"
                       className="object-cover"
                     />
-                  ) : null}
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-[hsl(var(--secondary))] text-center text-sm text-muted-foreground">
+                      This item no longer exists.
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="mt-4 flex items-center gap-3">
                 <Button
                   type="button"
-                  variant="outline"
-                  className="flex-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                  variant="destructive"
+                  className="flex-1"
                   onClick={() => {
-                    const src = closetItemSrc
-                    if (!src) return
-                    setSave((prev) => {
-                      const idOrSrc = closetItemSrc
-                      if (!idOrSrc) return prev
-                      const inLikes = prev.likes.includes(idOrSrc)
-                      const likes = inLikes ? prev.likes.filter((v) => v !== idOrSrc) : prev.likes
-                      const dislikes =
-                        inLikes || prev.dislikes.includes(idOrSrc) ? prev.dislikes : [...prev.dislikes, idOrSrc]
-                      return { likes, dislikes }
-                    })
+                    const idOrSrc = closetItemSrc
+                    if (!idOrSrc) return
+                    if (usingCatalogue) {
+                      if (save.likes.includes(idOrSrc)) removeFromSaved(idOrSrc)
+                      if (reservedIds.includes(idOrSrc)) removeFromReserved(idOrSrc)
+                      if (requestedIds.includes(idOrSrc)) removeFromRequested(idOrSrc)
+                    } else {
+                      removeFromSaved(idOrSrc)
+                    }
                     closeClosetItem()
                   }}
                 >
@@ -1223,7 +1240,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                           className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
                         >
                           <Image
-                            src={usingCatalogue ? (catalogueItems.find((g) => g.id === src)?.primaryPhotoUrl ?? '/placeholder.png') : src}
+                            src={
+                              usingCatalogue
+                                ? (() => {
+                                    const g = catalogueItems.find((x) => x.id === src)
+                                    return g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ?? '/placeholder.png'
+                                  })()
+                                : src
+                            }
                             alt="Liked"
                             width={80}
                             height={80}
