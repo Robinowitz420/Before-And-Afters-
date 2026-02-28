@@ -101,12 +101,55 @@ All borrowed items must be returned before cancellation is finalized.
   }
 
   return (
-    <div className="relative left-1/2 w-screen -translate-x-1/2 px-0">
+    <div className="relative h-[100svh] w-screen overflow-hidden bg-black">
       {error && (
-        <div className="mx-auto mb-6 max-w-6xl rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive">
+        <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive">
           {error}
         </div>
       )}
+
+      <div className="absolute inset-0">
+        <Image
+          src={BASE_IMAGE_SRC}
+          alt="Membership"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
+
+      <div className="absolute inset-0 bg-black/10" />
+
+      <div className="absolute inset-0 z-40 flex items-center justify-center px-4">
+        <div className="flex w-full max-w-sm flex-col items-center">
+          <Button
+            type="button"
+            size="lg"
+            className="w-full rounded-full bg-black/80 text-white hover:bg-black border border-white/25"
+            onClick={() => {
+              setSelectedTier(STRIPE_TIER_ID)
+              openDisclaimerForTier(STRIPE_TIER_ID)
+            }}
+            disabled={checkoutTier !== null}
+          >
+            Join here
+          </Button>
+
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <div className="text-2xl leading-none text-white drop-shadow">↑</div>
+            <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-black shadow">
+              Its a button! Click it!
+            </div>
+          </div>
+
+          {checkoutTier ? (
+            <div className="mt-6 w-full rounded-2xl bg-black/60 px-4 py-3 text-center text-sm text-white">
+              Redirecting to checkout…
+            </div>
+          ) : null}
+        </div>
+      </div>
 
       {disclaimerOpen ? (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-4 pt-10">
@@ -154,82 +197,6 @@ All borrowed items must be returned before cancellation is finalized.
           </div>
         </div>
       ) : null}
-
-      {/* MOBILE: Full-screen */}
-      <div className="md:hidden fixed inset-0 z-40">
-        <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{ width: '100vw', height: '100vh' }}
-        >
-          <Image
-            src={BASE_IMAGE_SRC}
-            alt="Membership tiers"
-            fill
-            priority
-            className="object-contain"
-            sizes="100vw"
-          />
-        </div>
-
-        {/* Single click zone for $100 membership */}
-        <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-          style={{ width: '100vw', height: '100vh' }}
-        >
-          <button
-            type="button"
-            aria-label="Join Membership"
-            className="absolute inset-0 cursor-pointer"
-            onClick={() => {
-              setSelectedTier(STRIPE_TIER_ID)
-              openDisclaimerForTier(STRIPE_TIER_ID)
-            }}
-            disabled={checkoutTier !== null}
-          />
-        </div>
-
-        {checkoutTier && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white z-50">
-            Redirecting to checkout…
-          </div>
-        )}
-      </div>
-
-      {/* DESKTOP: Normal */}
-      <div className="hidden md:block relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
-        <div className="flex items-center justify-center">
-          <Image
-            src={BASE_IMAGE_SRC}
-            alt="Membership tiers"
-            width={1024}
-            height={576}
-            priority
-            className="h-auto w-full select-none object-contain"
-          />
-        </div>
-
-        {/* Single click zone for $100 membership */}
-        <div className="absolute inset-0">
-          <button
-            type="button"
-            aria-label="Join Membership"
-            className="absolute inset-0 focus:outline-none focus:ring-4 focus:ring-primary/40"
-            onClick={() => {
-              setSelectedTier(STRIPE_TIER_ID)
-              openDisclaimerForTier(STRIPE_TIER_ID)
-            }}
-            disabled={checkoutTier !== null}
-          />
-        </div>
-
-        {checkoutTier && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
-            Redirecting to checkout…
-          </div>
-        )}
-      </div>
-
-      {selectedTier ? null : null}
     </div>
   )
 }
