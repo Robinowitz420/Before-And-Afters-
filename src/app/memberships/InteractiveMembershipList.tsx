@@ -52,38 +52,43 @@ All borrowed items must be returned before cancellation is finalized.
     setCheckoutTier(tier)
     setError(null)
     try {
+      console.log('Creating checkout session for tier:', tier)
       const res = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tier }),
       })
-      const data = await res.json().catch(() => ({}))
+      console.log('Checkout session response status:', res.status)
+      
+      const data = await res.json().catch((e) => {
+        console.error('Failed to parse response:', e)
+        return {}
+      })
+      console.log('Checkout session response data:', data)
+      
       if (!res.ok) {
         if (res.status === 401) {
           setError('Please sign in to join a membership.')
           return
         }
-        setError((data as any)?.error || 'Could not start checkout. Please try again.')
+        const errorMsg = (data as any)?.error || `Server error (${res.status}). Please try again.`
+        console.error('Checkout error:', errorMsg)
+        setError(errorMsg)
         return
       }
+      
       const url = (data as any)?.url
       if (!url || typeof url !== 'string') {
         console.error('Invalid checkout URL received:', data)
-        setError('Invalid checkout URL. Please try again.')
+        setError('Invalid checkout URL received from server.')
         return
       }
-      // Validate URL before redirect
-      try {
-        new URL(url)
-      } catch (e) {
-        console.error('Invalid URL format:', url)
-        setError('Invalid checkout URL format. Please try again.')
-        return
-      }
+      
+      console.log('Redirecting to Stripe checkout:', url)
       window.location.assign(url)
     } catch (e) {
       console.error('Checkout error:', e)
-      setError('Something went wrong. Please try again.')
+      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.')
     } finally {
       setCheckoutTier(null)
     }
