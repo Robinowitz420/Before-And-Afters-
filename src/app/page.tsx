@@ -46,6 +46,11 @@ function LandingClient() {
     setEntering(true)
     try {
       const res = await fetch('/api/profile')
+      if (res.status === 401) {
+        // Session expired or invalid, go to sign in
+        router.push('/sign-in')
+        return
+      }
       if (res.ok) {
         const profile = await res.json().catch(() => null)
         if (profile && typeof profile === 'object' && 'clerkUserId' in profile) {
@@ -53,8 +58,8 @@ function LandingClient() {
           return
         }
       }
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error('Profile check error:', e)
     } finally {
       setEntering(false)
     }
