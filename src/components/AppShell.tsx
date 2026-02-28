@@ -41,7 +41,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="pointer-events-auto mx-auto flex w-full items-center justify-end px-6 py-4">
               <div>
                 <SignedIn>
-                  <UserButton afterSignOutUrl="/" />
+                  <div className="fixed bottom-4 right-4 z-50">
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
                 </SignedIn>
                 <SignedOut>
                   <SignInButton mode="modal">

@@ -1319,6 +1319,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 ) : null}
               </div>
+              <Link href="/search" className="w-full block mt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
+                >
+                  🔍 Search Clothing
+                </Button>
+              </Link>
             </div>
           </FrameBox>
         </aside>
@@ -1353,16 +1363,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   className="w-full bg-black text-white hover:bg-black/80 border-white/20 sm:w-auto"
                 >
                   ✏️ Edit profile
-                </Button>
-              </Link>
-              <Link href="/search" className="w-full sm:w-auto">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20 sm:w-auto"
-                >
-                  🔍 Search Clothing
                 </Button>
               </Link>
             </div>
@@ -1698,23 +1698,23 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
                 <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
-                <div className="mt-3 flex items-center gap-3">
+                <div className="mt-3 flex flex-col items-center gap-3">
                   <div
-                    className="h-20 w-16 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
+                    className="h-60 w-48 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
                   >
                     {profile.avatar ? (
                       <Image
                         src={profile.avatar}
                         alt="Avatar"
-                        width={64}
-                        height={80}
+                        width={192}
+                        height={240}
                         className="h-full w-full object-cover"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
                     )}
                   </div>
-                  <div className="flex flex-1 flex-col gap-2">
+                  <div className="flex w-full flex-col gap-2">
                     <input
                       type="file"
                       accept="image/*"
@@ -1768,115 +1768,57 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       </div>
       </div>
 
-      {/* Questionnaire Data Display */}
-      {profile.fullName || profile.styleVibe || profile.excitementReasons?.length ? (
-        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-[url('/images/checkered-background.jpg')] bg-cover bg-center p-6 shadow-sm">
-          <div className="rounded-2xl bg-white/90 p-6 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Joni&apos;s Dressup Box</div>
-                <div className="mt-1 text-xl font-semibold text-[hsl(var(--ink))]">Your Application</div>
-              </div>
-              {profile.selfieUrl && (
-                <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-white shadow-md">
-                  <img src={profile.selfieUrl} alt="Selfie" className="h-full w-full object-cover" />
+      {/* Profile Completion Bar */}
+      {(() => {
+        const profileFields = [
+          profile.fullName,
+          profile.permaPlayaName,
+          profile.igHandle,
+          profile.birthday,
+          profile.neighborhood,
+          profile.signatureColor,
+          profile.closetMascot,
+          profile.styleVibe,
+          profile.aboutYou,
+          profile.wardrobeGripes,
+          profile.favoriteStores,
+          profile.excitementReasons?.length ? 'hasExcitement' : null,
+          profile.selfieUrl,
+          profile.avatar,
+          profile.tones?.length ? 'hasTones' : null,
+          profile.vibes?.length ? 'hasVibes' : null,
+          profile.eras?.length ? 'hasEras' : null,
+        ]
+        const filledFields = profileFields.filter(Boolean).length
+        const totalFields = profileFields.length
+        const completionPercent = Math.round((filledFields / totalFields) * 100)
+
+        return (
+          <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-[url('/images/checkered-background.jpg')] bg-cover bg-center p-6 shadow-sm">
+            <div className="rounded-2xl bg-white/90 p-6 backdrop-blur-sm">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Profile</div>
+                  <div className="mt-1 text-xl font-semibold text-[hsl(var(--ink))]">Your Profile Completion</div>
                 </div>
-              )}
+                <div className="text-2xl font-bold text-primary">{completionPercent}%</div>
+              </div>
+
+              <div className="mt-4">
+                <div className="h-4 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
+                    style={{ width: `${completionPercent}%` }}
+                  />
+                </div>
+                <p className="mt-3 text-sm text-[hsl(var(--ink))]/70">
+                  The more we know about you the better the recommendations!
+                </p>
+              </div>
             </div>
-
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {profile.fullName && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Full Name</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.fullName}</div>
-                </div>
-              )}
-              {profile.permaPlayaName && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">PermaPlaya Name</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.permaPlayaName}</div>
-                </div>
-              )}
-              {profile.igHandle && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">IG Handle</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.igHandle}</div>
-                </div>
-              )}
-              {profile.birthday && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Birthday</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.birthday}</div>
-                </div>
-              )}
-              {profile.neighborhood && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Neighborhood</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.neighborhood}</div>
-                </div>
-              )}
-              {profile.signatureColor && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Signature Color</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.emoji}</span>
-                    <span className="text-sm font-semibold text-[hsl(var(--ink))]">
-                      {SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.label}
-                    </span>
-                  </div>
-                </div>
-              )}
-              {profile.closetMascot && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Closet Mascot</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.closetMascot}</div>
-                </div>
-              )}
-            </div>
-
-            {profile.styleVibe && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Style Vibe</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.styleVibe}</div>
-              </div>
-            )}
-
-            {profile.aboutYou && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">About You</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.aboutYou}</div>
-              </div>
-            )}
-
-            {profile.wardrobeGripes && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Wardrobe Gripes</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.wardrobeGripes}</div>
-              </div>
-            )}
-
-            {profile.favoriteStores && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Favorite Stores & Brands</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.favoriteStores}</div>
-              </div>
-            )}
-
-            {profile.excitementReasons?.length ? (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60 mb-2">What Excites You</div>
-                <div className="flex flex-wrap gap-2">
-                  {profile.excitementReasons.map((reason: string) => (
-                    <span key={reason} className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                      {reason}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ) : null}
           </div>
-        </div>
-      ) : null}
+        )
+      })()}
 
       {/* Delete Profile Dialog */}
       <Dialog.Root open={deleteProfileOpen} onOpenChange={setDeleteProfileOpen}>
