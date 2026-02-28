@@ -876,13 +876,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       </Dialog.Root>
 
       <div className="mb-6 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-end sm:gap-6">
-        <button
-          type="button"
-          onClick={() => setDetailsOpen(true)}
-          className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto"
-        >
-          ✏️ Edit profile
-        </button>
+        <Link href="/profile-wizard" className="w-full sm:w-auto">
+          <button
+            type="button"
+            className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto"
+          >
+            ✏️ Edit profile
+          </button>
+        </Link>
         <Link href="/search" className="w-full sm:w-auto">
           <button className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto">
             🔍 Search Clothing
