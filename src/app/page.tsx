@@ -68,15 +68,13 @@ function LandingClient() {
     router.push('/profile-wizard')
   }
 
-  const buttonText = !isLoaded 
-    ? 'Enter' 
-    : !isSignedIn 
-      ? 'Enter' 
-      : hasProfile === null 
-        ? 'Loading...' 
-        : hasProfile 
-          ? 'Enter' 
-          : 'Create Profile'
+  const buttonText = !isLoaded
+    ? 'Enter'
+    : !isSignedIn
+      ? 'Enter'
+      : hasProfile
+        ? 'Enter'
+        : 'Create Profile'
 
   return (
     <main className="text-[hsl(var(--foreground))]">
