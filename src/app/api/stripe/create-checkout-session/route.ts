@@ -14,7 +14,11 @@ function getBaseUrl(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     // Check if Stripe is properly initialized
-    if (!process.env.STRIPE_SECRET_KEY) {
+    const stripeKeyExists = !!process.env.STRIPE_SECRET_KEY
+    const stripeKeyLength = process.env.STRIPE_SECRET_KEY?.length || 0
+    console.log('Stripe checkout - Key exists:', stripeKeyExists, 'Key length:', stripeKeyLength)
+    
+    if (!stripeKeyExists) {
       console.error('STRIPE_SECRET_KEY is not set in environment variables')
       return NextResponse.json(
         { error: 'Payment service is not configured. Please contact support.' },
@@ -22,20 +26,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    await auth.protect()
-    const { userId } = await auth()
+    const authResult = await auth()
+    const { userId } = authResult
+    console.log('Stripe checkout - User ID:', userId ? 'Found' : 'Missing')
+    
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const clerkUser = await currentUser()
     const email = clerkUser?.primaryEmailAddress?.emailAddress ?? clerkUser?.emailAddresses?.[0]?.emailAddress ?? undefined
+    console.log('Stripe checkout - Email:', email ? 'Found' : 'Missing')
+    
     if (!email) {
       return NextResponse.json({ error: 'Email required for checkout' }, { status: 400 })
     }
 
     const body = await request.json()
     const tier = body?.tier as string | undefined
+    console.log('Stripe checkout - Tier:', tier)
+    
     if (!tier || !Object.keys(MEMBERSHIP_LEVELS).includes(tier)) {
       return NextResponse.json({ error: 'Invalid membership tier' }, { status: 400 })
     }
@@ -44,6 +54,8 @@ export async function POST(request: NextRequest) {
     const firstMonthCents = Math.round(level.monthlyPrice * 100)
     const depositCents = Math.round(DEPOSIT_AMOUNT * 100)
     const baseUrl = getBaseUrl(request)
+    
+    console.log('Stripe checkout - Creating session:', { tier, email, baseUrl, firstMonthCents, depositCents })
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -81,6 +93,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('Stripe checkout - Session created:', session.id, 'URL:', session.url ? 'Valid' : 'Missing')
+
     if (!session.url) {
       console.error('Stripe session created but no URL returned:', session)
       return NextResponse.json(
@@ -92,6 +106,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url })
   } catch (error) {
     console.error('Stripe create-checkout-session error:', error)
+    console.error('Error type:', typeof error)
+    console.error('Error message:', error instanceof Error ? error.message : 'Unknown error')
+    if (error instanceof Error && error.stack) {
+      console.error('Error stack:', error.stack)
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to create checkout session' },
       { status: 500 }
