@@ -386,14 +386,14 @@ export default function SearchPage() {
             <Button
               variant="outline"
               onClick={clearAll}
-              className="px-6 py-3"
+              className="px-6 py-3 bg-black text-white hover:bg-black/80 border-white/20"
             >
               Clear All
             </Button>
             <Button
               variant="outline"
               onClick={() => router.push('/profile')}
-              className="px-6 py-3"
+              className="px-6 py-3 bg-black text-white hover:bg-black/80 border-white/20"
             >
               ← Back to Profile
             </Button>
