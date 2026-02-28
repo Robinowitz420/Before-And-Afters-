@@ -63,16 +63,26 @@ All borrowed items must be returned before cancellation is finalized.
           setError('Please sign in to join a membership.')
           return
         }
-        setError((data as any)?.error || 'Could not start checkout')
+        setError((data as any)?.error || 'Could not start checkout. Please try again.')
         return
       }
-      if ((data as any)?.url) {
-        window.location.href = (data as any).url as string
+      const url = (data as any)?.url
+      if (!url || typeof url !== 'string') {
+        console.error('Invalid checkout URL received:', data)
+        setError('Invalid checkout URL. Please try again.')
         return
       }
-      setError('Invalid response from server')
+      // Validate URL before redirect
+      try {
+        new URL(url)
+      } catch (e) {
+        console.error('Invalid URL format:', url)
+        setError('Invalid checkout URL format. Please try again.')
+        return
+      }
+      window.location.assign(url)
     } catch (e) {
-      console.error(e)
+      console.error('Checkout error:', e)
       setError('Something went wrong. Please try again.')
     } finally {
       setCheckoutTier(null)
@@ -126,10 +136,10 @@ All borrowed items must be returned before cancellation is finalized.
               </Button>
               <Button
                 type="button"
-                onClick={() => {
+                onClick={async () => {
                   if (!pendingTier) return
                   setDisclaimerOpen(false)
-                  redirectToStripeCheckout(pendingTier)
+                  await redirectToStripeCheckout(pendingTier)
                 }}
                 disabled={!disclaimerAgreed || pendingTier === null || checkoutTier !== null}
               >
