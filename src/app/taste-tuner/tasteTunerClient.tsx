@@ -1536,7 +1536,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           <Dialog.Portal>
             <Dialog.Overlay
               className={cn(
-                'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+                'fixed inset-0 z-50 bg-[url("/images/checkered-background.jpg")] bg-cover bg-center bg-no-repeat',
+                'after:absolute after:inset-0 after:bg-black/40 after:backdrop-blur-sm after:content-[""]',
                 'transition-opacity duration-200 ease-out',
                 'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
               )}
@@ -1575,18 +1576,22 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">Loading…</div>
                       ) : detailError ? (
                         <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">{detailError}</div>
-                      ) : detailGarment ? (
-                        <Image
-                          src={
-                            (typeof detailGarment.primaryPhotoUrl === 'string' && detailGarment.primaryPhotoUrl) ||
-                            (Array.isArray(detailGarment.photoUrls) && detailGarment.photoUrls[0] ? detailGarment.photoUrls[0] : '')
-                          }
-                          alt={detailGarment.name ?? 'Garment'}
-                          fill
-                          sizes="360px"
-                          className="object-cover"
-                        />
-                      ) : null}
+                      ) : detailGarment ? (() => {
+                        const src =
+                          (typeof detailGarment.primaryPhotoUrl === 'string' && detailGarment.primaryPhotoUrl) ||
+                          (Array.isArray(detailGarment.photoUrls) && detailGarment.photoUrls[0] ? detailGarment.photoUrls[0] : '') ||
+                          '/placeholder.png'
+
+                        return (
+                          <Image
+                            src={src}
+                            alt={detailGarment.name ?? 'Garment'}
+                            fill
+                            sizes="360px"
+                            className="object-cover"
+                          />
+                        )
+                      })() : null}
                     </div>
                   </div>
 
