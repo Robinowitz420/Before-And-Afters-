@@ -1747,12 +1747,13 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
             </FrameBox>
 
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm">
-              <div className="text-xs font-medium text-[hsl(var(--ink))]">Not a member?</div>
-              <Button asChild className="mt-2 w-full" size="sm">
-                <Link href="/memberships">Join here</Link>
-              </Button>
-            </div>
+            {!membershipTitle && (
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm">
+                <Button asChild className="w-full" size="sm">
+                  <Link href="/memberships">Become A Member</Link>
+                </Button>
+              </div>
+            )}
 
             <Button
               type="button"
