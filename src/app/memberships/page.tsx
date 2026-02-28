@@ -58,12 +58,6 @@ It’s important to note that this business model is based on trust and integrit
 
       <div className="hidden sm:block">
         <div className="mx-auto w-full max-w-5xl px-0 py-10 sm:px-6">
-          <div className="mb-10">
-            <div className="px-6 sm:px-0">
-              <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
-            </div>
-          </div>
-
           <Suspense fallback={<div className="text-[hsl(var(--ink))]/70">Loading tiers…</div>}>
             <InteractiveMembershipList />
           </Suspense>
