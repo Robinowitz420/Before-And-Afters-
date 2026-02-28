@@ -59,10 +59,19 @@ function LandingClient() {
       setEntering(false)
     }
 
+    // No profile found, go to wizard
     router.push('/profile-wizard')
   }
 
-  const buttonText = !isLoaded ? 'Enter' : !isSignedIn ? 'Enter' : hasProfile === null ? 'Enter' : hasProfile ? 'Enter' : 'Create Profile'
+  const buttonText = !isLoaded 
+    ? 'Enter' 
+    : !isSignedIn 
+      ? 'Enter' 
+      : hasProfile === null 
+        ? 'Loading...' 
+        : hasProfile 
+          ? 'Enter' 
+          : 'Create Profile'
 
   return (
     <main className="text-[hsl(var(--foreground))]">
@@ -87,7 +96,7 @@ function LandingClient() {
             </p>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering || hasProfile === null}>
+            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering}>
               {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
@@ -195,7 +204,7 @@ function LandingClient() {
             <p>Enter to build your profile and start exploring.</p>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering || hasProfile === null}>
+            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering}>
               {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
