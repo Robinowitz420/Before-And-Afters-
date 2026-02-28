@@ -254,7 +254,6 @@ export function ProfileWizard() {
   const [step, setStep] = useState<number>(1)
   const [data, setData] = useState<WizardData>(defaultData())
   const [submitted, setSubmitted] = useState(false)
-  const [expandedBubble, setExpandedBubble] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
 
@@ -273,9 +272,9 @@ export function ProfileWizard() {
     }
   }, [isLoaded, isSignedIn, mounted, router])
 
-  const canContinueStep1 = data.displayName.trim() !== '' && data.email.trim() !== '' && data.phone.trim() !== ''
-  const canContinueStep3 = data.styleVibe.trim() !== '' && data.excitementReasons.length > 0
-  const canContinueStep4 = data.fullName.trim() !== '' && data.neighborhood.trim() !== ''
+  const canContinueStep1 = data.displayName.trim() !== ''
+  const canContinueStep3 = true
+  const canContinueStep4 = true
 
   const canContinue = (stepNum: number) => {
     switch (stepNum) {
@@ -299,7 +298,7 @@ export function ProfileWizard() {
       : 'Personal Touch'
 
   const stepDescription =
-    step === 1 ? 'Pop some bubbles to share your magical details.'
+    step === 1 ? 'Just the basics. You can complete your profile anytime.'
       : step === 2 ? 'Body-neutral, practical sizing info + fabric allergies so pulls feel good.'
       : step === 3 ? 'Tell us about your style, your wardrobe gripes, and what excites you about Joni\'s Dressup Box.'
       : 'A few fun details to complete your profile—your mascot, signature color, and selfie!'
@@ -438,7 +437,7 @@ export function ProfileWizard() {
             ) : (
               <>
                 <div className="flex-1">
-                  {step === 1 ? <Step1 data={data} setData={setData} expandedBubble={expandedBubble} setExpandedBubble={setExpandedBubble} /> : null}
+                  {step === 1 ? <Step1 data={data} setData={setData} /> : null}
                   {step === 2 ? <Step2 data={data} setData={setData} /> : null}
                   {step === 3 ? <Step3 data={data} setData={setData} /> : null}
                   {step === 4 ? <Step4 data={data} setData={setData} /> : null}
@@ -453,11 +452,11 @@ export function ProfileWizard() {
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                       {step < totalSteps ? (
                         <Button type="button" onClick={goNext} disabled={!canContinue(step)}>
-                          Next
+                          Complete
                         </Button>
                       ) : (
                         <Button type="button" onClick={onSubmit} disabled={!canContinue(step) || saving}>
-                          {saving ? 'Saving...' : 'Complete profile'}
+                          {saving ? 'Saving...' : 'Complete'}
                         </Button>
                       )}
                     </div>
@@ -471,10 +470,14 @@ export function ProfileWizard() {
 
                   {!canContinue(step) ? (
                     <div className="mt-3 text-xs text-[hsl(var(--ink))]/70">
-                      {step === 1 && 'Fill in your magical bubbles: display name, email, and phone are required.'}
+                      {step === 1 && 'Name is required to continue.'}
                       {step === 2 && 'Select your height range and top size to help us find the perfect fit.'}
                     </div>
                   ) : null}
+
+                  <div className="mt-3 text-xs text-[hsl(var(--ink))]/70">
+                    you can complete your profile at any time!
+                  </div>
                 </div>
               </>
             )}
@@ -585,135 +588,37 @@ function BubbleComponent({
   )
 }
 
-function Step1({ data, setData, expandedBubble, setExpandedBubble }: {
-  data: WizardData;
-  setData: (v: WizardData) => void;
-  expandedBubble: string | null;
-  setExpandedBubble: (bubble: string | null) => void;
-}) {
-  const isExpanded = (bubbleId: string) => expandedBubble === bubbleId
-  const hasContent = (value: string) => value.trim().length > 0
-
+function Step1({ data, setData }: { data: WizardData; setData: (v: WizardData) => void }) {
   return (
-    <div className="space-y-8">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-          ✨ Welcome to the Endless Closet
-        </h2>
-        <p className="text-lg text-[hsl(var(--ink))]/80">
-          Click the bubbles to expand them and enter your information
-        </p>
-      </div>
-
-      {/* Step 1: Overlapping cluster layout */}
-      <div className="relative max-w-6xl mx-auto h-96 flex items-center justify-center">
-        {/* Display Name Bubble - Large center bubble */}
-        <BubbleComponent
-          id="displayName"
-          icon="🌟"
-          label="Display Name"
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <FieldLabel title="Name" hint="Required" />
+        <Input
           value={data.displayName}
-          onChange={(value: string) => setData({ ...data, displayName: value })}
-          placeholder="Your magical name"
-          required={true}
-          normalSize="w-48 h-48"
-          expandedSize="w-96 h-96"
-          position="left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-          zIndex="z-10"
-          gradientFrom="bg-gradient-to-r from-pink-400 via-purple-500 to-fuchsia-600"
-          textColor="text-pink-600"
-          expandedTextSize="text-2xl"
-          isExpanded={isExpanded}
-          hasContent={hasContent}
-          setExpandedBubble={setExpandedBubble}
-        />
-
-        {/* Nickname Bubble - Top left, overlapping */}
-        <BubbleComponent
-          id="nickname"
-          icon="🎭"
-          label="Nickname"
-          value={data.nickname || ''}
-          onChange={(value: string) => setData({ ...data, nickname: value })}
-          placeholder="Party name or alias"
-          required={false}
-          normalSize="w-36 h-36"
-          expandedSize="w-72 h-72"
-          position="left-8 top-8"
-          zIndex="z-20"
-          gradientFrom="bg-gradient-to-r from-blue-400 via-cyan-500 to-teal-600"
-          textColor="text-blue-600"
-          isExpanded={isExpanded}
-          hasContent={hasContent}
-          setExpandedBubble={setExpandedBubble}
-        />
-
-        {/* Email Bubble - Bottom right, overlapping */}
-        <BubbleComponent
-          id="email"
-          icon="📧"
-          label="Email"
-          value={data.email}
-          onChange={(value: string) => setData({ ...data, email: value })}
-          placeholder="your.email@domain.com"
-          required={true}
-          normalSize="w-40 h-40"
-          expandedSize="w-80 h-80"
-          position="right-8 bottom-8"
-          zIndex="z-30"
-          gradientFrom="bg-gradient-to-r from-green-400 via-emerald-500 to-lime-600"
-          textColor="text-green-600"
-          isExpanded={isExpanded}
-          hasContent={hasContent}
-          setExpandedBubble={setExpandedBubble}
-        />
-
-        {/* Phone Bubble - Top right, overlapping */}
-        <BubbleComponent
-          id="phone"
-          icon="📱"
-          label="Phone"
-          value={data.phone}
-          onChange={(value: string) => setData({ ...data, phone: value })}
-          placeholder="(555) 123-4567"
-          required={true}
-          normalSize="w-32 h-32"
-          expandedSize="w-64 h-64"
-          position="right-12 top-12"
-          zIndex="z-40"
-          gradientFrom="bg-gradient-to-r from-orange-400 via-red-500 to-pink-600"
-          textColor="text-orange-600"
-          isExpanded={isExpanded}
-          hasContent={hasContent}
-          setExpandedBubble={setExpandedBubble}
+          onChange={(e) => setData({ ...data, displayName: e.target.value })}
+          placeholder="Your name"
+          autoComplete="name"
         />
       </div>
 
-      {/* Dynamic floating decorations */}
-      <div className="relative mt-8">
-        {/* Large background bubbles */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-32 h-32 bg-pink-200 rounded-full opacity-20 animate-ping"></div>
-          <div className="w-24 h-24 bg-purple-200 rounded-full opacity-25 animate-pulse ml-16"></div>
-          <div className="w-20 h-20 bg-blue-200 rounded-full opacity-20 animate-bounce ml-8"></div>
-        </div>
+      <div className="space-y-2">
+        <FieldLabel title="Email" hint="Optional" />
+        <Input
+          value={data.email}
+          onChange={(e) => setData({ ...data, email: e.target.value })}
+          placeholder="you@example.com"
+          autoComplete="email"
+        />
+      </div>
 
-        {/* Main floating elements */}
-        <div className="relative text-center">
-          <div className="inline-flex items-center space-x-4 text-3xl">
-            <span className="animate-bounce hover:animate-spin">✨</span>
-            <span className="animate-bounce delay-100 hover:scale-125 transition-transform">🫧</span>
-            <span className="animate-bounce delay-200 hover:animate-spin">🌟</span>
-            <span className="animate-bounce delay-300 hover:scale-125 transition-transform">💫</span>
-            <span className="animate-bounce delay-500 hover:animate-spin">✨</span>
-          </div>
-
-          {/* Smaller floating particles */}
-          <div className="absolute -top-4 left-1/4 text-lg animate-pulse">⚪</div>
-          <div className="absolute -top-2 right-1/3 text-sm animate-bounce delay-700">🔵</div>
-          <div className="absolute -bottom-3 left-1/3 text-sm animate-pulse delay-300">🟣</div>
-          <div className="absolute -bottom-2 right-1/4 text-lg animate-bounce delay-500">🟡</div>
-        </div>
+      <div className="space-y-2">
+        <FieldLabel title="Phone" hint="Optional" />
+        <Input
+          value={data.phone}
+          onChange={(e) => setData({ ...data, phone: e.target.value })}
+          placeholder="(555) 123-4567"
+          autoComplete="tel"
+        />
       </div>
     </div>
   )

@@ -51,11 +51,28 @@ export async function DELETE() {
       return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
     }
 
-    await db.collection('profiles').doc(userId).delete()
+    const ref = db.collection('profiles').doc(userId)
+    const snap = await ref.get()
+    if (!snap.exists) {
+      return NextResponse.json({ ok: true })
+    }
+
+    await ref.delete()
 
     return NextResponse.json({ ok: true })
   } catch (error) {
-    console.error('Error deleting profile:', error)
+    const maybeStatus = (error as any)?.status
+    const maybeErrors = (error as any)?.errors
+    console.error('Error deleting profile:', {
+      error,
+      status: maybeStatus,
+      errors: maybeErrors,
+    })
+
+    if (maybeStatus === 401) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     return NextResponse.json({ error: 'Failed to delete profile' }, { status: 500 })
   }
 }
