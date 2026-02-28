@@ -281,7 +281,7 @@ export function ProfileWizard() {
       case 1:
         return canContinueStep1
       case 2:
-        return data.heightRange.trim() !== '' && data.topSizeRange.trim() !== ''
+        return true
       case 3:
         return canContinueStep3
       case 4:
@@ -451,14 +451,14 @@ export function ProfileWizard() {
 
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                       {step < totalSteps ? (
-                        <Button type="button" onClick={goNext} disabled={!canContinue(step)}>
-                          Complete
+                        <Button type="button" variant="outline" onClick={goNext}>
+                          Next
                         </Button>
-                      ) : (
-                        <Button type="button" onClick={onSubmit} disabled={!canContinue(step) || saving}>
-                          {saving ? 'Saving...' : 'Complete'}
-                        </Button>
-                      )}
+                      ) : null}
+
+                      <Button type="button" onClick={onSubmit} disabled={!canContinueStep1 || saving}>
+                        {saving ? 'Saving...' : 'Complete'}
+                      </Button>
                     </div>
                   </div>
 
@@ -471,7 +471,6 @@ export function ProfileWizard() {
                   {!canContinue(step) ? (
                     <div className="mt-3 text-xs text-[hsl(var(--ink))]/70">
                       {step === 1 && 'Name is required to continue.'}
-                      {step === 2 && 'Select your height range and top size to help us find the perfect fit.'}
                     </div>
                   ) : null}
 
