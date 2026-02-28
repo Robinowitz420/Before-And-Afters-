@@ -842,7 +842,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="mx-auto w-full max-w-[1600px] px-4 py-6 sm:px-6 sm:py-10">
+      <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 sm:py-10">
       {membershipTitle ? (
         <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-4 shadow-sm backdrop-blur sm:p-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
@@ -1198,7 +1198,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       </Dialog.Root>
 
       <div className="grid gap-6 lg:grid-cols-[280px,1fr,260px]">
-        <aside className="lg:sticky lg:top-6">
+        <aside className="w-full">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-white/70 p-4 shadow-sm backdrop-blur">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
@@ -1299,10 +1299,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </FrameBox>
         </aside>
 
-        <section className="flex flex-col items-start justify-center">
+        <section className="flex w-full flex-col items-center justify-start lg:items-start lg:justify-center">
           {/* Mode toggle */}
           {usingCatalogue && !catalogueLoading && !catalogueError ? (
-            <div className="mb-4 flex flex-wrap gap-2">
+            <div className="mb-4 flex w-full max-w-[520px] flex-col gap-2 sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-2">
               <Button
                 type="button"
                 variant={browseMode ? 'outline' : 'default'}
@@ -1326,7 +1326,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="bg-black text-white hover:bg-black/80 border-white/20"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20 sm:w-auto"
                 >
                   ✏️ Edit profile
                 </Button>
@@ -1336,7 +1336,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="bg-black text-white hover:bg-black/80 border-white/20"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20 sm:w-auto"
                 >
                   🔍 Search Clothing
                 </Button>
@@ -1650,7 +1650,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </Dialog.Portal>
         </Dialog.Root>
 
-        <aside className="lg:sticky lg:top-6">
+        <aside className="w-full lg:sticky lg:top-6">
           <div className="space-y-3">
             <FrameBox frameClassName="scale-[1.10] rotate-[1.2deg]">
               <div className="rounded-2xl border-[3px] border-blue-600 bg-white/70 p-4 shadow-sm backdrop-blur">
