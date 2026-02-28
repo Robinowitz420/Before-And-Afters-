@@ -431,8 +431,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const deck = useMemo(() => {
     if (usingCatalogue) {
       const seen = new Set([...save.likes, ...save.dislikes])
-      const filtered = catalogueItems.filter((g) => !seen.has(g.id))
-      return filtered.length ? filtered : catalogueItems
+      // Only include items with photos
+      const withPhotos = catalogueItems.filter((g) => {
+        const hasPhoto = typeof g.primaryPhotoUrl === 'string' && g.primaryPhotoUrl.length > 0 ||
+          (Array.isArray(g.photoUrls) && g.photoUrls.length > 0 && g.photoUrls[0])
+        return hasPhoto
+      })
+      const filtered = withPhotos.filter((g) => !seen.has(g.id))
+      return filtered.length ? filtered : withPhotos
     }
     const seen = new Set([...save.likes, ...save.dislikes])
     const filtered = images.filter((img) => !seen.has(img.src))
