@@ -1,6 +1,6 @@
  'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 
@@ -12,6 +12,28 @@ function LandingClient() {
   const router = useRouter()
   const { isLoaded, isSignedIn } = useUser()
   const [entering, setEntering] = useState(false)
+  const [hasProfile, setHasProfile] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    async function checkProfile() {
+      if (!isLoaded || !isSignedIn) {
+        setHasProfile(false)
+        return
+      }
+      try {
+        const res = await fetch('/api/profile')
+        if (res.ok) {
+          const profile = await res.json().catch(() => null)
+          setHasProfile(profile && typeof profile === 'object' && 'clerkUserId' in profile)
+        } else {
+          setHasProfile(false)
+        }
+      } catch {
+        setHasProfile(false)
+      }
+    }
+    checkProfile()
+  }, [isLoaded, isSignedIn])
 
   const onEnterCloset = async () => {
     if (!isLoaded || entering) return
@@ -40,6 +62,8 @@ function LandingClient() {
     router.push('/profile-wizard')
   }
 
+  const buttonText = !isLoaded ? 'Enter' : !isSignedIn ? 'Enter' : hasProfile === null ? 'Enter' : hasProfile ? 'Enter' : 'Create Profile'
+
   return (
     <main className="text-[hsl(var(--foreground))]">
       {/* Hero Section */}
@@ -63,11 +87,8 @@ function LandingClient() {
             </p>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset} size="lg">
-              Enter
-            </Button>
-            <Button asChild variant="secondary" size="lg">
-              <a href="/memberships">Join</a>
+            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering || hasProfile === null}>
+              {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
         </div>
@@ -171,14 +192,11 @@ function LandingClient() {
           <h2 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <p className="text-xl font-bold text-white sm:text-2xl md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
-            <p>Join as a member, or enter to build your profile and start exploring.</p>
+            <p>Enter to build your profile and start exploring.</p>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset} size="lg">
-              Enter
-            </Button>
-            <Button asChild variant="secondary" size="lg">
-              <a href="/memberships">View Memberships</a>
+            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering || hasProfile === null}>
+              {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
         </div>
