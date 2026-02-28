@@ -876,19 +876,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       </Dialog.Root>
 
       <div className="mb-6 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-end sm:gap-6">
-        <Link href="/profile-wizard" className="w-full sm:w-auto">
-          <button
-            type="button"
-            className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto"
-          >
-            ✏️ Edit profile
-          </button>
-        </Link>
-        <Link href="/search" className="w-full sm:w-auto">
-          <button className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md transition-colors hover:bg-black/40 sm:w-auto">
-            🔍 Search Clothing
-          </button>
-        </Link>
         <div className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md sm:w-auto">
           <UserButton afterSignOutUrl="/" />
         </div>
@@ -1369,7 +1356,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <section className="flex flex-col items-start justify-center">
           {/* Mode toggle */}
           {usingCatalogue && !catalogueLoading && !catalogueError ? (
-            <div className="mb-4 flex gap-2">
+            <div className="mb-4 flex flex-wrap gap-2">
               <Button
                 type="button"
                 variant={browseMode ? 'outline' : 'default'}
@@ -1388,6 +1375,26 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               >
                 Browse All
               </Button>
+              <Link href="/profile-wizard" className="w-full sm:w-auto">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="bg-black text-white hover:bg-black/80 border-white/20"
+                >
+                  ✏️ Edit profile
+                </Button>
+              </Link>
+              <Link href="/search" className="w-full sm:w-auto">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="bg-black text-white hover:bg-black/80 border-white/20"
+                >
+                  🔍 Search Clothing
+                </Button>
+              </Link>
             </div>
           ) : null}
 
