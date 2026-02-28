@@ -123,10 +123,11 @@ All borrowed items must be returned before cancellation is finalized.
 
       <div className="absolute inset-0 z-40 flex items-center justify-center px-4">
         <div className="flex w-full max-w-sm flex-col items-center">
+          {/* Button - hidden on mobile */}
           <Button
             type="button"
             size="lg"
-            className="w-full rounded-full bg-black/80 text-white hover:bg-black border border-white/25 py-6 text-xl sm:py-4 sm:text-lg"
+            className="hidden md:flex w-full rounded-full bg-black/80 text-white hover:bg-black border border-white/25 py-6 text-xl sm:py-4 sm:text-lg"
             onClick={() => {
               setSelectedTier(STRIPE_TIER_ID)
               openDisclaimerForTier(STRIPE_TIER_ID)
@@ -136,9 +137,10 @@ All borrowed items must be returned before cancellation is finalized.
             Join here
           </Button>
 
+          {/* Badge - pink, under the button area */}
           <div className="mt-4 flex flex-col items-center gap-2">
             <div className="text-2xl leading-none text-white drop-shadow">↑</div>
-            <div className="rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-black shadow">
+            <div className="rounded-full bg-pink-500 px-4 py-2 text-sm font-semibold text-white shadow">
               Its a button! Click it!
             </div>
           </div>
