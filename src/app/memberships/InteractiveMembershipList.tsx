@@ -2,26 +2,17 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { Button } from '@/components/ui/button'
 
-const BASE_IMAGE_SRC = '/images/Membership Images/DeliNotSelected.jpg'
-
-const SELECTED_IMAGE_SRC: Record<MembershipTier, string> = {
-  Eeeehs: '/images/Membership Images/EeeehsSelected.jpg',
-  Oooohs: '/images/Membership Images/OooohsSelected.jpg',
-  Aaaaahs: '/images/Membership Images/AaaagsSelected.jpg',
-  Mmmmms: '/images/Membership Images/MmmmsSelected.jpg',
-}
+const BASE_IMAGE_SRC = '/images/Membership Images/Backgrounds/Website Page Breakdown (USE THIS) (1)'
 
 export default function InteractiveMembershipList() {
-  const [hoveredTier, setHoveredTier] = useState<MembershipTier | null>(null)
-  const [selectedTier, setSelectedTier] = useState<MembershipTier | null>(null)
-  const [checkoutTier, setCheckoutTier] = useState<MembershipTier | null>(null)
+  const [selectedTier, setSelectedTier] = useState<string | null>(null)
+  const [checkoutTier, setCheckoutTier] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [disclaimerOpen, setDisclaimerOpen] = useState(false)
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false)
-  const [pendingTier, setPendingTier] = useState<MembershipTier | null>(null)
+  const [pendingTier, setPendingTier] = useState<string | null>(null)
 
   const membershipDisclaimer = `Membership Agreement & Disclaimer
 Please read carefully before completing your purchase.
@@ -54,7 +45,7 @@ You may cancel at any time, but no refunds will be issued for partial months.
 All borrowed items must be returned before cancellation is finalized.
 `
 
-  const redirectToStripeCheckout = async (tier: MembershipTier) => {
+  const redirectToStripeCheckout = async (tier: string) => {
     setCheckoutTier(tier)
     setError(null)
     try {
@@ -85,7 +76,7 @@ All borrowed items must be returned before cancellation is finalized.
     }
   }
 
-  const openDisclaimerForTier = (tier: MembershipTier) => {
+  const openDisclaimerForTier = (tier: string) => {
     setPendingTier(tier)
     setDisclaimerAgreed(false)
     setDisclaimerOpen(true)
@@ -153,7 +144,7 @@ All borrowed items must be returned before cancellation is finalized.
           style={{ width: '100vh', height: '100vw' }}
         >
           <Image
-            src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
+            src={BASE_IMAGE_SRC}
             alt="Membership tiers"
             fill
             priority
@@ -162,71 +153,21 @@ All borrowed items must be returned before cancellation is finalized.
           />
         </div>
 
-        {/* Tap zones - rotated to match image */}
+        {/* Single click zone for $100 membership */}
         <div 
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
           style={{ width: '100vh', height: '100vw' }}
         >
-          {/* Top-left: Eeeehs */}
           <button
             type="button"
-            aria-label={MEMBERSHIP_LEVELS.Eeeehs.name}
-            className="absolute left-0 top-0 h-1/2 w-1/2 cursor-pointer"
+            aria-label="Join Membership"
+            className="absolute inset-0 cursor-pointer"
             onClick={() => {
-              if (selectedTier === 'Eeeehs') {
-                openDisclaimerForTier('Eeeehs')
+              if (selectedTier === 'membership') {
+                openDisclaimerForTier('membership')
                 return
               }
-              setSelectedTier('Eeeehs')
-              setHoveredTier('Eeeehs')
-            }}
-            disabled={checkoutTier !== null}
-          />
-
-          {/* Top-right: Oooohs */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Oooohs.name}
-            className="absolute right-0 top-0 h-1/2 w-1/2 cursor-pointer"
-            onClick={() => {
-              if (selectedTier === 'Oooohs') {
-                openDisclaimerForTier('Oooohs')
-                return
-              }
-              setSelectedTier('Oooohs')
-              setHoveredTier('Oooohs')
-            }}
-            disabled={checkoutTier !== null}
-          />
-
-          {/* Bottom-left: Aaaaahs */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Aaaaahs.name}
-            className="absolute left-0 bottom-0 h-1/2 w-1/2 cursor-pointer"
-            onClick={() => {
-              if (selectedTier === 'Aaaaahs') {
-                openDisclaimerForTier('Aaaaahs')
-                return
-              }
-              setSelectedTier('Aaaaahs')
-              setHoveredTier('Aaaaahs')
-            }}
-            disabled={checkoutTier !== null}
-          />
-
-          {/* Bottom-right: Mmmmms */}
-          <button
-            type="button"
-            aria-label={MEMBERSHIP_LEVELS.Mmmmms.name}
-            className="absolute right-0 bottom-0 h-1/2 w-1/2 cursor-pointer"
-            onClick={() => {
-              if (selectedTier === 'Mmmmms') {
-                openDisclaimerForTier('Mmmmms')
-                return
-              }
-              setSelectedTier('Mmmmms')
-              setHoveredTier('Mmmmms')
+              setSelectedTier('membership')
             }}
             disabled={checkoutTier !== null}
           />
@@ -243,7 +184,7 @@ All borrowed items must be returned before cancellation is finalized.
       <div className="hidden md:block relative mx-auto w-full border-y border-[hsl(var(--border))] bg-black shadow-lg">
         <div className="flex items-center justify-center">
           <Image
-            src={hoveredTier ? SELECTED_IMAGE_SRC[hoveredTier] : BASE_IMAGE_SRC}
+            src={BASE_IMAGE_SRC}
             alt="Membership tiers"
             width={1024}
             height={576}
@@ -252,79 +193,22 @@ All borrowed items must be returned before cancellation is finalized.
           />
         </div>
 
-        {/* Clickable quadrants */}
+        {/* Single click zone for $100 membership */}
         <div className="absolute inset-0">
-            <button
-              type="button"
-              aria-label={MEMBERSHIP_LEVELS.Eeeehs.name}
-              className="absolute left-0 top-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-              onMouseEnter={() => setHoveredTier('Eeeehs')}
-              onMouseLeave={() => setHoveredTier(null)}
-              onClick={() => {
-                if (selectedTier === 'Eeeehs') {
-                  openDisclaimerForTier('Eeeehs')
-                  return
-                }
-                setSelectedTier('Eeeehs')
-                setHoveredTier('Eeeehs')
-              }}
-              disabled={checkoutTier !== null}
-            />
-
-            {/* Top-right: Oooohs */}
-            <button
-              type="button"
-              aria-label={MEMBERSHIP_LEVELS.Oooohs.name}
-              className="absolute right-0 top-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-              onMouseEnter={() => setHoveredTier('Oooohs')}
-              onMouseLeave={() => setHoveredTier(null)}
-              onClick={() => {
-                if (selectedTier === 'Oooohs') {
-                  openDisclaimerForTier('Oooohs')
-                  return
-                }
-                setSelectedTier('Oooohs')
-                setHoveredTier('Oooohs')
-              }}
-              disabled={checkoutTier !== null}
-            />
-
-            {/* Bottom-left: Aaaaahs */}
-            <button
-              type="button"
-              aria-label={MEMBERSHIP_LEVELS.Aaaaahs.name}
-              className="absolute left-0 bottom-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-              onMouseEnter={() => setHoveredTier('Aaaaahs')}
-              onMouseLeave={() => setHoveredTier(null)}
-              onClick={() => {
-                if (selectedTier === 'Aaaaahs') {
-                  openDisclaimerForTier('Aaaaahs')
-                  return
-                }
-                setSelectedTier('Aaaaahs')
-                setHoveredTier('Aaaaahs')
-              }}
-              disabled={checkoutTier !== null}
-            />
-
-            {/* Bottom-right: Mmmmms */}
-            <button
-              type="button"
-              aria-label={MEMBERSHIP_LEVELS.Mmmmms.name}
-              className="absolute right-0 bottom-0 h-1/2 w-1/2 focus:outline-none focus:ring-4 focus:ring-primary/40"
-              onMouseEnter={() => setHoveredTier('Mmmmms')}
-              onMouseLeave={() => setHoveredTier(null)}
-              onClick={() => {
-                if (selectedTier === 'Mmmmms') {
-                  openDisclaimerForTier('Mmmmms')
-                  return
-                }
-                setSelectedTier('Mmmmms')
-                setHoveredTier('Mmmmms')
-              }}
-              disabled={checkoutTier !== null}
-            />
-          </div>
+          <button
+            type="button"
+            aria-label="Join Membership"
+            className="absolute inset-0 focus:outline-none focus:ring-4 focus:ring-primary/40"
+            onClick={() => {
+              if (selectedTier === 'membership') {
+                openDisclaimerForTier('membership')
+                return
+              }
+              setSelectedTier('membership')
+            }}
+            disabled={checkoutTier !== null}
+          />
+        </div>
 
         {checkoutTier && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white">
