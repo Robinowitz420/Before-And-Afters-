@@ -859,7 +859,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     <div className="min-h-screen w-full">
       <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 sm:py-10">
       {membershipTitle ? (
-        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-4 shadow-sm backdrop-blur sm:p-6">
+        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/40 p-4 shadow-sm backdrop-blur sm:p-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
           <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))] sm:text-2xl">{membershipTitle}</div>
           {membershipSubtitle ? (
@@ -1217,7 +1217,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       <div className="grid gap-6 lg:grid-cols-[280px,1fr,260px]">
         <aside className="w-full">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/70 p-4 shadow-sm backdrop-blur">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
               <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
               <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
@@ -1447,7 +1447,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     Liked
                   </div>
                   <div
-                    className="pointer-events-none absolute right-6 top-20 z-10 rounded-full border border-[hsl(var(--border))] bg-white/90 px-4 py-2 text-sm font-semibold text-[hsl(var(--ink))]"
+                    className="pointer-events-none absolute right-6 top-20 z-10 rounded-full border border-[hsl(var(--border))] bg-white/70 px-4 py-2 text-sm font-semibold text-[hsl(var(--ink))]"
                     style={{ opacity: dislikeIntensity }}
                   >
                     Not for you
@@ -1694,7 +1694,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <aside className="w-full lg:sticky lg:top-6">
           <div className="space-y-3">
             <FrameBox frameClassName="scale-[1.10] rotate-[1.2deg]">
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/70 p-4 shadow-sm backdrop-blur">
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
                 <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
                 <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
@@ -1747,7 +1747,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
             </FrameBox>
 
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-100 p-4 shadow-sm">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm">
               <div className="text-xs font-medium text-[hsl(var(--ink))]">Not a member?</div>
               <Button asChild className="mt-2 w-full" size="sm">
                 <Link href="/memberships">Join here</Link>
@@ -1795,7 +1795,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         return (
           <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-[url('/images/checkered-background.jpg')] bg-cover bg-center p-6 shadow-sm">
-            <div className="rounded-2xl bg-white/90 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl bg-white/70 p-6 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Profile</div>
