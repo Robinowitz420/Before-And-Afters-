@@ -13,6 +13,15 @@ function getBaseUrl(request: NextRequest): string {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Stripe is properly initialized
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('STRIPE_SECRET_KEY is not set in environment variables')
+      return NextResponse.json(
+        { error: 'Payment service is not configured. Please contact support.' },
+        { status: 500 }
+      )
+    }
+
     await auth.protect()
     const { userId } = await auth()
     if (!userId) {
@@ -71,6 +80,14 @@ export async function POST(request: NextRequest) {
         membershipTier: tier,
       },
     })
+
+    if (!session.url) {
+      console.error('Stripe session created but no URL returned:', session)
+      return NextResponse.json(
+        { error: 'Failed to create checkout URL' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
