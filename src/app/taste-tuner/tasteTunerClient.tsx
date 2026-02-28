@@ -11,6 +11,23 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 
+function FrameBox({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={cn('relative', className)}>
+      <div className="absolute inset-0">
+        <Image
+          src={encodeURI('/images/Boxes/frame .png')}
+          alt="Frame"
+          fill
+          sizes="400px"
+          className="pointer-events-none select-none object-contain"
+        />
+      </div>
+      <div className="relative z-10 p-4">{children}</div>
+    </div>
+  )
+}
+
 function SelectedChip({ children }: { children: React.ReactNode }) {
   return (
     <span
@@ -1675,93 +1692,117 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {profile.fullName && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Full Name</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.fullName}</div>
-                </div>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Full Name</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.fullName}</div>
+                  </div>
+                </FrameBox>
               )}
               {profile.permaPlayaName && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">PermaPlaya Name</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.permaPlayaName}</div>
-                </div>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">PermaPlaya Name</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.permaPlayaName}</div>
+                  </div>
+                </FrameBox>
               )}
               {profile.igHandle && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">IG Handle</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.igHandle}</div>
-                </div>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">IG Handle</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.igHandle}</div>
+                  </div>
+                </FrameBox>
               )}
               {profile.birthday && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Birthday</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.birthday}</div>
-                </div>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Birthday</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.birthday}</div>
+                  </div>
+                </FrameBox>
               )}
               {profile.neighborhood && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Neighborhood</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.neighborhood}</div>
-                </div>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Neighborhood</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.neighborhood}</div>
+                  </div>
+                </FrameBox>
               )}
               {profile.signatureColor && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Signature Color</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg">{SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.emoji}</span>
-                    <span className="text-sm font-semibold text-[hsl(var(--ink))]">
-                      {SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.label}
-                    </span>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Signature Color</div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.emoji}</span>
+                      <span className="text-sm font-semibold text-[hsl(var(--ink))]">
+                        {SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.label}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </FrameBox>
               )}
               {profile.closetMascot && (
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Closet Mascot</div>
-                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.closetMascot}</div>
-                </div>
+                <FrameBox>
+                  <div className="rounded-2xl bg-white/60 p-3">
+                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Closet Mascot</div>
+                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.closetMascot}</div>
+                  </div>
+                </FrameBox>
               )}
             </div>
 
             {profile.styleVibe && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Style Vibe</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.styleVibe}</div>
-              </div>
+              <FrameBox className="mt-4">
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Style Vibe</div>
+                  <div className="text-sm text-[hsl(var(--ink))]">{profile.styleVibe}</div>
+                </div>
+              </FrameBox>
             )}
 
             {profile.aboutYou && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">About You</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.aboutYou}</div>
-              </div>
+              <FrameBox className="mt-4">
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">About You</div>
+                  <div className="text-sm text-[hsl(var(--ink))]">{profile.aboutYou}</div>
+                </div>
+              </FrameBox>
             )}
 
             {profile.wardrobeGripes && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Wardrobe Gripes</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.wardrobeGripes}</div>
-              </div>
+              <FrameBox className="mt-4">
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Wardrobe Gripes</div>
+                  <div className="text-sm text-[hsl(var(--ink))]">{profile.wardrobeGripes}</div>
+                </div>
+              </FrameBox>
             )}
 
             {profile.favoriteStores && (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Favorite Stores & Brands</div>
-                <div className="text-sm text-[hsl(var(--ink))]">{profile.favoriteStores}</div>
-              </div>
+              <FrameBox className="mt-4">
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Favorite Stores & Brands</div>
+                  <div className="text-sm text-[hsl(var(--ink))]">{profile.favoriteStores}</div>
+                </div>
+              </FrameBox>
             )}
 
             {profile.excitementReasons?.length ? (
-              <div className="mt-4 rounded-2xl bg-white/60 p-3">
-                <div className="text-xs font-medium text-[hsl(var(--ink))]/60 mb-2">What Excites You</div>
-                <div className="flex flex-wrap gap-2">
-                  {profile.excitementReasons.map((reason: string) => (
-                    <span key={reason} className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                      {reason}
-                    </span>
-                  ))}
+              <FrameBox className="mt-4">
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60 mb-2">What Excites You</div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.excitementReasons.map((reason: string) => (
+                      <span key={reason} className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                        {reason}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </FrameBox>
             ) : null}
           </div>
         </div>
