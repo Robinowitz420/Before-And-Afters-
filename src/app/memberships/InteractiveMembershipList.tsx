@@ -166,11 +166,8 @@ All borrowed items must be returned before cancellation is finalized.
             aria-label="Join Membership"
             className="absolute inset-0 cursor-pointer"
             onClick={() => {
-              if (selectedTier === STRIPE_TIER_ID) {
-                openDisclaimerForTier(STRIPE_TIER_ID)
-                return
-              }
               setSelectedTier(STRIPE_TIER_ID)
+              openDisclaimerForTier(STRIPE_TIER_ID)
             }}
             disabled={checkoutTier !== null}
           />
@@ -203,11 +200,8 @@ All borrowed items must be returned before cancellation is finalized.
             aria-label="Join Membership"
             className="absolute inset-0 focus:outline-none focus:ring-4 focus:ring-primary/40"
             onClick={() => {
-              if (selectedTier === STRIPE_TIER_ID) {
-                openDisclaimerForTier(STRIPE_TIER_ID)
-                return
-              }
               setSelectedTier(STRIPE_TIER_ID)
+              openDisclaimerForTier(STRIPE_TIER_ID)
             }}
             disabled={checkoutTier !== null}
           />
@@ -220,11 +214,7 @@ All borrowed items must be returned before cancellation is finalized.
         )}
       </div>
 
-      {selectedTier && (
-        <div className="mx-auto mt-6 max-w-6xl px-6 text-center text-sm text-muted-foreground">
-          Tap/click the same tier again to continue to checkout.
-        </div>
-      )}
+      {selectedTier ? null : null}
     </div>
   )
 }
