@@ -1335,15 +1335,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   🔍 Search Clothing
                 </Button>
               </Link>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => setDeleteProfileOpen(true)}
-                className="bg-red-600 text-white hover:bg-red-700 border-red-600"
-              >
-                🗑️ Delete Profile
-              </Button>
             </div>
           ) : null}
 
@@ -1711,6 +1702,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 <Link href="/memberships">Join here</Link>
               </Button>
             </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setDeleteProfileOpen(true)}
+              className="w-full bg-red-600 text-white hover:bg-red-700 border-red-600"
+            >
+              🗑️ Delete Profile
+            </Button>
           </div>
         </aside>
       </div>
