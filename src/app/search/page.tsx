@@ -367,7 +367,8 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50">
+    <div className="relative min-h-screen">
+      <div className="fixed inset-0 -z-10 bg-[url('/images/checkered-background.jpg')] bg-cover bg-center bg-no-repeat" />
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
