@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useUser, UserButton } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs'
 import * as Dialog from '@radix-ui/react-dialog'
 
 import { Button } from '@/components/ui/button'
@@ -966,12 +966,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
-
-      <div className="mb-6 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-end sm:gap-6">
-        <div className="w-full rounded-2xl border border-white/15 bg-black/30 px-4 py-3 text-white shadow-sm backdrop-blur-md sm:w-auto">
-          <UserButton afterSignOutUrl="/" />
-        </div>
-      </div>
 
       <Dialog.Root open={editOpen} onOpenChange={(open) => (open ? setEditOpen(true) : closeEditor())}>
         <Dialog.Portal>
