@@ -155,26 +155,26 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
       ) : null}
 
-      {/* MOBILE: Full-screen rotated */}
+      {/* MOBILE: Full-screen */}
       <div className="md:hidden fixed inset-0 z-40">
         <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
-          style={{ width: '100vh', height: '100vw' }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ width: '100vw', height: '100vh' }}
         >
           <Image
             src={BASE_IMAGE_SRC}
             alt="Membership tiers"
             fill
             priority
-            className="object-cover"
-            sizes="100vh"
+            className="object-contain"
+            sizes="100vw"
           />
         </div>
 
         {/* Single click zone for $100 membership */}
         <div 
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
-          style={{ width: '100vh', height: '100vw' }}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ width: '100vw', height: '100vh' }}
         >
           <button
             type="button"

@@ -1350,9 +1350,13 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
             ) : !currentCard || !currentCard.src ? (
               <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-8 text-center shadow-sm">
-                <div className="text-lg font-semibold text-[hsl(var(--ink))]">No items found</div>
+                <div className="text-lg font-semibold text-[hsl(var(--ink))]">
+                  {usingCatalogue ? 'Catalogue is empty' : 'No clothing images found'}
+                </div>
                 <div className="mt-2 text-sm text-muted-foreground">
-                  Add images to <code className="font-mono">/public/images/clothing</code> and refresh.
+                  {usingCatalogue 
+                    ? 'No items available in the catalogue right now. Please check back later.' 
+                    : 'Add images to /public/images/clothing and refresh.'}
                 </div>
               </div>
             ) : browseMode ? (
