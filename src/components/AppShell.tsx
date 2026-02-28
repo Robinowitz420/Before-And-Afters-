@@ -16,7 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div
       className={cn(
         'min-h-screen',
-        isTasteTuner ? 'bg-transparent' : isLanding ? 'app-atmosphere' : 'app-sunset'
+        isTasteTuner ? 'bg-transparent' : isLanding ? 'bg-[url("/images/Membership Images/Backgrounds/Website Page Breakdown (USE THIS) (1)")] bg-cover bg-center bg-no-repeat' : 'app-sunset'
       )}
     >
       {isTasteTuner ? (
