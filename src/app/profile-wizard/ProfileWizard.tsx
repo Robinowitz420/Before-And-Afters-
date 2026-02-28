@@ -21,6 +21,21 @@ type WizardData = {
   fitNotes: string
 
   fabricSensitivities: string[]
+
+  // Joni's Dressup Box Application
+  fullName: string
+  permaPlayaName: string
+  igHandle: string
+  birthday: string
+  neighborhood: string
+  styleVibe: string
+  aboutYou: string
+  wardrobeGripes: string
+  favoriteStores: string
+  excitementReasons: string[]
+  closetMascot: string
+  signatureColor: string
+  selfieUrl: string
 }
 
 const HEIGHT_RANGES = [
@@ -33,6 +48,34 @@ const HEIGHT_RANGES = [
 ]
 
 const SIZE_RANGES_TOP = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Varies']
+
+const EXCITEMENT_OPTIONS = [
+  'Trying out different styles, shapes, colors and vibes without the long term commitment',
+  'Elevating my going-out looks',
+  'Working with style-savvy staff to find things that fit, suit me and build my confidence',
+  'Reinventing myself regularly, having more eras',
+  'The excitement of finding new things to wear all the time',
+  'Being part of a community that loves clothes and style',
+  'Having a place to change my outfit and get ready at any hour of the day',
+  'Putting my own clothes into the closet',
+  'Sharing and hearing stories about the clothes I wear and share',
+  'Having fun bringing more Twinning and Squad coordinated looks into my lifestyle',
+  'Renting stand-out pieces for performances, content and photo/video shoots',
+  'Dressing for special occasions',
+  'Making every day a special occasion!',
+] as const
+
+const SIGNATURE_COLORS = [
+  { value: 'red', label: 'RED', emoji: '❤️', class: 'bg-red-500' },
+  { value: 'orange', label: 'ORANGE', emoji: '🧡', class: 'bg-orange-500' },
+  { value: 'yellow', label: 'YELLOW', emoji: '💛', class: 'bg-yellow-400' },
+  { value: 'green', label: 'GREEN', emoji: '💚', class: 'bg-green-500' },
+  { value: 'blue', label: 'BLUE', emoji: '💙', class: 'bg-blue-500' },
+  { value: 'purple', label: 'PURPLE', emoji: '💜', class: 'bg-purple-500' },
+  { value: 'pink', label: 'PINK', emoji: '💗', class: 'bg-pink-500' },
+  { value: 'black', label: 'BLACK', emoji: '🖤', class: 'bg-gray-900' },
+  { value: 'white', label: 'WHITE', emoji: '🤍', class: 'bg-gray-100' },
+] as const
 
 const FABRIC_SENSITIVITIES = [
   'Wool (itch)',
@@ -55,6 +98,21 @@ function defaultData(): WizardData {
     fitNotes: '',
 
     fabricSensitivities: [],
+
+    // Joni's Dressup Box Application
+    fullName: '',
+    permaPlayaName: '',
+    igHandle: '',
+    birthday: '',
+    neighborhood: '',
+    styleVibe: '',
+    aboutYou: '',
+    wardrobeGripes: '',
+    favoriteStores: '',
+    excitementReasons: [],
+    closetMascot: '',
+    signatureColor: '',
+    selfieUrl: '',
   }
 }
 
@@ -78,7 +136,7 @@ async function saveProfile(data: WizardData): Promise<{ success: boolean; error?
 }
 
 function clampStep(step: number) {
-  return Math.min(2, Math.max(1, step))
+  return Math.min(4, Math.max(1, step))
 }
 
 type TogglePillProps = {
@@ -200,7 +258,7 @@ export function ProfileWizard() {
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
 
-  const totalSteps = 2
+  const totalSteps = 4
   const progressPct = Math.round((step / totalSteps) * 100)
 
   useEffect(() => {
@@ -216,6 +274,8 @@ export function ProfileWizard() {
   }, [isLoaded, isSignedIn, mounted, router])
 
   const canContinueStep1 = data.displayName.trim() !== '' && data.email.trim() !== '' && data.phone.trim() !== ''
+  const canContinueStep3 = data.styleVibe.trim() !== '' && data.excitementReasons.length > 0
+  const canContinueStep4 = data.fullName.trim() !== '' && data.neighborhood.trim() !== ''
 
   const canContinue = (stepNum: number) => {
     switch (stepNum) {
@@ -223,6 +283,10 @@ export function ProfileWizard() {
         return canContinueStep1
       case 2:
         return data.heightRange.trim() !== '' && data.topSizeRange.trim() !== ''
+      case 3:
+        return canContinueStep3
+      case 4:
+        return canContinueStep4
       default:
         return false
     }
@@ -230,11 +294,15 @@ export function ProfileWizard() {
 
   const stepTitle =
     step === 1 ? 'Identity Basics'
-      : 'Fit + Fabric'
+      : step === 2 ? 'Fit + Fabric'
+      : step === 3 ? 'Style & Vibe'
+      : 'Personal Touch'
 
   const stepDescription =
     step === 1 ? 'Pop some bubbles to share your magical details.'
-      : 'Body-neutral, practical sizing info + fabric allergies so pulls feel good.'
+      : step === 2 ? 'Body-neutral, practical sizing info + fabric allergies so pulls feel good.'
+      : step === 3 ? 'Tell us about your style, your wardrobe gripes, and what excites you about Joni\'s Dressup Box.'
+      : 'A few fun details to complete your profile—your mascot, signature color, and selfie!'
 
   const goNext = () => setStep((s) => clampStep(s + 1))
   const goBack = () => setStep((s) => clampStep(s - 1))
@@ -371,7 +439,9 @@ export function ProfileWizard() {
               <>
                 <div className="flex-1">
                   {step === 1 ? <Step1 data={data} setData={setData} expandedBubble={expandedBubble} setExpandedBubble={setExpandedBubble} /> : null}
-                  {step === 2 ? <Step7 data={data} setData={setData} /> : null}
+                  {step === 2 ? <Step2 data={data} setData={setData} /> : null}
+                  {step === 3 ? <Step3 data={data} setData={setData} /> : null}
+                  {step === 4 ? <Step4 data={data} setData={setData} /> : null}
                 </div>
 
                 <div className="mt-auto">
@@ -649,7 +719,7 @@ function Step1({ data, setData, expandedBubble, setExpandedBubble }: {
   )
 }
 
-function Step7({ data, setData }: { data: WizardData; setData: (v: WizardData) => void }) {
+function Step2({ data, setData }: { data: WizardData; setData: (v: WizardData) => void }) {
   const toggleSensitivity = (value: (typeof FABRIC_SENSITIVITIES)[number]) => {
     if (value === 'Prefer not to say') {
       setData({ ...data, fabricSensitivities: ['Prefer not to say'] })
@@ -891,6 +961,392 @@ function Step7({ data, setData }: { data: WizardData; setData: (v: WizardData) =
           <div className="absolute -top-1 right-1/3 text-xs animate-bounce delay-700">📐</div>
           <div className="absolute -bottom-2 left-1/3 text-sm animate-pulse delay-300">👖</div>
           <div className="absolute -bottom-3 right-1/4 text-xs animate-bounce delay-500">👕</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Step3({ data, setData }: { data: WizardData; setData: (v: WizardData) => void }) {
+  const toggleExcitement = (value: (typeof EXCITEMENT_OPTIONS)[number]) => {
+    const exists = data.excitementReasons.includes(value)
+    setData({
+      ...data,
+      excitementReasons: exists
+        ? data.excitementReasons.filter((r: string) => r !== value)
+        : [...data.excitementReasons, value],
+    })
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-600 bg-clip-text text-transparent">
+          👗 Your Style & Vibe
+        </h2>
+        <p className="text-lg text-[hsl(var(--ink))]/80">
+          Help us understand your fashion energy
+        </p>
+      </div>
+
+      {/* Style Vibe */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 via-purple-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-pink-50 via-purple-50 to-fuchsia-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
+              ✨ What&apos;s your style vibe?
+            </label>
+            <textarea
+              value={data.styleVibe}
+              onChange={(e) => setData({ ...data, styleVibe: e.target.value })}
+              placeholder="Describe your aesthetic—vintage glam, streetwear, minimalist, maximalist, cottagecore, dark academia..."
+              rows={3}
+              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
+            />
+            <div className="text-xs text-center text-pink-600 mt-3 font-medium">Required</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tell us more about you */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-teal-50 via-cyan-50 to-blue-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
+              💫 Tell us more about yourself
+            </label>
+            <textarea
+              value={data.aboutYou}
+              onChange={(e) => setData({ ...data, aboutYou: e.target.value })}
+              placeholder="Share anything else you&apos;d like us to know about you..."
+              rows={3}
+              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
+            />
+            <div className="text-xs text-center text-teal-600 mt-3">Optional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Wardrobe Gripes */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-orange-400 via-red-500 to-pink-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-orange-50 via-red-50 to-pink-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
+              😤 What gripes do you have about your current wardrobe?
+            </label>
+            <textarea
+              value={data.wardrobeGripes}
+              onChange={(e) => setData({ ...data, wardrobeGripes: e.target.value })}
+              placeholder="Shopping habits, getting dressed, fit issues, style ruts..."
+              rows={3}
+              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
+            />
+            <div className="text-xs text-center text-orange-600 mt-3">Optional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Favorite Stores */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-400 via-purple-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-indigo-50 via-purple-50 to-fuchsia-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-4">
+              🛍️ Any fave stores, boutiques, brands or designers?
+            </label>
+            <textarea
+              value={data.favoriteStores}
+              onChange={(e) => setData({ ...data, favoriteStores: e.target.value })}
+              placeholder="We want to know where you love to shop!"
+              rows={3}
+              className="w-full bg-transparent border-0 text-center text-base font-medium text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0 resize-none"
+            />
+            <div className="text-xs text-center text-indigo-600 mt-3">Optional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* What excites you */}
+      <div className="max-w-4xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-rose-400 via-pink-500 to-fuchsia-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white/80 rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50">
+            <div className="text-center">
+              <div className="text-2xl mb-2">🎉</div>
+              <h3 className="text-lg font-bold text-gray-900">What excites you about joining Joni&apos;s Dressup Box?</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Select all that apply — we want to know what you&apos;re most excited about!
+              </p>
+              <div className="mt-2 text-xs font-medium text-pink-700">
+                {data.excitementReasons.length > 0
+                  ? `${data.excitementReasons.length} selected`
+                  : 'Select at least one to continue'}
+              </div>
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {EXCITEMENT_OPTIONS.map((option: string) => {
+                const selected = data.excitementReasons.includes(option)
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => toggleExcitement(option as typeof EXCITEMENT_OPTIONS[number])}
+                    className={`relative rounded-xl p-4 shadow-md border-2 text-left hover:scale-[1.02] transition-all duration-200 ${
+                      selected
+                        ? 'bg-gradient-to-br from-pink-500 to-fuchsia-600 text-white border-pink-500'
+                        : 'bg-white border-gray-200 hover:border-pink-300'
+                    }`}
+                  >
+                    <div className="text-sm font-medium leading-snug">{option}</div>
+                    {selected && (
+                      <div className="absolute top-2 right-2 w-5 h-5 bg-white rounded-full flex items-center justify-center text-pink-600 text-xs font-bold">
+                        ✓
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) => void }) {
+  return (
+    <div className="space-y-8">
+      <div className="text-center">
+        <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-600 bg-clip-text text-transparent">
+          🎨 Personal Touch
+        </h2>
+        <p className="text-lg text-[hsl(var(--ink))]/80">
+          A few fun details to make your profile uniquely you
+        </p>
+      </div>
+
+      {/* Full Name & PermaPlaya Name row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        {/* Full Name */}
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-6 shadow-lg border-2 border-transparent bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+              📝 Full Name
+            </label>
+            <input
+              type="text"
+              value={data.fullName}
+              onChange={(e) => setData({ ...data, fullName: e.target.value })}
+              placeholder="Your full name"
+              className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+            />
+            <div className="text-xs text-center text-blue-600 mt-2 font-medium">Required</div>
+          </div>
+        </div>
+
+        {/* PermaPlaya Name */}
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-pink-400 via-rose-500 to-red-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-6 shadow-lg border-2 border-transparent bg-gradient-to-br from-pink-50 via-rose-50 to-red-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+              🎭 PermaPlaya Name
+            </label>
+            <input
+              type="text"
+              value={data.permaPlayaName}
+              onChange={(e) => setData({ ...data, permaPlayaName: e.target.value })}
+              placeholder="Your artist/party name"
+              className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+            />
+            <div className="text-xs text-center text-pink-600 mt-2">Optional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* IG Handle & Birthday row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        {/* IG Handle */}
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-pink-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-6 shadow-lg border-2 border-transparent bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+              📱 IG Handle
+            </label>
+            <input
+              type="text"
+              value={data.igHandle}
+              onChange={(e) => setData({ ...data, igHandle: e.target.value })}
+              placeholder="@yourhandle"
+              className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+            />
+            <div className="text-xs text-center text-purple-600 mt-2">Optional</div>
+          </div>
+        </div>
+
+        {/* Birthday */}
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-orange-500 to-red-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-6 shadow-lg border-2 border-transparent bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+              🎂 Birthday
+            </label>
+            <input
+              type="date"
+              value={data.birthday}
+              onChange={(e) => setData({ ...data, birthday: e.target.value })}
+              className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+            />
+            <div className="text-xs text-center text-amber-600 mt-2">Optional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Neighborhood */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-green-400 via-teal-500 to-cyan-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-6 shadow-lg border-2 border-transparent bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+              🏙️ Neighborhood
+            </label>
+            <input
+              type="text"
+              value={data.neighborhood}
+              onChange={(e) => setData({ ...data, neighborhood: e.target.value })}
+              placeholder="Where do you hang?"
+              className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+            />
+            <div className="text-xs text-center text-green-600 mt-2 font-medium">Required</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Closet Mascot */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-6 shadow-lg border-2 border-transparent bg-gradient-to-br from-yellow-50 via-amber-50 to-orange-50">
+            <label className="block text-center text-sm font-semibold text-gray-700 mb-3">
+              🐾 If your closet had an animal mascot, what would it be?
+            </label>
+            <input
+              type="text"
+              value={data.closetMascot}
+              onChange={(e) => setData({ ...data, closetMascot: e.target.value })}
+              placeholder="A fierce leopard? A cozy cat? A peacock?"
+              className="w-full bg-transparent border-0 text-center text-lg font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+            />
+            <div className="text-xs text-center text-amber-600 mt-2">Optional</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Signature Color */}
+      <div className="max-w-4xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-rose-400 via-pink-500 to-purple-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white/80 rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
+            <div className="text-center">
+              <div className="text-2xl mb-2">🎨</div>
+              <h3 className="text-lg font-bold text-gray-900">Signature Color</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                If you had to choose one color that represents you...
+              </p>
+              {data.signatureColor && (
+                <div className="mt-2 text-sm font-medium text-pink-700">
+                  Selected: {SIGNATURE_COLORS.find((c: {value: string; label: string; emoji: string; class: string}) => c.value === data.signatureColor)?.label}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
+              {SIGNATURE_COLORS.map((color: {value: string; label: string; emoji: string; class: string}) => {
+                const selected = data.signatureColor === color.value
+                return (
+                  <button
+                    key={color.value}
+                    type="button"
+                    onClick={() => setData({ ...data, signatureColor: color.value })}
+                    className={`relative w-20 h-20 rounded-full shadow-xl border-4 hover:scale-110 transition-all duration-300 ${
+                      selected ? 'border-gray-900 scale-110' : 'border-white'
+                    } ${color.class}`}
+                  >
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-2xl">{color.emoji}</span>
+                    </div>
+                    {selected && (
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold border-2 border-white">
+                        ✓
+                      </div>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Selfie Upload */}
+      <div className="max-w-2xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-cyan-50 via-blue-50 to-indigo-50">
+            <div className="text-center">
+              <div className="text-2xl mb-2">📸</div>
+              <h3 className="text-lg font-bold text-gray-900">Upload a selfie!</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Let&apos;s see that beautiful face 💕
+              </p>
+            </div>
+
+            <div className="mt-6">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    const reader = new FileReader()
+                    reader.onload = (event) => {
+                      setData({ ...data, selfieUrl: event.target?.result as string })
+                    }
+                    reader.readAsDataURL(file)
+                  }
+                }}
+                className="hidden"
+                id="selfie-upload"
+              />
+              <label
+                htmlFor="selfie-upload"
+                className="block w-full cursor-pointer"
+              >
+                <div className="border-2 border-dashed border-blue-300 rounded-2xl p-8 text-center hover:bg-blue-50/50 transition-colors">
+                  {data.selfieUrl ? (
+                    <div className="space-y-3">
+                      <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-white shadow-lg">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={data.selfieUrl} alt="Selfie preview" className="w-full h-full object-cover" />
+                      </div>
+                      <p className="text-sm text-blue-600 font-medium">Click to change photo</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="text-4xl">📤</div>
+                      <p className="text-sm text-gray-600">Click to upload or drag a photo here</p>
+                      <p className="text-xs text-gray-400">Size limit: 10 MB</p>
+                    </div>
+                  )}
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
