@@ -15,6 +15,8 @@ export default function InteractiveMembershipList() {
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false)
   const [pendingTier, setPendingTier] = useState<string | null>(null)
 
+  const STRIPE_TIER_ID = 'Oooohs'
+
   const membershipDisclaimer = `Membership Agreement & Disclaimer
 Please read carefully before completing your purchase.
 
@@ -164,11 +166,11 @@ All borrowed items must be returned before cancellation is finalized.
             aria-label="Join Membership"
             className="absolute inset-0 cursor-pointer"
             onClick={() => {
-              if (selectedTier === 'membership') {
-                openDisclaimerForTier('membership')
+              if (selectedTier === STRIPE_TIER_ID) {
+                openDisclaimerForTier(STRIPE_TIER_ID)
                 return
               }
-              setSelectedTier('membership')
+              setSelectedTier(STRIPE_TIER_ID)
             }}
             disabled={checkoutTier !== null}
           />
@@ -201,11 +203,11 @@ All borrowed items must be returned before cancellation is finalized.
             aria-label="Join Membership"
             className="absolute inset-0 focus:outline-none focus:ring-4 focus:ring-primary/40"
             onClick={() => {
-              if (selectedTier === 'membership') {
-                openDisclaimerForTier('membership')
+              if (selectedTier === STRIPE_TIER_ID) {
+                openDisclaimerForTier(STRIPE_TIER_ID)
                 return
               }
-              setSelectedTier('membership')
+              setSelectedTier(STRIPE_TIER_ID)
             }}
             disabled={checkoutTier !== null}
           />
