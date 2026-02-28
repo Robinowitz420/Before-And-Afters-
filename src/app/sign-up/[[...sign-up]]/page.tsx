@@ -3,7 +3,10 @@ import { dark } from '@clerk/themes'
 
 export default function Page() {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+    <div 
+      className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/images/Membership%20Images/Backgrounds/plain%20wallpaper.png')" }}
+    >
       <SignUp
         appearance={{
           theme: dark,
@@ -15,7 +18,7 @@ export default function Page() {
           },
           elements: {
             formButtonPrimary: 'bg-indigo-600 hover:bg-indigo-700 text-white',
-            card: 'bg-slate-900 border-slate-700',
+            card: 'bg-slate-900/90 border-slate-700 backdrop-blur-sm',
             socialButtonsBlockButton: 'bg-slate-800 border-slate-700 hover:bg-slate-700',
             formFieldInput: 'bg-slate-800 border-slate-600 text-white',
           }
