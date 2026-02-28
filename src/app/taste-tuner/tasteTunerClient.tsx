@@ -410,6 +410,9 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [dragging, setDragging] = useState(false)
   const dragStartX = useRef<number | null>(null)
 
+  const [deleteProfileOpen, setDeleteProfileOpen] = useState(false)
+  const [deletingProfile, setDeletingProfile] = useState(false)
+
   const usingCatalogue = images.length === 0
 
   // Group garments by category for browse mode
@@ -811,6 +814,24 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     setDragX(0)
     setDragging(false)
     dragStartX.current = null
+  }
+
+  const deleteProfile = async () => {
+    setDeletingProfile(true)
+    try {
+      const res = await fetch('/api/profile', { method: 'DELETE' })
+      if (res.ok) {
+        setProfile({})
+        setDeleteProfileOpen(false)
+        router.push('/')
+      } else {
+        console.error('Failed to delete profile')
+      }
+    } catch (e) {
+      console.error('Error deleting profile:', e)
+    } finally {
+      setDeletingProfile(false)
+    }
   }
 
   return (
@@ -1314,6 +1335,15 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   🔍 Search Clothing
                 </Button>
               </Link>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setDeleteProfileOpen(true)}
+                className="bg-red-600 text-white hover:bg-red-700 border-red-600"
+              >
+                🗑️ Delete Profile
+              </Button>
             </div>
           ) : null}
 
@@ -1795,6 +1825,61 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </div>
         </div>
       ) : null}
+
+      {/* Delete Profile Dialog */}
+      <Dialog.Root open={deleteProfileOpen} onOpenChange={setDeleteProfileOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay
+            className={cn(
+              'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
+              'transition-opacity duration-200 ease-out',
+              'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
+            )}
+          />
+          <Dialog.Content
+            className={cn(
+              'fixed left-1/2 top-1/2 z-50 w-[min(480px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2',
+              'rounded-2xl border border-red-200 bg-white shadow-2xl',
+              'transition-[opacity,transform] duration-200 ease-out will-change-transform',
+              'data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+              'data-[state=open]:scale-100 data-[state=closed]:scale-95'
+            )}
+          >
+            <div className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
+                  <span className="text-xl">⚠️</span>
+                </div>
+                <div>
+                  <div className="text-lg font-semibold text-gray-900">Delete Profile</div>
+                  <div className="text-sm text-gray-600">This action cannot be undone</div>
+                </div>
+              </div>
+
+              <div className="mt-4 text-sm text-gray-700">
+                Are you sure you want to delete your profile? All your data including preferences, likes, and application information will be permanently removed.
+              </div>
+
+              <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <Dialog.Close asChild>
+                  <Button type="button" variant="outline" disabled={deletingProfile}>
+                    Cancel
+                  </Button>
+                </Dialog.Close>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={deleteProfile}
+                  disabled={deletingProfile}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {deletingProfile ? 'Deleting...' : 'Delete Profile'}
+                </Button>
+              </div>
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   )
 }
