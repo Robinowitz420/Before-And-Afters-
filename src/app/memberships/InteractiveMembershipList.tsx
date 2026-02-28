@@ -126,7 +126,7 @@ All borrowed items must be returned before cancellation is finalized.
           <Button
             type="button"
             size="lg"
-            className="w-full rounded-full bg-black/80 text-white hover:bg-black border border-white/25"
+            className="w-full rounded-full bg-black/80 text-white hover:bg-black border border-white/25 py-6 text-xl sm:py-4 sm:text-lg"
             onClick={() => {
               setSelectedTier(STRIPE_TIER_ID)
               openDisclaimerForTier(STRIPE_TIER_ID)
