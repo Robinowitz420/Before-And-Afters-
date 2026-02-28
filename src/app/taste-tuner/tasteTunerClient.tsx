@@ -1588,19 +1588,36 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       </div>
                     </div>
 
-                    <div className="mt-4">
+                    <div className="mt-4 space-y-2">
                       {detailGarmentId ? (
-                        <Button
-                          type="button"
-                          className="w-full"
-                          onClick={() => {
-                            reserveCurrent(detailGarmentId).catch(() => {
-                              // ignore
-                            })
-                          }}
-                        >
-                          Reserve item
-                        </Button>
+                        <>
+                          <Button
+                            type="button"
+                            className="w-full"
+                            onClick={() => {
+                              reserveCurrent(detailGarmentId).catch(() => {
+                                // ignore
+                              })
+                            }}
+                          >
+                            Reserve item
+                          </Button>
+                          {(save.likes.includes(detailGarmentId) || reservedIds.includes(detailGarmentId) || requestedIds.includes(detailGarmentId)) ? (
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              className="w-full"
+                              onClick={() => {
+                                if (save.likes.includes(detailGarmentId)) removeFromSaved(detailGarmentId)
+                                if (reservedIds.includes(detailGarmentId)) removeFromReserved(detailGarmentId)
+                                if (requestedIds.includes(detailGarmentId)) removeFromRequested(detailGarmentId)
+                                setDetailOpen(false)
+                              }}
+                            >
+                              Remove from closet
+                            </Button>
+                          ) : null}
+                        </>
                       ) : null}
                     </div>
                   </div>
