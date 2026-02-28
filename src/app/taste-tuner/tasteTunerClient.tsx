@@ -11,7 +11,15 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 
-function FrameBox({ children, className }: { children: React.ReactNode; className?: string }) {
+function FrameBox({
+  children,
+  className,
+  frameClassName,
+}: {
+  children: React.ReactNode
+  className?: string
+  frameClassName?: string
+}) {
   return (
     <div className={cn('relative', className)}>
       <div className="absolute inset-0">
@@ -20,7 +28,7 @@ function FrameBox({ children, className }: { children: React.ReactNode; classNam
           alt="Frame"
           fill
           sizes="400px"
-          className="pointer-events-none select-none object-contain"
+          className={cn('pointer-events-none select-none object-contain', frameClassName)}
         />
       </div>
       <div className="relative z-10 p-4">{children}</div>
@@ -1164,102 +1172,104 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
       <div className="grid gap-6 lg:grid-cols-[280px,1fr,260px]">
         <aside className="lg:sticky lg:top-6">
-          <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
-            <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
-            <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
+          <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
+              <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
+              <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
-            <div className="mt-4 space-y-4">
-              <div>
-                <div className="text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
-                {savedItems.length ? (
-                  <div className="mt-2 grid grid-cols-4 gap-1.5">
-                    {savedItems.slice(0, 8).map((src) => (
-                      <button
-                        key={src}
-                        type="button"
-                        onClick={() => {
-                          if (usingCatalogue) {
-                            openGarmentDetails(src)
-                            return
-                          }
-                          openClosetItem(src)
-                        }}
-                        className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                      >
-                        <Image
-                          src={usingCatalogue ? (catalogueItems.find((g) => g.id === src)?.primaryPhotoUrl ?? '/placeholder.png') : src}
-                          alt="Liked"
-                          width={80}
-                          height={80}
-                          className="h-14 w-full object-cover"
-                        />
-                      </button>
-                    ))}
+              <div className="mt-4 space-y-4">
+                <div>
+                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
+                  {savedItems.length ? (
+                    <div className="mt-2 grid grid-cols-4 gap-1.5">
+                      {savedItems.slice(0, 8).map((src) => (
+                        <button
+                          key={src}
+                          type="button"
+                          onClick={() => {
+                            if (usingCatalogue) {
+                              openGarmentDetails(src)
+                              return
+                            }
+                            openClosetItem(src)
+                          }}
+                          className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                        >
+                          <Image
+                            src={usingCatalogue ? (catalogueItems.find((g) => g.id === src)?.primaryPhotoUrl ?? '/placeholder.png') : src}
+                            alt="Liked"
+                            width={80}
+                            height={80}
+                            className="h-14 w-full object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                      Swipe right to like
+                    </div>
+                  )}
+                </div>
+
+                {usingCatalogue ? (
+                  <div>
+                    <div className="text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
+                    {reservedIds.length ? (
+                      <div className="mt-2 grid grid-cols-4 gap-1.5">
+                        {reservedIds.slice(0, 4).map((id) => {
+                          const g = catalogueItems.find((x) => x.id === id)
+                          const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                          return (
+                            <button
+                              key={id}
+                              type="button"
+                              onClick={() => openGarmentDetails(id)}
+                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                            >
+                              {img ? <Image src={img} alt="Reserved" width={80} height={80} className="h-14 w-full object-cover" /> : null}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : (
+                      <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                        No reserved items
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                    Swipe right to like
+                ) : null}
+
+                {usingCatalogue ? (
+                  <div>
+                    <div className="text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
+                    {requestedIds.length ? (
+                      <div className="mt-2 grid grid-cols-4 gap-1.5">
+                        {requestedIds.slice(0, 4).map((id) => {
+                          const g = catalogueItems.find((x) => x.id === id)
+                          const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                          return (
+                            <button
+                              key={id}
+                              type="button"
+                              onClick={() => openGarmentDetails(id)}
+                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                            >
+                              {img ? <Image src={img} alt="Requested" width={80} height={80} className="h-14 w-full object-cover" /> : null}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : (
+                      <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                        No requested items
+                      </div>
+                    )}
                   </div>
-                )}
+                ) : null}
               </div>
-
-              {usingCatalogue ? (
-                <div>
-                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
-                  {reservedIds.length ? (
-                    <div className="mt-2 grid grid-cols-4 gap-1.5">
-                      {reservedIds.slice(0, 4).map((id) => {
-                        const g = catalogueItems.find((x) => x.id === id)
-                        const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                        return (
-                          <button
-                            key={id}
-                            type="button"
-                            onClick={() => openGarmentDetails(id)}
-                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                          >
-                            {img ? <Image src={img} alt="Reserved" width={80} height={80} className="h-14 w-full object-cover" /> : null}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  ) : (
-                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                      No reserved items
-                    </div>
-                  )}
-                </div>
-              ) : null}
-
-              {usingCatalogue ? (
-                <div>
-                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
-                  {requestedIds.length ? (
-                    <div className="mt-2 grid grid-cols-4 gap-1.5">
-                      {requestedIds.slice(0, 4).map((id) => {
-                        const g = catalogueItems.find((x) => x.id === id)
-                        const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                        return (
-                          <button
-                            key={id}
-                            type="button"
-                            onClick={() => openGarmentDetails(id)}
-                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                          >
-                            {img ? <Image src={img} alt="Requested" width={80} height={80} className="h-14 w-full object-cover" /> : null}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  ) : (
-                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                      No requested items
-                    </div>
-                  )}
-                </div>
-              ) : null}
             </div>
-          </div>
+          </FrameBox>
         </aside>
 
         <section className="flex flex-col items-start justify-center">
@@ -1611,57 +1621,59 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         <aside className="lg:sticky lg:top-6">
           <div className="space-y-3">
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
-              <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
-              <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
+            <FrameBox frameClassName="scale-[1.10] rotate-[1.2deg]">
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-200 p-4 shadow-sm">
+                <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
+                <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
-              <div className="mt-3 flex items-center gap-3">
-                <div
-                  className="h-20 w-16 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
-                >
-                  {profile.avatar ? (
-                    <Image
-                      src={profile.avatar}
-                      alt="Avatar"
-                      width={64}
-                      height={80}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
-                  )}
-                </div>
-                <div className="flex flex-1 flex-col gap-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    disabled={avatarUploading}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const file = e.target.files?.[0]
-                      if (!file) return
-                      setAvatarUploading(true)
-                      const reader = new FileReader()
-                      reader.onload = () => {
-                        const result = typeof reader.result === 'string' ? reader.result : ''
-                        if (result) {
-                          const next = { ...(profile || {}), avatar: result } as WizardProfile
-                          setProfile(next)
-                          saveProfile(next).catch(() => {
-                            // ignore
-                          })
+                <div className="mt-3 flex items-center gap-3">
+                  <div
+                    className="h-20 w-16 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
+                  >
+                    {profile.avatar ? (
+                      <Image
+                        src={profile.avatar}
+                        alt="Avatar"
+                        width={64}
+                        height={80}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
+                    )}
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={avatarUploading}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        setAvatarUploading(true)
+                        const reader = new FileReader()
+                        reader.onload = () => {
+                          const result = typeof reader.result === 'string' ? reader.result : ''
+                          if (result) {
+                            const next = { ...(profile || {}), avatar: result } as WizardProfile
+                            setProfile(next)
+                            saveProfile(next).catch(() => {
+                              // ignore
+                            })
+                          }
+                          setAvatarUploading(false)
                         }
-                        setAvatarUploading(false)
-                      }
-                      reader.onerror = () => {
-                        setAvatarUploading(false)
-                      }
-                      reader.readAsDataURL(file)
-                    }}
-                    className="block w-full text-xs text-muted-foreground file:rounded-lg file:border file:border-[hsl(var(--border))] file:bg-white file:px-2 file:py-1 file:text-xs file:font-medium file:text-[hsl(var(--ink))] hover:file:bg-[hsl(var(--secondary))]"
-                  />
+                        reader.onerror = () => {
+                          setAvatarUploading(false)
+                        }
+                        reader.readAsDataURL(file)
+                      }}
+                      className="block w-full text-xs text-muted-foreground file:rounded-lg file:border file:border-[hsl(var(--border))] file:bg-white file:px-2 file:py-1 file:text-xs file:font-medium file:text-[hsl(var(--ink))] hover:file:bg-[hsl(var(--secondary))]"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </FrameBox>
 
             <div className="rounded-2xl border-[3px] border-blue-600 bg-yellow-100 p-4 shadow-sm">
               <div className="text-xs font-medium text-[hsl(var(--ink))]">Not a member?</div>
@@ -1692,117 +1704,93 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {profile.fullName && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Full Name</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.fullName}</div>
-                  </div>
-                </FrameBox>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Full Name</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.fullName}</div>
+                </div>
               )}
               {profile.permaPlayaName && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">PermaPlaya Name</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.permaPlayaName}</div>
-                  </div>
-                </FrameBox>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">PermaPlaya Name</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.permaPlayaName}</div>
+                </div>
               )}
               {profile.igHandle && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">IG Handle</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.igHandle}</div>
-                  </div>
-                </FrameBox>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">IG Handle</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.igHandle}</div>
+                </div>
               )}
               {profile.birthday && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Birthday</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.birthday}</div>
-                  </div>
-                </FrameBox>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Birthday</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.birthday}</div>
+                </div>
               )}
               {profile.neighborhood && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Neighborhood</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.neighborhood}</div>
-                  </div>
-                </FrameBox>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Neighborhood</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.neighborhood}</div>
+                </div>
               )}
               {profile.signatureColor && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Signature Color</div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.emoji}</span>
-                      <span className="text-sm font-semibold text-[hsl(var(--ink))]">
-                        {SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.label}
-                      </span>
-                    </div>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Signature Color</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.emoji}</span>
+                    <span className="text-sm font-semibold text-[hsl(var(--ink))]">
+                      {SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.label}
+                    </span>
                   </div>
-                </FrameBox>
+                </div>
               )}
               {profile.closetMascot && (
-                <FrameBox>
-                  <div className="rounded-2xl bg-white/60 p-3">
-                    <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Closet Mascot</div>
-                    <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.closetMascot}</div>
-                  </div>
-                </FrameBox>
+                <div className="rounded-2xl bg-white/60 p-3">
+                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Closet Mascot</div>
+                  <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.closetMascot}</div>
+                </div>
               )}
             </div>
 
             {profile.styleVibe && (
-              <FrameBox className="mt-4">
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Style Vibe</div>
-                  <div className="text-sm text-[hsl(var(--ink))]">{profile.styleVibe}</div>
-                </div>
-              </FrameBox>
+              <div className="mt-4 rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Style Vibe</div>
+                <div className="text-sm text-[hsl(var(--ink))]">{profile.styleVibe}</div>
+              </div>
             )}
 
             {profile.aboutYou && (
-              <FrameBox className="mt-4">
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">About You</div>
-                  <div className="text-sm text-[hsl(var(--ink))]">{profile.aboutYou}</div>
-                </div>
-              </FrameBox>
+              <div className="mt-4 rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">About You</div>
+                <div className="text-sm text-[hsl(var(--ink))]">{profile.aboutYou}</div>
+              </div>
             )}
 
             {profile.wardrobeGripes && (
-              <FrameBox className="mt-4">
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Wardrobe Gripes</div>
-                  <div className="text-sm text-[hsl(var(--ink))]">{profile.wardrobeGripes}</div>
-                </div>
-              </FrameBox>
+              <div className="mt-4 rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Wardrobe Gripes</div>
+                <div className="text-sm text-[hsl(var(--ink))]">{profile.wardrobeGripes}</div>
+              </div>
             )}
 
             {profile.favoriteStores && (
-              <FrameBox className="mt-4">
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Favorite Stores & Brands</div>
-                  <div className="text-sm text-[hsl(var(--ink))]">{profile.favoriteStores}</div>
-                </div>
-              </FrameBox>
+              <div className="mt-4 rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Favorite Stores & Brands</div>
+                <div className="text-sm text-[hsl(var(--ink))]">{profile.favoriteStores}</div>
+              </div>
             )}
 
             {profile.excitementReasons?.length ? (
-              <FrameBox className="mt-4">
-                <div className="rounded-2xl bg-white/60 p-3">
-                  <div className="text-xs font-medium text-[hsl(var(--ink))]/60 mb-2">What Excites You</div>
-                  <div className="flex flex-wrap gap-2">
-                    {profile.excitementReasons.map((reason: string) => (
-                      <span key={reason} className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                        {reason}
-                      </span>
-                    ))}
-                  </div>
+              <div className="mt-4 rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60 mb-2">What Excites You</div>
+                <div className="flex flex-wrap gap-2">
+                  {profile.excitementReasons.map((reason: string) => (
+                    <span key={reason} className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                      {reason}
+                    </span>
+                  ))}
                 </div>
-              </FrameBox>
+              </div>
             ) : null}
           </div>
         </div>
