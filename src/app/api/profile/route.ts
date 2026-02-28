@@ -37,6 +37,29 @@ export async function GET() {
   }
 }
 
+export async function DELETE() {
+  try {
+    await auth.protect()
+    const { userId } = await auth()
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const db = getAdminFirestore()
+    if (!db) {
+      return NextResponse.json({ error: 'Database not configured' }, { status: 500 })
+    }
+
+    await db.collection('profiles').doc(userId).delete()
+
+    return NextResponse.json({ ok: true })
+  } catch (error) {
+    console.error('Error deleting profile:', error)
+    return NextResponse.json({ error: 'Failed to delete profile' }, { status: 500 })
+  }
+}
+
 export async function PUT(request: NextRequest) {
   try {
     await auth.protect()
