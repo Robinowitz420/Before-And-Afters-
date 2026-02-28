@@ -1794,8 +1794,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         const completionPercent = Math.round((filledFields / totalFields) * 100)
 
         return (
-          <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-[url('/images/checkered-background.jpg')] bg-cover bg-center p-6 shadow-sm">
-            <div className="rounded-2xl bg-white/70 p-6 backdrop-blur-sm">
+          <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-transparent p-6">
+            <div className="rounded-2xl bg-white/50 p-6 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Profile</div>
