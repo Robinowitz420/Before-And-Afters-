@@ -176,6 +176,20 @@ type WizardProfile = {
   tones?: string[]
   vibes?: string[]
   eras?: string[]
+  // Joni's Dressup Box Application fields
+  fullName?: string
+  permaPlayaName?: string
+  igHandle?: string
+  birthday?: string
+  neighborhood?: string
+  styleVibe?: string
+  aboutYou?: string
+  wardrobeGripes?: string
+  favoriteStores?: string
+  excitementReasons?: string[]
+  closetMascot?: string
+  signatureColor?: string
+  selfieUrl?: string
 }
 
 type CatalogueGarmentCard = {
@@ -290,6 +304,18 @@ const VIBES_GROUPS = [
 
 const ALL_VIBES = VIBES_GROUPS.flatMap((g) => g.options)
 const ALLOWED_VIBES_SET = new Set<string>(ALL_VIBES as readonly string[])
+
+const SIGNATURE_COLORS = [
+  { value: 'red', label: 'RED', emoji: '❤️', class: 'bg-red-500' },
+  { value: 'orange', label: 'ORANGE', emoji: '🧡', class: 'bg-orange-500' },
+  { value: 'yellow', label: 'YELLOW', emoji: '💛', class: 'bg-yellow-400' },
+  { value: 'green', label: 'GREEN', emoji: '💚', class: 'bg-green-500' },
+  { value: 'blue', label: 'BLUE', emoji: '💙', class: 'bg-blue-500' },
+  { value: 'purple', label: 'PURPLE', emoji: '💜', class: 'bg-purple-500' },
+  { value: 'pink', label: 'PINK', emoji: '💗', class: 'bg-pink-500' },
+  { value: 'black', label: 'BLACK', emoji: '🖤', class: 'bg-gray-900' },
+  { value: 'white', label: 'WHITE', emoji: '🤍', class: 'bg-gray-100' },
+] as const
 
 function readTasteSave(): TasteTunerSave {
   if (typeof window === 'undefined' || !window.localStorage) return { likes: [], dislikes: [] }
@@ -866,6 +892,114 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           <UserButton afterSignOutUrl="/" />
         </div>
       </div>
+
+      {/* Questionnaire Data Display */}
+      {profile.fullName || profile.styleVibe || profile.excitementReasons?.length ? (
+        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/80 p-6 shadow-sm backdrop-blur">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Joni&apos;s Dressup Box</div>
+              <div className="mt-1 text-xl font-semibold text-[hsl(var(--ink))]">Your Application</div>
+            </div>
+            {profile.selfieUrl && (
+              <div className="h-16 w-16 overflow-hidden rounded-full border-2 border-white shadow-md">
+                <img src={profile.selfieUrl} alt="Selfie" className="h-full w-full object-cover" />
+              </div>
+            )}
+          </div>
+
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {profile.fullName && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Full Name</div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.fullName}</div>
+              </div>
+            )}
+            {profile.permaPlayaName && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">PermaPlaya Name</div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.permaPlayaName}</div>
+              </div>
+            )}
+            {profile.igHandle && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">IG Handle</div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.igHandle}</div>
+              </div>
+            )}
+            {profile.birthday && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Birthday</div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.birthday}</div>
+              </div>
+            )}
+            {profile.neighborhood && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Neighborhood</div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.neighborhood}</div>
+              </div>
+            )}
+            {profile.signatureColor && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Signature Color</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.emoji}</span>
+                  <span className="text-sm font-semibold text-[hsl(var(--ink))]">
+                    {SIGNATURE_COLORS.find((c: {value: string}) => c.value === profile.signatureColor)?.label}
+                  </span>
+                </div>
+              </div>
+            )}
+            {profile.closetMascot && (
+              <div className="rounded-2xl bg-white/60 p-3">
+                <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Closet Mascot</div>
+                <div className="text-sm font-semibold text-[hsl(var(--ink))]">{profile.closetMascot}</div>
+              </div>
+            )}
+          </div>
+
+          {profile.styleVibe && (
+            <div className="mt-4 rounded-2xl bg-white/60 p-3">
+              <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Style Vibe</div>
+              <div className="text-sm text-[hsl(var(--ink))]">{profile.styleVibe}</div>
+            </div>
+          )}
+
+          {profile.aboutYou && (
+            <div className="mt-4 rounded-2xl bg-white/60 p-3">
+              <div className="text-xs font-medium text-[hsl(var(--ink))]/60">About You</div>
+              <div className="text-sm text-[hsl(var(--ink))]">{profile.aboutYou}</div>
+            </div>
+          )}
+
+          {profile.wardrobeGripes && (
+            <div className="mt-4 rounded-2xl bg-white/60 p-3">
+              <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Wardrobe Gripes</div>
+              <div className="text-sm text-[hsl(var(--ink))]">{profile.wardrobeGripes}</div>
+            </div>
+          )}
+
+          {profile.favoriteStores && (
+            <div className="mt-4 rounded-2xl bg-white/60 p-3">
+              <div className="text-xs font-medium text-[hsl(var(--ink))]/60">Favorite Stores & Brands</div>
+              <div className="text-sm text-[hsl(var(--ink))]">{profile.favoriteStores}</div>
+            </div>
+          )}
+
+          {profile.excitementReasons?.length ? (
+            <div className="mt-4 rounded-2xl bg-white/60 p-3">
+              <div className="text-xs font-medium text-[hsl(var(--ink))]/60 mb-2">What Excites You</div>
+              <div className="flex flex-wrap gap-2">
+                {profile.excitementReasons.map((reason: string) => (
+                  <span key={reason} className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                    {reason}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       <Dialog.Root open={editOpen} onOpenChange={(open) => (open ? setEditOpen(true) : closeEditor())}>
         <Dialog.Portal>
