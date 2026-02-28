@@ -397,6 +397,31 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [detailLoading, setDetailLoading] = useState(false)
   const [detailError, setDetailError] = useState<string | null>(null)
 
+  const detailGarmentImageSrc = useMemo(() => {
+    if (!detailGarment) return ''
+
+    const candidate =
+      (typeof detailGarment.primaryPhotoUrl === 'string' && detailGarment.primaryPhotoUrl) ||
+      (Array.isArray(detailGarment.photoUrls) && typeof detailGarment.photoUrls[0] === 'string' ? detailGarment.photoUrls[0] : '')
+
+    if (candidate) return candidate
+
+    const anyDetail = detailGarment as Record<string, unknown>
+    const photos = anyDetail.photos
+    if (Array.isArray(photos) && photos.length > 0) {
+      const first = photos[0] as unknown
+      if (typeof first === 'string') return first
+      if (first && typeof first === 'object') {
+        const firstObj = first as Record<string, unknown>
+        if (typeof firstObj.url === 'string' && firstObj.url) return firstObj.url
+        if (typeof firstObj.publicUrl === 'string' && firstObj.publicUrl) return firstObj.publicUrl
+        if (typeof firstObj.src === 'string' && firstObj.src) return firstObj.src
+      }
+    }
+
+    return '/placeholder.png'
+  }, [detailGarment])
+
   const [reservedIds, setReservedIds] = useState<string[]>([])
   const [requestedIds, setRequestedIds] = useState<string[]>([])
   const [reservePopup, setReservePopup] = useState<{ type: 'accepted' | 'unavailable'; message: string; alternatives: CatalogueGarmentCard[] } | null>(null)
@@ -1557,22 +1582,15 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">Loading…</div>
                       ) : detailError ? (
                         <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">{detailError}</div>
-                      ) : detailGarment ? (() => {
-                        const src =
-                          (typeof detailGarment.primaryPhotoUrl === 'string' && detailGarment.primaryPhotoUrl) ||
-                          (Array.isArray(detailGarment.photoUrls) && detailGarment.photoUrls[0] ? detailGarment.photoUrls[0] : '') ||
-                          '/placeholder.png'
-
-                        return (
-                          <Image
-                            src={src}
-                            alt={detailGarment.name ?? 'Garment'}
-                            fill
-                            sizes="360px"
-                            className="object-cover"
-                          />
-                        )
-                      })() : null}
+                      ) : detailGarment ? (
+                        <Image
+                          src={detailGarmentImageSrc}
+                          alt={detailGarment.name ?? 'Garment'}
+                          fill
+                          sizes="360px"
+                          className="object-cover"
+                        />
+                      ) : null}
                     </div>
                   </div>
 
