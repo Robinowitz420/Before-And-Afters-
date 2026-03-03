@@ -108,7 +108,16 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
       )}
 
-      <div className="absolute inset-0">
+      <button
+        type="button"
+        className="absolute inset-0"
+        onClick={() => {
+          setSelectedTier(STRIPE_TIER_ID)
+          openDisclaimerForTier(STRIPE_TIER_ID)
+        }}
+        disabled={checkoutTier !== null}
+        aria-label="Become a member"
+      >
         <Image
           src={BASE_IMAGE_SRC}
           alt="Membership"
@@ -117,41 +126,17 @@ All borrowed items must be returned before cancellation is finalized.
           className="object-cover"
           sizes="100vw"
         />
-      </div>
+      </button>
 
       <div className="absolute inset-0 bg-black/10" />
 
-      <div className="absolute inset-0 z-40 flex items-center justify-center px-4">
-        <div className="flex w-full max-w-sm flex-col items-center">
-          {/* Button - hidden on mobile */}
-          <Button
-            type="button"
-            size="lg"
-            className="hidden md:flex w-full rounded-full bg-black/80 text-white hover:bg-black border border-white/25 py-6 text-xl sm:py-4 sm:text-lg"
-            onClick={() => {
-              setSelectedTier(STRIPE_TIER_ID)
-              openDisclaimerForTier(STRIPE_TIER_ID)
-            }}
-            disabled={checkoutTier !== null}
-          >
-            Join here
-          </Button>
-
-          {/* Badge - pink, under the button area */}
-          <div className="mt-4 flex flex-col items-center gap-2">
-            <div className="text-2xl leading-none text-white drop-shadow">↑</div>
-            <div className="rounded-full bg-pink-500 px-4 py-2 text-sm font-semibold text-white shadow">
-              Its a button! Click it!
-            </div>
+      {checkoutTier ? (
+        <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-black/60 px-4 py-3 text-center text-sm text-white">
+            Redirecting to checkout…
           </div>
-
-          {checkoutTier ? (
-            <div className="mt-6 w-full rounded-2xl bg-black/60 px-4 py-3 text-center text-sm text-white">
-              Redirecting to checkout…
-            </div>
-          ) : null}
         </div>
-      </div>
+      ) : null}
 
       {disclaimerOpen ? (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-4 pt-10">
