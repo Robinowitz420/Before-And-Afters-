@@ -7,7 +7,6 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    await auth.protect()
     const { userId } = await auth()
 
     if (!userId) {
@@ -32,14 +31,18 @@ export async function GET() {
       updatedAt: snap.data()?.updatedAt,
     })
   } catch (error) {
-    console.error('Error fetching profile:', error)
+    const maybeStatus = (error as any)?.status
+    const maybeErrors = (error as any)?.errors
+    console.error('Error fetching profile:', { error, status: maybeStatus, errors: maybeErrors })
+    if (maybeStatus === 401) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
   }
 }
 
 export async function DELETE() {
   try {
-    await auth.protect()
     const { userId } = await auth()
 
     if (!userId) {
@@ -79,7 +82,6 @@ export async function DELETE() {
 
 export async function PUT(request: NextRequest) {
   try {
-    await auth.protect()
     const { userId } = await auth()
 
     if (!userId) {
@@ -108,7 +110,12 @@ export async function PUT(request: NextRequest) {
       updatedAt: now,
     })
   } catch (error) {
-    console.error('Error saving profile:', error)
+    const maybeStatus = (error as any)?.status
+    const maybeErrors = (error as any)?.errors
+    console.error('Error saving profile:', { error, status: maybeStatus, errors: maybeErrors })
+    if (maybeStatus === 401) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     return NextResponse.json({ error: 'Failed to save profile' }, { status: 500 })
   }
 }
