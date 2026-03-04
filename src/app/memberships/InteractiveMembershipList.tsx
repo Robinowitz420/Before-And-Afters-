@@ -56,6 +56,7 @@ All borrowed items must be returned before cancellation is finalized.
       const res = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ tier }),
       })
       console.log('Checkout session response status:', res.status)
@@ -110,7 +111,7 @@ All borrowed items must be returned before cancellation is finalized.
 
       <button
         type="button"
-        className="absolute inset-0"
+        className="group absolute inset-0 cursor-pointer select-none disabled:cursor-not-allowed"
         onClick={() => {
           setSelectedTier(STRIPE_TIER_ID)
           openDisclaimerForTier(STRIPE_TIER_ID)
@@ -118,17 +119,27 @@ All borrowed items must be returned before cancellation is finalized.
         disabled={checkoutTier !== null}
         aria-label="Become a member"
       >
-        <Image
-          src={BASE_IMAGE_SRC}
-          alt="Membership"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
-        />
-      </button>
+        <div className="relative h-full w-full">
+          <Image
+            src={BASE_IMAGE_SRC}
+            alt="Membership"
+            fill
+            priority
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.01] group-active:scale-[0.995]"
+            sizes="100vw"
+          />
 
-      <div className="absolute inset-0 bg-black/10" />
+          <div className="absolute inset-0 bg-black/10 transition-colors duration-300 group-hover:bg-black/20" />
+
+          <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10 sm:pb-12">
+            <div className="rounded-full border border-white/30 bg-black/40 px-6 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition-colors duration-300 group-hover:bg-black/55">
+              Become a Member
+            </div>
+          </div>
+
+          <div className="pointer-events-none absolute inset-0 ring-0 ring-white/30 transition-[ring-width] duration-300 group-hover:ring-4" />
+        </div>
+      </button>
 
       {checkoutTier ? (
         <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center px-4">
