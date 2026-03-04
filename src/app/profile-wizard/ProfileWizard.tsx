@@ -121,6 +121,7 @@ async function saveProfile(data: WizardData): Promise<{ success: boolean; error?
     const res = await fetch('/api/profile', {
       method: 'PUT',
       headers: { 'content-type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(data ?? {}),
     })
 
