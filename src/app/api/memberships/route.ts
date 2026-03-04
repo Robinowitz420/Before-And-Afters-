@@ -3,6 +3,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { MEMBERSHIP_LEVELS } from '@/types'
 import { DEPOSIT_GLITCOIN } from '@/lib/business-rules'
+import { getAdminFirestore } from '@/lib/firebase/admin'
 
 export async function GET() {
   try {
@@ -121,8 +122,11 @@ export async function POST(request: NextRequest) {
       partyVibe,
       sleepSchedule,
       powerLetter,
-      membershipTier
+      membershipTier,
+      ref,
     } = body
+
+    const referralCode = typeof ref === 'string' ? ref.trim() : ''
 
     if (email && email !== clerkEmail) {
       return NextResponse.json(
@@ -224,6 +228,30 @@ export async function POST(request: NextRequest) {
           depositPaid: false, // Will be updated when deposit is paid
         },
       })
+
+    if (referralCode) {
+      try {
+        const db = getAdminFirestore()
+
+        await db.collection('referrals').add({
+          employeeCode: referralCode,
+          clerkUserId: userId,
+          memberEmail: clerkEmail,
+          source: 'memberships_qr',
+          createdAt: new Date().toISOString(),
+        })
+
+        await db.collection('members').doc(userId).set(
+          {
+            referredByEmployeeCode: referralCode,
+            referredAt: new Date().toISOString(),
+          },
+          { merge: true }
+        )
+      } catch (error) {
+        console.error('Failed to write referral attribution:', error)
+      }
+    }
 
     // Create initial Glitcoin transactions
     // Membership fee

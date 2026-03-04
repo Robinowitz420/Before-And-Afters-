@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
@@ -14,6 +14,20 @@ export default function InteractiveMembershipList() {
   const [disclaimerOpen, setDisclaimerOpen] = useState(false)
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false)
   const [pendingTier, setPendingTier] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    try {
+      const url = new URL(window.location.href)
+      const ref = url.searchParams.get('ref')
+
+      if (ref && ref.trim()) {
+        window.localStorage.setItem('baa_ref', ref.trim())
+      }
+    } catch {
+      // ignore
+    }
+  }, [])
 
   const STRIPE_TIER_ID = 'Oooohs'
 

@@ -180,6 +180,15 @@ export function MembershipSignupForm({
         }
       })
 
+      try {
+        const ref = window.localStorage.getItem('baa_ref')
+        if (ref && ref.trim()) {
+          submitData.append('ref', ref.trim())
+        }
+      } catch {
+        // ignore
+      }
+
       const response = await fetch('/api/memberships', {
         method: 'POST',
         body: submitData,

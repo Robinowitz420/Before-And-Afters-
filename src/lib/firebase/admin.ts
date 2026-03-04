@@ -25,6 +25,7 @@ function initAdmin() {
 
 export function getAdminFirestore() {
   initAdmin();
+  if (getApps().length === 0) return null;
   const require = createRequire(import.meta.url);
   const { getFirestore } = require("firebase-admin/firestore") as typeof import("firebase-admin/firestore");
   return getFirestore();
