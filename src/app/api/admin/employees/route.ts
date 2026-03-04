@@ -51,18 +51,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing name or code' }, { status: 400 })
     }
 
-    await db
-      .collection('employees')
-      .doc(code)
-      .set(
-        {
-          code,
-          name,
-          active: true,
-          createdAt: new Date().toISOString(),
-        },
-        { merge: true }
-      )
+    const existing = await db.collection('employees').doc(code).get()
+    const existingCreatedAt = existing.exists ? (existing.data() as any)?.createdAt : null
+
+    await db.collection('employees').doc(code).set(
+      {
+        code,
+        name,
+        active: true,
+        createdAt: typeof existingCreatedAt === 'string' ? existingCreatedAt : new Date().toISOString(),
+      },
+      { merge: true }
+    )
 
     return NextResponse.json({ ok: true })
   } catch (error) {

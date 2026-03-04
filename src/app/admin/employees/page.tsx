@@ -5,7 +5,6 @@ import { QRCodeCanvas } from 'qrcode.react'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 
 type Employee = {
   id: string
@@ -104,11 +103,21 @@ export default function AdminEmployeesPage() {
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <div className="text-sm font-medium">Name</div>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Elize" />
+            <input
+              value={name}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+              placeholder="Elize"
+              className="h-10 w-full rounded-md border border-[hsl(var(--border))] bg-background px-3 py-2 text-sm"
+            />
           </div>
           <div className="space-y-2">
             <div className="text-sm font-medium">Code</div>
-            <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="elize" />
+            <input
+              value={code}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCode(e.target.value)}
+              placeholder="elize"
+              className="h-10 w-full rounded-md border border-[hsl(var(--border))] bg-background px-3 py-2 text-sm"
+            />
             <div className="text-xs text-[hsl(var(--ink))]/70">Normalized: {normalizedCode || '—'}</div>
           </div>
 
