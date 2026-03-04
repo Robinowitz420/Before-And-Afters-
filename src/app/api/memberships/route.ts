@@ -233,6 +233,10 @@ export async function POST(request: NextRequest) {
       try {
         const db = getAdminFirestore()
 
+        if (!db) {
+          throw new Error('Firestore unavailable')
+        }
+
         await db.collection('referrals').add({
           employeeCode: referralCode,
           clerkUserId: userId,
