@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
 const BASE_IMAGE_SRC =
-  '/images/Membership%20Images/Backgrounds/Website%20Page%20Breakdown%20(USE%20THIS)%20(1)/1.png'
+  '/images/Backgrounds/Website%20Page%20Breakdown%20(USE%20THIS)%20(1)/1.png'
 
 export default function InteractiveMembershipList() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
