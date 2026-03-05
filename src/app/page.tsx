@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
+import Image from 'next/image'
 
 import { Button } from '@/components/ui/button'
 
@@ -79,72 +80,168 @@ function LandingClient() {
   return (
     <main className="text-[hsl(var(--foreground))]">
       {/* Hero Section */}
-      <section id="portal" className="relative bg-[hsl(var(--ink-dark))] text-white">
-        <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
+      <section id="portal" className="relative text-white">
+        <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
+          <div className="mx-auto w-full max-w-5xl">
+            <Image
+              src="/images/herobannere.jpg"
+              alt="Before & Afters"
+              width={2400}
+              height={900}
+              className="h-auto w-full"
+              priority
+            />
+          </div>
+
+          <div className="mt-10 text-center">
           <h1 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            Joni&apos;s Dress Up Box
+            CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
           </h1>
-          <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
-            <p>Born from loving clothes too much to ever let them go.</p>
-            <p className="font-semibold">A solution for:</p>
-            <div className="mx-auto grid max-w-xl gap-2 text-lg font-semibold sm:text-xl md:grid-cols-2">
-              <div>Collectors</div>
-              <div>Thrillers</div>
-              <div>Glamour hoarders</div>
-              <div>Those who live light but want access to everything</div>
-            </div>
-            <p>This is a clothing-sharing ecosystem built on trust, care, and endless swap-outs.</p>
-            <p className="text-xl font-bold text-white sm:text-2xl md:text-3xl">
-              Your closet just got a lot bigger — without taking over your house.
+          <div className="mt-8 space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
+            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8">
+            <p>
+              You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
+              time without spending all your money or time doing it, you want to slay the business meeting AND the theme party AND the bodega run,
+              you would love leveling up your looks with some sweet easily-accessible stylist support, you are flabbergasted that there are no clothing
+              stores open at night and would love to shop outside normal retail hours in a non-retaily kinda way, you’re somehow both very bored and
+              very overwhelmed with the state of your closet, your “giveaway tote” has been lurking in the corner for six months, your cute denim
+              upcycling concept is lingering lavishly on MaybeSomeday Island along with your raging rebel rockstar dreams, you’re low key torn up
+              about your contribution to the fast fashion machine that is actively destroying the planet….. and at the end of the day you honestly
+              kinda miss being 5 and just really want to play dress up in a magical make believe land with friends all day!!!!
             </p>
+            <p>Well it’s time to make…. BELIEVE. (And then believe bigger.)</p>
+            <p>
+              All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
+              make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
+              DRESSING THE PART??!?!?
+            </p>
+            <p>Welcome to Before &amp; Afters.</p>
+            <p>Helloooo love, I’m Michelle Joni!</p>
+            <p>
+              Born from my own (horrifyingly first world) clothing problem of having too many clothes to fit in my 5 closets, entire basement and two
+              storage units combined, but never wanting to sell, swap, say goodbye to a damn thing, or have to stop myself from acquiring more and more
+              amazing clothing for any reason whatsoever…… I desperately needed a solution to save my space, my sanity, and my sartorial soul!
+            </p>
+            <p>JONI’S DRESS UP BOX IS HERE. &lt;3</p>
+            <p>Not just to solve my silly avoidable problem…</p>
+            <p>
+              To activate a glorious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
+              along the way to expand my comfort zone inch by inch. Solutions to problems I wouldn’t have known existed if not for my self inflicted
+              regimen of self-development mixed with passionate public shenanigans where I was pushed to discover just how much clothing, adornment,
+              and dressing up really does matter… if you let it!
+            </p>
+            </div>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering}>
               {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
+          </div>
         </div>
       </section>
 
       {/* Mission Section */}
-      <section id="mission" className="relative bg-[hsl(var(--secondary))] text-[hsl(var(--foreground))]">
-        <div className="mx-auto max-w-4xl px-6 py-20 md:py-28">
-          <h2 className="text-balance text-3xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl text-center">Mission</h2>
-          <div className="mt-8 space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
-            <p>
-              Our mission is to make the magic of clothing available to everyone in NYC — from high-end transformation seekers,
-              to young artists finding their true expression, to kids dressing like their favorite character, to anyone who simply
-              wants better options (or a new way to show up).
-            </p>
-            <p>
-              We&apos;re building the structures, protocols, and technology for the fruitful sharing of clothing — and the stories it holds.
-              Clothing carries history, culture, and fresh meaning every time it&apos;s worn.
-            </p>
-            <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/60 p-6 shadow-sm backdrop-blur">
-              <div className="text-sm font-semibold tracking-wide text-[hsl(var(--ink))]/80">In practice</div>
-              <ul className="mt-4 space-y-3">
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" />
-                  <span>Playful experimentation as a tool for personal development.</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" />
-                  <span>Intentional style as a path to embodiment.</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" />
-                  <span>Ritual + community as a way to stay luminous.</span>
-                </li>
-              </ul>
+      <section id="mission" className="relative text-[hsl(var(--foreground))]">
+        <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-12">
+              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
+                <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
+                  You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
+                  time without spending all your money or time doing it, you want to slay the business meeting AND the theme party AND the bodega run,
+                  you would love leveling up your looks with some sweet easily-accessible stylist support, you are flabbergasted that there are no clothing
+                  stores open at night and would love to shop outside normal retail hours in a non-retaily kinda way, you’re somehow both very bored and
+                  very overwhelmed with the state of your closet, your “giveaway tote” has been lurking in the corner for six months, your cute denim
+                  upcycling concept is lingering lavishly on MaybeSomeday Island along with your raging rebel rockstar dreams, you’re low key torn up
+                  about your contribution to the fast fashion machine that is actively destroying the planet….. and at the end of the day you honestly
+                  kinda miss being 5 and just really want to play dress up in a magical make believe land with friends all day!!!!
+                </p>
+                <p>Well it’s time to make…. BELIEVE. (And then believe bigger.)</p>
+              </div>
             </div>
+
+            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
+              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
+                <p>
+                  All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
+                  make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
+                  DRESSING THE PART??!?!?
+                </p>
+                <p>Welcome to Before &amp; Afters.</p>
+              </div>
+            </div>
+
+            <figure className="w-full lg:col-span-8">
+              <Image
+                src="/images/Joni%20Images/JoniSofa.jpg"
+                alt="Michelle Joni"
+                width={1600}
+                height={2000}
+                className="h-auto w-full"
+                priority
+              />
+            </figure>
+          </div>
+
+          <div className="mt-14 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:items-start">
+            <figure className="lg:col-span-7">
+              <Image
+                src="/images/Joni%20Images/JoniHero.jpeg"
+                alt="Before & Afters"
+                width={2000}
+                height={1250}
+                className="h-auto w-full"
+              />
+            </figure>
+
+            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
+              <div className="space-y-6 text-base leading-relaxed">
+                <p>Helloooo love, I’m Michelle Joni!</p>
+                <p>
+                  Born from my own (horrifyingly first world) clothing problem of having too many clothes to fit in my 5 closets, entire basement and two
+                  storage units combined, but never wanting to sell, swap, say goodbye to a damn thing, or have to stop myself from acquiring more and more
+                  amazing clothing for any reason whatsoever…… I desperately needed a solution to save my space, my sanity, and my sartorial soul!
+                </p>
+                <p>JONI’S DRESS UP BOX IS HERE. &lt;3</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-14 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:items-start">
+            <div className="order-2 rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:order-1 lg:col-span-5">
+              <div className="space-y-6 text-base leading-relaxed">
+                <p>Not just to solve my silly avoidable problem…</p>
+                <p>
+                  To activate a glorious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
+                  along the way to expand my comfort zone inch by inch. Solutions to problems I wouldn’t have known existed if not for my self inflicted
+                  regimen of self-development mixed with passionate public shenanigans where I was pushed to discover just how much clothing, adornment,
+                  and dressing up really does matter… if you let it!
+                </p>
+              </div>
+            </div>
+
+            <figure className="order-1 lg:order-2 lg:col-span-7">
+              <Image
+                src="/images/Joni%20Images/JoniColorsGlam.jpg"
+                alt="Editorial"
+                width={2000}
+                height={1250}
+                className="h-auto w-full"
+              />
+            </figure>
           </div>
         </div>
       </section>
 
       {/* Offerings */}
-      <section id="offerings" className="relative bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
+      <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
-          <h2 className="text-balance text-3xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl text-center">How we do it</h2>
+          <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-white/80 px-6 py-4 shadow-sm backdrop-blur md:px-10">
+            <h2 className="text-balance text-3xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl text-center text-[hsl(var(--ink))]">
+              How we do it
+            </h2>
+          </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-8 shadow-sm backdrop-blur">
@@ -199,7 +296,7 @@ function LandingClient() {
       </section>
 
       {/* Call to action */}
-      <section id="invitation" className="relative bg-[hsl(var(--ink-dark))] text-white">
+      <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
           <h2 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">

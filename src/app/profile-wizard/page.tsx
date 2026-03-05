@@ -7,7 +7,7 @@ export default function ProfileWizardPage() {
     <div 
       className="min-h-screen w-full"
       style={{
-        backgroundImage: 'url("/images/Membership%20Images/Backgrounds/plain%20wallpaper.png")',
+        backgroundImage: 'url("/images/Backgrounds/plain%20wallpaper.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

@@ -5,7 +5,7 @@ export default function Page() {
   return (
     <div 
       className="flex min-h-screen items-center justify-center bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/images/Membership%20Images/Backgrounds/plain%20wallpaper.png')" }}
+      style={{ backgroundImage: "url('/images/Backgrounds/plain%20wallpaper.png')" }}
     >
       <SignIn
         appearance={{
