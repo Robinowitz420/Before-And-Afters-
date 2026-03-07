@@ -97,41 +97,6 @@ function LandingClient() {
           <h1 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
           </h1>
-          <div className="mt-8 space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8">
-            <p>
-              You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
-              time without spending all your money or time doing it, you want to slay the business meeting AND the theme party AND the bodega run,
-              you would love leveling up your looks with some sweet easily-accessible stylist support, you are flabbergasted that there are no clothing
-              stores open at night and would love to shop outside normal retail hours in a non-retaily kinda way, you’re somehow both very bored and
-              very overwhelmed with the state of your closet, your “giveaway tote” has been lurking in the corner for six months, your cute denim
-              upcycling concept is lingering lavishly on MaybeSomeday Island along with your raging rebel rockstar dreams, you’re low key torn up
-              about your contribution to the fast fashion machine that is actively destroying the planet….. and at the end of the day you honestly
-              kinda miss being 5 and just really want to play dress up in a magical make believe land with friends all day!!!!
-            </p>
-            <p>Well it’s time to make…. BELIEVE. (And then believe bigger.)</p>
-            <p>
-              All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
-              make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
-              DRESSING THE PART??!?!?
-            </p>
-            <p>Welcome to Before &amp; Afters.</p>
-            <p>Helloooo love, I’m Michelle Joni!</p>
-            <p>
-              Born from my own (horrifyingly first world) clothing problem of having too many clothes to fit in my 5 closets, entire basement and two
-              storage units combined, but never wanting to sell, swap, say goodbye to a damn thing, or have to stop myself from acquiring more and more
-              amazing clothing for any reason whatsoever…… I desperately needed a solution to save my space, my sanity, and my sartorial soul!
-            </p>
-            <p>JONI’S DRESS UP BOX IS HERE. &lt;3</p>
-            <p>Not just to solve my silly avoidable problem…</p>
-            <p>
-              To activate a glorious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
-              along the way to expand my comfort zone inch by inch. Solutions to problems I wouldn’t have known existed if not for my self inflicted
-              regimen of self-development mixed with passionate public shenanigans where I was pushed to discover just how much clothing, adornment,
-              and dressing up really does matter… if you let it!
-            </p>
-            </div>
-          </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering}>
               {entering ? 'Loading...' : buttonText}
