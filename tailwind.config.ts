@@ -103,6 +103,9 @@ const config: Config = {
         "glitter": "glitter 2s linear infinite",
         "sparkle": "sparkle 1.5s ease-in-out infinite",
       },
+      fontFamily: {
+        knewave: ['var(--font-knewave)', 'cursive'],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
