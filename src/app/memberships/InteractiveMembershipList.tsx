@@ -67,11 +67,21 @@ All borrowed items must be returned before cancellation is finalized.
     setError(null)
     try {
       console.log('Creating checkout session for tier:', tier)
+
+      let referralCode: string | null = null
+      try {
+        referralCode = window.localStorage.getItem('baa_ref')
+        if (referralCode) referralCode = referralCode.trim()
+        if (!referralCode) referralCode = null
+      } catch {
+        referralCode = null
+      }
+
       const res = await fetch('/api/stripe/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ tier }),
+        body: JSON.stringify({ tier, referralCode }),
       })
       console.log('Checkout session response status:', res.status)
       

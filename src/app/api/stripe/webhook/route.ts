@@ -4,6 +4,7 @@ import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { DEPOSIT_GLITCOIN } from '@/lib/business-rules'
+import { getAdminFirestore } from '@/lib/firebase/admin'
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 if (!webhookSecret) {
@@ -33,6 +34,8 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
     const clerkUserId = session.metadata?.clerkUserId as string | undefined
     const membershipTier = session.metadata?.membershipTier as string | undefined
+    const referralCodeRaw = session.metadata?.referralCode as string | undefined
+    const referralCode = typeof referralCodeRaw === 'string' ? referralCodeRaw.trim() : ''
     const email = session.customer_details?.email ?? session.customer_email ?? null
 
     if (!membershipTier || !Object.keys(MEMBERSHIP_LEVELS).includes(membershipTier)) {
@@ -114,6 +117,34 @@ export async function POST(request: NextRequest) {
           description: `Monthly free Glitcoins for ${membershipTier} membership`,
         },
       })
+    }
+
+    if (referralCode && clerkUserId) {
+      try {
+        const db = getAdminFirestore()
+
+        if (!db) {
+          throw new Error('Firestore unavailable')
+        }
+
+        await db.collection('referrals').add({
+          employeeCode: referralCode,
+          clerkUserId,
+          memberEmail: email,
+          source: 'stripe_checkout',
+          createdAt: new Date().toISOString(),
+        })
+
+        await db.collection('members').doc(clerkUserId).set(
+          {
+            referredByEmployeeCode: referralCode,
+            referredAt: new Date().toISOString(),
+          },
+          { merge: true }
+        )
+      } catch (error) {
+        console.error('Failed to write referral attribution (Stripe webhook):', error)
+      }
     }
 
     return NextResponse.json({ received: true })

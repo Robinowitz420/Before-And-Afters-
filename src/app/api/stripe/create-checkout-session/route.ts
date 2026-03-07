@@ -44,6 +44,8 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const tier = body?.tier as string | undefined
+    const referralCodeRaw = body?.referralCode as string | null | undefined
+    const referralCode = typeof referralCodeRaw === 'string' ? referralCodeRaw.trim() : ''
     console.log('Stripe checkout - Tier:', tier)
     
     if (!tier || !Object.keys(MEMBERSHIP_LEVELS).includes(tier)) {
@@ -90,6 +92,7 @@ export async function POST(request: NextRequest) {
       metadata: {
         clerkUserId: userId,
         membershipTier: tier,
+        ...(referralCode ? { referralCode } : {}),
       },
     })
 
