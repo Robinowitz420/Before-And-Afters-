@@ -94,7 +94,7 @@ function LandingClient() {
           </div>
 
           <div className="mt-10 text-center">
-          <h1 className="font-knewave text-balance text-4xl leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl lg:text-7xl">
             CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
           </h1>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -203,7 +203,7 @@ function LandingClient() {
       <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
           <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-white/80 px-6 py-4 shadow-sm backdrop-blur md:px-10">
-            <h2 className="text-balance text-3xl font-black leading-tight tracking-tight sm:text-4xl md:text-5xl text-center text-[hsl(var(--ink))]">
+            <h2 className="font-marck text-balance text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl text-center text-black">
               How we do it
             </h2>
           </div>
@@ -263,7 +263,7 @@ function LandingClient() {
       {/* Call to action */}
       <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-          <h2 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl">Ready to play?</h2>
+          <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <p className="text-xl font-bold text-white sm:text-2xl md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
             <p>Enter to build your profile and start exploring.</p>

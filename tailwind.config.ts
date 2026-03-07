@@ -105,6 +105,7 @@ const config: Config = {
       },
       fontFamily: {
         knewave: ['var(--font-knewave)', 'cursive'],
+        marck: ['var(--font-marck-script)', 'cursive'],
       },
     },
   },
