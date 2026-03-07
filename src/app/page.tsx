@@ -94,7 +94,7 @@ function LandingClient() {
           </div>
 
           <div className="mt-10 text-center">
-          <h1 className="text-balance text-4xl font-black leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="font-knewave text-balance text-4xl leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
           </h1>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
