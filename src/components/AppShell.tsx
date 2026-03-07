@@ -21,7 +21,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         isTasteTuner
           ? 'bg-transparent'
           : isLanding
-            ? 'bg-black bg-[url("/images/Backgrounds/plain%20wallpaper.png")] bg-[length:auto_100vh] bg-top bg-repeat-y'
+            ? 'bg-black bg-[url("/images/Backgrounds/Background2.jpg")] bg-[length:auto_100vh] bg-top bg-repeat-y'
             : 'app-sunset'
       )}
     >
