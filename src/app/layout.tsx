@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter, Knewave } from 'next/font/google'
+import { Knewave } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { AppShell } from '@/components/AppShell'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
 const knewave = Knewave({
   weight: '400',
   subsets: ['latin'],
@@ -25,7 +24,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} ${knewave.variable} min-h-screen text-foreground`}>
+        <body className={`${knewave.className} ${knewave.variable} min-h-screen text-foreground`}>
           <AppShell>{children}</AppShell>
         </body>
       </html>
