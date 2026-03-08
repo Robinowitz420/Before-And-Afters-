@@ -86,9 +86,9 @@ function LandingClient() {
             <Image
               src="/images/herobannere.jpg"
               alt="Before & Afters"
-              width={2400}
-              height={900}
-              className="h-auto w-full"
+              width={1920}
+              height={720}
+              className="mx-auto h-auto w-[80%]"
               priority
             />
           </div>

@@ -1314,10 +1314,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
                       <div className="relative h-32 w-full">
                         <Image
-                          src={encodeURI('/images/Boxes/LemmeGetThisStraight.jpg')}
+                          src={encodeURI('/images/Joni Images/JoniCalander.jpg')}
                           alt="Calendar"
                           fill
-                          sizes="280px"
+                          sizes="380px"
                           className="object-cover"
                         />
                       </div>
@@ -1439,10 +1439,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
                 >
-                  <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-                    {currentCard.category}
-                  </div>
-
                   <div
                     className="pointer-events-none absolute left-6 top-20 z-10 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
                     style={{ opacity: likeIntensity }}
