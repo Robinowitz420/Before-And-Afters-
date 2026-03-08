@@ -1339,7 +1339,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <section className="flex w-full flex-col items-center justify-start lg:items-start lg:justify-center">
           {/* Mode toggle */}
           {usingCatalogue && !catalogueLoading && !catalogueError ? (
-            <div className="mb-4 flex w-full max-w-[520px] flex-col gap-2 sm:max-w-none sm:flex-row sm:flex-wrap sm:gap-2">
+            <div className="mb-4 grid w-full max-w-[520px] grid-cols-3 gap-2">
               <Button
                 type="button"
                 variant={browseMode ? 'outline' : 'default'}
@@ -1358,12 +1358,12 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               >
                 Browse All
               </Button>
-              <Link href="/profile-wizard" className="w-full sm:w-auto">
+              <Link href="/profile-wizard" className="w-full">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20 sm:w-auto"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
                 >
                   ✏️ Edit profile
                 </Button>
@@ -1756,7 +1756,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               variant="outline"
               size="sm"
               onClick={() => setDeleteProfileOpen(true)}
-              className="w-full bg-red-600 text-white hover:bg-red-700 border-red-600"
+              className="fixed bottom-4 right-4 z-50 w-auto bg-red-600 text-white hover:bg-red-700 border-red-600"
             >
               🗑️ Delete Profile
             </Button>
