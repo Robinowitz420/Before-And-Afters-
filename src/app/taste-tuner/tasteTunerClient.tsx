@@ -1312,7 +1312,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
                   <Link href="/calendar" className="block">
                     <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
-                      <div className="relative h-32 w-full">
+                      <div className="relative h-40 w-full overflow-hidden">
                         <Image
                           src={encodeURI('/images/Joni Images/JoniCalander.jpg')}
                           alt="Calendar"
@@ -1322,9 +1322,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         />
                       </div>
                       <div className="p-3">
-                        <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Events</div>
-                        <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Calendar & Details</div>
-                        <Button type="button" className="mt-3 w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
+                        <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
                           View Calendar
                         </Button>
                       </div>
