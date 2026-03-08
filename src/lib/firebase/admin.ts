@@ -1,5 +1,7 @@
 import { cert, getApps, initializeApp } from "firebase-admin/app";
-import { createRequire } from "node:module";
+import { getFirestore } from "firebase-admin/firestore";
+
+let cachedDb: ReturnType<typeof getFirestore> | null = null;
 
 function initAdmin() {
   if (getApps().length > 0) return;
@@ -26,7 +28,8 @@ function initAdmin() {
 export function getAdminFirestore() {
   initAdmin();
   if (getApps().length === 0) return null;
-  const require = createRequire(import.meta.url);
-  const { getFirestore } = require("firebase-admin/firestore") as typeof import("firebase-admin/firestore");
-  return getFirestore();
+
+  if (cachedDb) return cachedDb;
+  cachedDb = getFirestore();
+  return cachedDb;
 }
