@@ -81,8 +81,8 @@ function LandingClient() {
     <main className="text-[hsl(var(--foreground))]">
       {/* Hero Section - Pink Backgrounds Update */}
       <section id="portal" className="relative text-white">
-        <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
-          <div className="mx-auto w-full max-w-5xl">
+        <div className="w-full py-16 md:py-20">
+          <div className="w-full">
             <Image
               src="/images/herobannere.jpg"
               alt="Before & Afters"
@@ -99,7 +99,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-16 py-8 text-3xl font-bold"
+              className="border-[3px] border-[#FFD700] px-32 py-16 text-5xl font-bold"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>

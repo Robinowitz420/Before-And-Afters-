@@ -12,7 +12,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isTasteTuner = pathname === '/taste-tuner'
   const isMemberships = pathname === '/memberships'
   const isCalendar = pathname === '/calendar'
-  const isImmersive = isLanding || isProfileWizard || isTasteTuner || isMemberships || isCalendar
+  const isSearch = pathname === '/search'
+  const isImmersive = isLanding || isProfileWizard || isTasteTuner || isMemberships || isCalendar || isSearch
 
   return (
     <div
