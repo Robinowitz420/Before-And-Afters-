@@ -94,12 +94,6 @@ function LandingClient() {
           </div>
 
           <div className="mt-10 text-center">
-          <div className="inline-block rounded-3xl border border-black/10 bg-white/90 p-8 shadow-lg backdrop-blur">
-            <h1 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl lg:text-7xl">
-              CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
-            </h1>
-          </div>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
               type="button"
               onClick={onEnterCloset}
@@ -110,15 +104,15 @@ function LandingClient() {
               {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
-          </div>
         </div>
       </section>
 
       {/* Mission Section */}
       <section id="mission" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-12">
+          {/* Row 1: Long blurb + JoniSofa image side by side */}
+          <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-7">
               <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
@@ -134,41 +128,55 @@ function LandingClient() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
+            <figure className="lg:col-span-5">
+              <Image
+                src="/images/Joni%20Images/JoniSofa.jpg"
+                alt="Michelle Joni"
+                width={1600}
+                height={2000}
+                className="h-auto w-full rounded-3xl shadow-lg"
+                priority
+              />
+            </figure>
+          </div>
+
+          {/* Row 2: Short blurb + JoniHero image side by side */}
+          <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
                   make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
                   DRESSING THE PART??!?!?
                 </p>
-                <p>Welcome to Before &amp; Afters.</p>
+                <p>Welcome to Before & Afters.</p>
               </div>
             </div>
 
-            <figure className="w-full lg:col-span-10">
-              <Image
-                src="/images/Joni%20Images/JoniSofa.jpg"
-                alt="Michelle Joni"
-                width={2080}
-                height={2600}
-                className="h-auto w-full"
-                priority
-              />
-            </figure>
-          </div>
-
-          <div className="mt-14 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:items-start">
             <figure className="lg:col-span-7">
               <Image
                 src="/images/Joni%20Images/JoniHero.jpeg"
                 alt="Before & Afters"
                 width={2000}
                 height={1250}
-                className="h-auto w-full"
+                className="h-auto w-full rounded-3xl shadow-lg"
+              />
+            </figure>
+          </div>
+
+          {/* Row 3: JoniColorsGlam image + Text blurb side by side */}
+          <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
+            <figure className="lg:col-span-7">
+              <Image
+                src="/images/Joni%20Images/JoniColorsGlam.jpg"
+                alt="Editorial"
+                width={2000}
+                height={1250}
+                className="h-auto w-full rounded-3xl shadow-lg"
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed">
                 <p>Helloooo love, I’m Michelle Joni!</p>
                 <p>
@@ -181,8 +189,9 @@ function LandingClient() {
             </div>
           </div>
 
-          <div className="mt-14 grid gap-10 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <div className="order-2 rounded-3xl border border-black/10 bg-white/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:order-1 lg:col-span-5">
+          {/* Row 4: Text blurb only - full width */}
+          <div className="mt-14 lg:mt-16">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl">
               <div className="space-y-6 text-base leading-relaxed">
                 <p>Not just to solve my silly avoidable problem…</p>
                 <p>
@@ -193,16 +202,6 @@ function LandingClient() {
                 </p>
               </div>
             </div>
-
-            <figure className="order-1 lg:order-2 lg:col-span-9">
-              <Image
-                src="/images/Joni%20Images/JoniColorsGlam.jpg"
-                alt="Editorial"
-                width={2600}
-                height={1625}
-                className="h-auto w-full"
-              />
-            </figure>
           </div>
         </div>
       </section>
@@ -210,14 +209,14 @@ function LandingClient() {
       {/* Offerings */}
       <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
-          <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-white/90 px-8 py-6 shadow-lg backdrop-blur md:px-12">
+          <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur md:px-12">
             <h2 className="font-marck text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center">
               How we do it
             </h2>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Before &amp; Afters (Flagship)</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80">
                 Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and the primary Dress Up collection.
@@ -229,7 +228,7 @@ function LandingClient() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Dorothy the Dress Up Bus</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80">
                 Dorothy is our mobile extension — distributing dream dress-up options across NYC.
@@ -243,7 +242,7 @@ function LandingClient() {
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Isle of Check Meowt</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80">
                 Our for-sale essentials &amp; delights — the little things that complete the look.
@@ -254,7 +253,7 @@ function LandingClient() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-[hsl(var(--border))] bg-white/60 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Spritz n Glitz Bar</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80">
                 Beauty and hygiene essentials for quick fixes or full party prep.
@@ -271,12 +270,12 @@ function LandingClient() {
       {/* Call to action */}
       <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-          <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-white/90 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
+          <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
-            <div className="inline-block rounded-3xl border border-black/10 bg-white/90 px-8 py-4 shadow-lg backdrop-blur">
+            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur">
               <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
             </div>
-            <div className="inline-block rounded-3xl border border-black/10 bg-white/90 px-6 py-3 shadow-lg backdrop-blur">
+            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur">
               <p className="text-black">Enter to build your profile and start exploring.</p>
             </div>
           </div>
