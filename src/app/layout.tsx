@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Knewave, Marck_Script } from 'next/font/google'
+import { Knewave, Marck_Script, Montez } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { AppShell } from '@/components/AppShell'
 import './globals.css'
@@ -16,6 +16,12 @@ const marckScript = Marck_Script({
   variable: '--font-marck-script',
 })
 
+const montez = Montez({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-montez',
+})
+
 export const metadata: Metadata = {
   title: 'Before And Afters',
   description: 'Change your outfit, change the world!',
@@ -30,7 +36,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${knewave.className} ${knewave.variable} ${marckScript.variable} min-h-screen text-foreground`}>
+        <body className={`${montez.className} ${montez.variable} ${knewave.variable} ${marckScript.variable} min-h-screen text-foreground`}>
           <AppShell>{children}</AppShell>
         </body>
       </html>
