@@ -142,6 +142,29 @@ export async function POST(request: NextRequest) {
           },
           { merge: true }
         )
+
+        // Forward referral conversion to wardrobe-manager2
+        const referralSecret = process.env.REFERRAL_CONVERSION_SECRET
+        if (referralSecret) {
+          await fetch('https://wardrobe-manager2.vercel.app/api/referrals/convert', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-referral-secret': referralSecret,
+            },
+            body: JSON.stringify({
+              referralCode: referralCode.toUpperCase(),
+              stripeEventId: event.id,
+              stripeCheckoutSessionId: session.id,
+              amountTotal: session.amount_total,
+              currency: session.currency,
+              customerEmail: email,
+              membershipPlan: membershipTier,
+            }),
+          })
+        } else {
+          console.warn('REFERRAL_CONVERSION_SECRET not set; skipping wardrobe-manager2 referral conversion')
+        }
       } catch (error) {
         console.error('Failed to write referral attribution (Stripe webhook):', error)
       }
