@@ -112,7 +112,7 @@ function LandingClient() {
         <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
           {/* Row 1: Long blurb + JoniSofa image side by side */}
           <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
-            <figure className="lg:col-span-6">
+            <figure className="lg:col-span-7">
               <Image
                 src="/images/Joni%20Images/JoniHero.jpeg"
                 alt="Before & Afters"
@@ -123,7 +123,7 @@ function LandingClient() {
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-6">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
@@ -142,7 +142,7 @@ function LandingClient() {
 
           {/* Row 2: Short blurb + JoniHero image side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
               <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
@@ -153,7 +153,7 @@ function LandingClient() {
               </div>
             </div>
 
-            <figure className="lg:col-span-7">
+            <figure className="lg:col-span-8">
               <Image
                 src="/images/Joni%20Images/JoniSofa.jpg"
                 alt="Michelle Joni"

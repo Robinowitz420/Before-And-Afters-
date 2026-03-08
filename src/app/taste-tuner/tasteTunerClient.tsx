@@ -1282,72 +1282,56 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   )}
                 </div>
 
-                {usingCatalogue ? (
-                  <div>
-                    <div className="text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
-                    {reservedIds.length ? (
-                      <div className="mt-2 grid grid-cols-4 gap-1.5">
-                        {reservedIds.slice(0, 4).map((id) => {
-                          const g = catalogueItems.find((x) => x.id === id)
-                          const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                          return (
-                            <button
-                              key={id}
-                              type="button"
-                              onClick={() => openGarmentDetails(id)}
-                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                            >
-                              {img ? <Image src={img} alt="Reserved" width={80} height={80} className="h-14 w-full object-cover" /> : null}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    ) : (
-                      <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                        No reserved items
-                      </div>
-                    )}
-                  </div>
-                ) : null}
+                <div>
+                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
+                  {requestedIds.length ? (
+                    <div className="mt-2 grid grid-cols-4 gap-1.5">
+                      {requestedIds.slice(0, 8).map((id) => {
+                        const g = catalogueItems.find((x) => x.id === id)
+                        const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => openGarmentDetails(id)}
+                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                          >
+                            {img ? <Image src={img} alt="Requested" width={80} height={80} className="h-14 w-full object-cover" /> : null}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                      Request items to get started
+                    </div>
+                  )}
+                </div>
 
-                {usingCatalogue ? (
-                  <div>
-                    <div className="text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
-                    {requestedIds.length ? (
-                      <div className="mt-2 grid grid-cols-4 gap-1.5">
-                        {requestedIds.slice(0, 4).map((id) => {
-                          const g = catalogueItems.find((x) => x.id === id)
-                          const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                          return (
-                            <button
-                              key={id}
-                              type="button"
-                              onClick={() => openGarmentDetails(id)}
-                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                            >
-                              {img ? <Image src={img} alt="Requested" width={80} height={80} className="h-14 w-full object-cover" /> : null}
-                            </button>
-                          )
-                        })}
+                <div>
+                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
+                  <Link href="/calendar" className="block">
+                    <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
+                      <div className="relative h-32 w-full">
+                        <Image
+                          src={encodeURI('/images/Boxes/LemmeGetThisStraight.jpg')}
+                          alt="Calendar"
+                          fill
+                          sizes="280px"
+                          className="object-cover"
+                        />
                       </div>
-                    ) : (
-                      <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                        No requested items
+                      <div className="p-3">
+                        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Events</div>
+                        <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Calendar & Details</div>
+                        <Button type="button" className="mt-3 w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
+                          View Calendar
+                        </Button>
                       </div>
-                    )}
-                  </div>
-                ) : null}
+                    </div>
+                  </Link>
+                </div>
               </div>
-              <Link href="/search" className="w-full block mt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
-                >
-                  🔍 Search Clothing
-                </Button>
-              </Link>
             </div>
           </FrameBox>
         </aside>
