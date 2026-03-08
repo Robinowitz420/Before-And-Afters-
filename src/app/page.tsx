@@ -94,11 +94,19 @@ function LandingClient() {
           </div>
 
           <div className="mt-10 text-center">
-          <h1 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl lg:text-7xl">
-            CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
-          </h1>
+          <div className="inline-block rounded-3xl border border-black/10 bg-white/90 p-8 shadow-lg backdrop-blur">
+            <h1 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl lg:text-7xl">
+              CLOTHING PROBLEMS ARE REAL! Lemme get this straight…..
+            </h1>
+          </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering}>
+            <Button
+              type="button"
+              onClick={onEnterCloset}
+              size="lg"
+              disabled={entering}
+              className="border-[3px] border-[#FFD700] px-16 py-8 text-3xl font-bold"
+            >
               {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
@@ -137,12 +145,12 @@ function LandingClient() {
               </div>
             </div>
 
-            <figure className="w-full lg:col-span-8">
+            <figure className="w-full lg:col-span-10">
               <Image
                 src="/images/Joni%20Images/JoniSofa.jpg"
                 alt="Michelle Joni"
-                width={1600}
-                height={2000}
+                width={2080}
+                height={2600}
                 className="h-auto w-full"
                 priority
               />
@@ -186,12 +194,12 @@ function LandingClient() {
               </div>
             </div>
 
-            <figure className="order-1 lg:order-2 lg:col-span-7">
+            <figure className="order-1 lg:order-2 lg:col-span-9">
               <Image
                 src="/images/Joni%20Images/JoniColorsGlam.jpg"
                 alt="Editorial"
-                width={2000}
-                height={1250}
+                width={2600}
+                height={1625}
                 className="h-auto w-full"
               />
             </figure>
@@ -202,8 +210,8 @@ function LandingClient() {
       {/* Offerings */}
       <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
-          <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-white/80 px-6 py-4 shadow-sm backdrop-blur md:px-10">
-            <h2 className="font-marck text-balance text-3xl leading-tight tracking-tight sm:text-4xl md:text-5xl text-center text-black">
+          <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-white/90 px-8 py-6 shadow-lg backdrop-blur md:px-12">
+            <h2 className="font-marck text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center">
               How we do it
             </h2>
           </div>
@@ -263,13 +271,23 @@ function LandingClient() {
       {/* Call to action */}
       <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-          <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl">Ready to play?</h2>
+          <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-white/90 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
-            <p className="text-xl font-bold text-white sm:text-2xl md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
-            <p>Enter to build your profile and start exploring.</p>
+            <div className="inline-block rounded-3xl border border-black/10 bg-white/90 px-8 py-4 shadow-lg backdrop-blur">
+              <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
+            </div>
+            <div className="inline-block rounded-3xl border border-black/10 bg-white/90 px-6 py-3 shadow-lg backdrop-blur">
+              <p className="text-black">Enter to build your profile and start exploring.</p>
+            </div>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button type="button" onClick={onEnterCloset} size="lg" disabled={entering}>
+            <Button
+              type="button"
+              onClick={onEnterCloset}
+              size="lg"
+              disabled={entering}
+              className="border-[3px] border-[#FFD700] px-16 py-8 text-3xl font-bold"
+            >
               {entering ? 'Loading...' : buttonText}
             </Button>
           </div>
