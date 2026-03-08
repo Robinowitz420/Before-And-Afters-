@@ -112,7 +112,18 @@ function LandingClient() {
         <div className="mx-auto max-w-5xl px-6 py-16 md:py-24">
           {/* Row 1: Long blurb + JoniSofa image side by side */}
           <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-7">
+            <figure className="lg:col-span-6">
+              <Image
+                src="/images/Joni%20Images/JoniHero.jpeg"
+                alt="Before & Afters"
+                width={2400}
+                height={1500}
+                className="h-auto w-full rounded-3xl shadow-lg"
+                priority
+              />
+            </figure>
+
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-6">
               <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
@@ -127,17 +138,6 @@ function LandingClient() {
                 <p>Well it’s time to make…. BELIEVE. (And then believe bigger.)</p>
               </div>
             </div>
-
-            <figure className="lg:col-span-5">
-              <Image
-                src="/images/Joni%20Images/JoniSofa.jpg"
-                alt="Michelle Joni"
-                width={1600}
-                height={2000}
-                className="h-auto w-full rounded-3xl shadow-lg"
-                priority
-              />
-            </figure>
           </div>
 
           {/* Row 2: Short blurb + JoniHero image side by side */}
@@ -155,10 +155,10 @@ function LandingClient() {
 
             <figure className="lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JoniHero.jpeg"
-                alt="Before & Afters"
-                width={2000}
-                height={1250}
+                src="/images/Joni%20Images/JoniSofa.jpg"
+                alt="Michelle Joni"
+                width={2400}
+                height={3000}
                 className="h-auto w-full rounded-3xl shadow-lg"
               />
             </figure>
