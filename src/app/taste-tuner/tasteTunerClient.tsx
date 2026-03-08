@@ -1233,18 +1233,18 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-6 lg:grid-cols-[280px,1fr,260px]">
+      <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px]">
         <aside className="w-full">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
-              <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
-              <div className="mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
+              <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
+              <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
               <div className="mt-4 space-y-4">
                 <div>
-                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
+                  <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
                   {savedItems.length ? (
-                    <div className="mt-2 grid grid-cols-4 gap-1.5">
+                    <div className="mt-2 grid grid-cols-3 gap-2">
                       {savedItems.slice(0, 8).map((src) => (
                         <button
                           key={src}
@@ -1268,24 +1268,24 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                                 : src
                             }
                             alt="Liked"
-                            width={80}
-                            height={80}
-                            className="h-14 w-full object-cover"
+                            width={120}
+                            height={120}
+                            className="h-24 w-full object-cover"
                           />
                         </button>
                       ))}
                     </div>
                   ) : (
-                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                    <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
                       Swipe right to like
                     </div>
                   )}
                 </div>
 
                 <div>
-                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
+                  <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
                   {requestedIds.length ? (
-                    <div className="mt-2 grid grid-cols-4 gap-1.5">
+                    <div className="mt-2 grid grid-cols-3 gap-2">
                       {requestedIds.slice(0, 8).map((id) => {
                         const g = catalogueItems.find((x) => x.id === id)
                         const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
@@ -1296,20 +1296,20 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             onClick={() => openGarmentDetails(id)}
                             className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
                           >
-                            {img ? <Image src={img} alt="Requested" width={80} height={80} className="h-14 w-full object-cover" /> : null}
+                            {img ? <Image src={img} alt="Requested" width={120} height={120} className="h-24 w-full object-cover" /> : null}
                           </button>
                         )
                       })}
                     </div>
                   ) : (
-                    <div className="mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                    <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
                       Request items to get started
                     </div>
                   )}
                 </div>
 
                 <div>
-                  <div className="text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
+                  <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
                   <Link href="/calendar" className="block">
                     <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
                       <div className="relative h-32 w-full">
@@ -1322,8 +1322,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         />
                       </div>
                       <div className="p-3">
-                        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Events</div>
-                        <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Calendar & Details</div>
+                        <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Events</div>
+                        <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Calendar & Details</div>
                         <Button type="button" className="mt-3 w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
                           View Calendar
                         </Button>
@@ -1691,19 +1691,19 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           <div className="space-y-3">
             <FrameBox frameClassName="scale-[1.10] rotate-[1.2deg]">
               <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
-                <div className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
-                <div className="mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
+                <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
+                <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
                 <div className="mt-3 flex flex-col items-center gap-3">
                   <div
-                    className="h-60 w-48 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
+                    className="h-80 w-64 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
                   >
                     {profile.avatar ? (
                       <Image
                         src={profile.avatar}
                         alt="Avatar"
-                        width={192}
-                        height={240}
+                        width={256}
+                        height={320}
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -1736,12 +1736,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     const completionPercent = Math.round((filledFields / totalFields) * 100)
 
                     return (
-                      <div className="w-full">
-                        <div className="flex items-center justify-between text-xs font-medium text-[hsl(var(--ink))]/70">
-                          <div>Profile</div>
-                          <div className="font-semibold text-primary">{completionPercent}%</div>
+                      <div className="w-full space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="font-ranchers text-sm font-medium text-[hsl(var(--ink))]/70">Profile</div>
+                          <div className="inline-flex items-center rounded-full bg-gradient-to-r from-pink-400 to-pink-600 px-3 py-1 text-sm font-bold text-white shadow-md">
+                            {completionPercent}%
+                          </div>
                         </div>
-                        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
+                        <div className="h-4 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
                           <div
                             className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
                             style={{ width: `${completionPercent}%` }}
