@@ -37,7 +37,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ) : null}
       <div className={cn('mx-auto flex min-h-screen w-full', !isImmersive && 'max-w-[1600px]')}>
         {/* Clerk auth buttons at bottom right */}
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className={cn('fixed right-4 z-50', isTasteTuner ? 'bottom-20' : 'bottom-4')}>
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
           </SignedIn>

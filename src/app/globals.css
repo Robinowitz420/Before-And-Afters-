@@ -122,6 +122,9 @@ section[id] {
   * {
     @apply border-border;
   }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-ranchers;
+  }
   body {
     @apply text-foreground;
     min-height: 100vh;

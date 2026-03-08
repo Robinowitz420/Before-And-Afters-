@@ -1336,7 +1336,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </FrameBox>
         </aside>
 
-        <section className="flex w-full flex-col items-center justify-start lg:items-start lg:justify-center">
+        <section className="flex w-full flex-col items-center justify-start lg:items-center lg:justify-center">
           {/* Mode toggle */}
           {usingCatalogue && !catalogueLoading && !catalogueError ? (
             <div className="mb-4 grid w-full max-w-[520px] grid-cols-3 gap-2">
@@ -1710,6 +1710,47 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
                     )}
                   </div>
+
+                  {(() => {
+                    const profileFields = [
+                      profile.fullName,
+                      profile.permaPlayaName,
+                      profile.igHandle,
+                      profile.birthday,
+                      profile.neighborhood,
+                      profile.signatureColor,
+                      profile.closetMascot,
+                      profile.styleVibe,
+                      profile.aboutYou,
+                      profile.wardrobeGripes,
+                      profile.favoriteStores,
+                      profile.excitementReasons?.length ? 'hasExcitement' : null,
+                      profile.selfieUrl,
+                      profile.avatar,
+                      profile.tones?.length ? 'hasTones' : null,
+                      profile.vibes?.length ? 'hasVibes' : null,
+                      profile.eras?.length ? 'hasEras' : null,
+                    ]
+                    const filledFields = profileFields.filter(Boolean).length
+                    const totalFields = profileFields.length
+                    const completionPercent = Math.round((filledFields / totalFields) * 100)
+
+                    return (
+                      <div className="w-full">
+                        <div className="flex items-center justify-between text-xs font-medium text-[hsl(var(--ink))]/70">
+                          <div>Profile</div>
+                          <div className="font-semibold text-primary">{completionPercent}%</div>
+                        </div>
+                        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
+                            style={{ width: `${completionPercent}%` }}
+                          />
+                        </div>
+                      </div>
+                    )
+                  })()}
+
                   <div className="flex w-full flex-col gap-2">
                     <input
                       type="file"
@@ -1756,7 +1797,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               variant="outline"
               size="sm"
               onClick={() => setDeleteProfileOpen(true)}
-              className="fixed bottom-4 right-4 z-50 w-auto bg-red-600 text-white hover:bg-red-700 border-red-600"
+              className="fixed bottom-3 right-4 z-50 w-auto bg-red-600 text-white hover:bg-red-700 border-red-600"
             >
               🗑️ Delete Profile
             </Button>
@@ -1764,58 +1805,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </aside>
       </div>
       </div>
-
-      {/* Profile Completion Bar */}
-      {(() => {
-        const profileFields = [
-          profile.fullName,
-          profile.permaPlayaName,
-          profile.igHandle,
-          profile.birthday,
-          profile.neighborhood,
-          profile.signatureColor,
-          profile.closetMascot,
-          profile.styleVibe,
-          profile.aboutYou,
-          profile.wardrobeGripes,
-          profile.favoriteStores,
-          profile.excitementReasons?.length ? 'hasExcitement' : null,
-          profile.selfieUrl,
-          profile.avatar,
-          profile.tones?.length ? 'hasTones' : null,
-          profile.vibes?.length ? 'hasVibes' : null,
-          profile.eras?.length ? 'hasEras' : null,
-        ]
-        const filledFields = profileFields.filter(Boolean).length
-        const totalFields = profileFields.length
-        const completionPercent = Math.round((filledFields / totalFields) * 100)
-
-        return (
-          <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-transparent p-6">
-            <div className="rounded-2xl bg-white/50 p-6 backdrop-blur-sm">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Profile</div>
-                  <div className="mt-1 text-xl font-semibold text-[hsl(var(--ink))]">Your Profile Completion</div>
-                </div>
-                <div className="text-2xl font-bold text-primary">{completionPercent}%</div>
-              </div>
-
-              <div className="mt-4">
-                <div className="h-4 w-full overflow-hidden rounded-full bg-gray-200">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
-                    style={{ width: `${completionPercent}%` }}
-                  />
-                </div>
-                <p className="mt-3 text-sm text-[hsl(var(--ink))]/70">
-                  The more we know about you the better the recommendations!
-                </p>
-              </div>
-            </div>
-          </div>
-        )
-      })()}
 
       {/* Delete Profile Dialog */}
       <Dialog.Root open={deleteProfileOpen} onOpenChange={setDeleteProfileOpen}>
