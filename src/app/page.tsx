@@ -79,7 +79,7 @@ function LandingClient() {
 
   return (
     <main className="text-[hsl(var(--foreground))]">
-      {/* Hero Section */}
+      {/* Hero Section - Pink Backgrounds Update */}
       <section id="portal" className="relative text-white">
         <div className="mx-auto max-w-5xl px-6 py-16 md:py-20">
           <div className="mx-auto w-full max-w-5xl">
