@@ -1314,7 +1314,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
                       <div className="relative h-40 w-full overflow-hidden">
                         <Image
-                          src={encodeURI('/images/Joni Images/JoniCalander.jpg')}
+                          src="/images/Joni%20Images/JoniCalander.jpg"
                           alt="Calendar"
                           fill
                           sizes="380px"
