@@ -293,9 +293,9 @@ export function ProfileWizard() {
   }
 
   const stepTitle =
-    step === 1 ? 'Identity Basics'
-      : step === 2 ? 'Fit + Fabric'
-      : step === 3 ? 'Style & Vibe'
+    step === 1 ? 'Start here'
+      : step === 2 ? 'Fit & comfort'
+      : step === 3 ? 'Style notes'
       : 'Personal Touch'
 
   const stepDescription =
@@ -306,6 +306,8 @@ export function ProfileWizard() {
 
   const goNext = () => setStep((s) => clampStep(s + 1))
   const goBack = () => setStep((s) => clampStep(s - 1))
+
+  const hasRequiredName = data.displayName.trim().length > 0
 
   const onSubmit = async () => {
     setSaving(true)
@@ -457,7 +459,7 @@ export function ProfileWizard() {
                         </Button>
                       ) : null}
 
-                      <Button type="button" onClick={onSubmit} disabled={!canContinueStep1 || saving}>
+                      <Button type="button" onClick={onSubmit} disabled={!hasRequiredName || saving}>
                         {saving ? 'Saving...' : 'Complete'}
                       </Button>
                     </div>
