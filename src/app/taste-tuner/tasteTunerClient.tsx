@@ -1233,7 +1233,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px]">
+      <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px] lg:items-start">
         <aside className="w-full">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
@@ -1278,32 +1278,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   ) : (
                     <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
                       Swipe right to like
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Requested ({requestedIds.length})</div>
-                  {requestedIds.length ? (
-                    <div className="mt-2 grid grid-cols-3 gap-2">
-                      {requestedIds.slice(0, 8).map((id) => {
-                        const g = catalogueItems.find((x) => x.id === id)
-                        const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                        return (
-                          <button
-                            key={id}
-                            type="button"
-                            onClick={() => openGarmentDetails(id)}
-                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                          >
-                            {img ? <Image src={img} alt="Requested" width={120} height={120} className="h-24 w-full object-cover" /> : null}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  ) : (
-                    <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                      Request items to get started
                     </div>
                   )}
                 </div>
@@ -1764,33 +1738,39 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   })()}
 
                   <div className="flex w-full flex-col gap-2">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      disabled={avatarUploading}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const file = e.target.files?.[0]
-                        if (!file) return
-                        setAvatarUploading(true)
-                        const reader = new FileReader()
-                        reader.onload = () => {
-                          const result = typeof reader.result === 'string' ? reader.result : ''
-                          if (result) {
-                            const next = { ...(profile || {}), avatar: result } as WizardProfile
-                            setProfile(next)
-                            saveProfile(next).catch(() => {
-                              // ignore
-                            })
+                    {profile.avatar ? (
+                      <div className="text-center text-xs text-green-600 font-medium">✓ Photo uploaded</div>
+                    ) : null}
+                    <label className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-2 cursor-pointer hover:bg-white/80 transition">
+                      <span className="text-xs text-muted-foreground">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change photo' : 'Choose photo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={avatarUploading}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          setAvatarUploading(true)
+                          const reader = new FileReader()
+                          reader.onload = () => {
+                            const result = typeof reader.result === 'string' ? reader.result : ''
+                            if (result) {
+                              const next = { ...(profile || {}), avatar: result } as WizardProfile
+                              setProfile(next)
+                              saveProfile(next).catch(() => {
+                                // ignore
+                              })
+                            }
+                            setAvatarUploading(false)
                           }
-                          setAvatarUploading(false)
-                        }
-                        reader.onerror = () => {
-                          setAvatarUploading(false)
-                        }
-                        reader.readAsDataURL(file)
-                      }}
-                      className="block w-full text-xs text-muted-foreground file:rounded-lg file:border file:border-[hsl(var(--border))] file:bg-white file:px-2 file:py-1 file:text-xs file:font-medium file:text-[hsl(var(--ink))] hover:file:bg-[hsl(var(--secondary))]"
-                    />
+                          reader.onerror = () => {
+                            setAvatarUploading(false)
+                          }
+                          reader.readAsDataURL(file)
+                        }}
+                        className="hidden"
+                      />
+                    </label>
                   </div>
                 </div>
               </div>
