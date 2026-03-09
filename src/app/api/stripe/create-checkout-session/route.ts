@@ -9,6 +9,7 @@ const PROMO_CODE = 'FIRST70'
 const PROMO_MAX_USES = 70
 const PROMO_AMOUNT_OFF_CENTS = 5000
 const PROMO_RESERVATION_MINUTES = 30
+const PROMO_PAUSED = true
 
 type PromoStatus = {
   eligible: boolean
@@ -157,7 +158,9 @@ export async function POST(request: NextRequest) {
     const depositCents = Math.round(DEPOSIT_AMOUNT * 100)
     const baseUrl = getBaseUrl(request)
 
-    const promo = await getPromoStatus({ clerkUserId: userId, email })
+    const promo = PROMO_PAUSED
+      ? { eligible: false, remaining: 0, amountOffCents: 0 }
+      : await getPromoStatus({ clerkUserId: userId, email })
     const promoAmountOffCents = promo.eligible ? Math.min(promo.amountOffCents, firstMonthCents) : 0
     const discountedFirstMonthCents = firstMonthCents - promoAmountOffCents
     
