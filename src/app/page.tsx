@@ -114,7 +114,7 @@ function LandingClient() {
           <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
             <figure className="lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JoniHero.jpeg?v=2"
+                src="/images/Joni%20Images/JONISUPERHERO.jpg?v=1"
                 alt="Before & Afters"
                 width={2400}
                 height={1500}
@@ -124,18 +124,18 @@ function LandingClient() {
             </figure>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
-              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl font-['Fuzzy_Bubbles',cursive]">
+              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
-                  You&apos;re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
+                  You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
                   time without spending all your money or time doing it, you want to slay the business meeting AND the theme party AND the bodega run,
                   you would love leveling up your looks with some sweet easily-accessible stylist support, you are flabbergasted that there are no clothing
-                  stores open at night and would love to shop outside normal retail hours in a non-retaily kinda way, you&apos;re somehow both very bored and
-                  very overwhelmed with the state of your closet, your &quot;giveaway tote&quot; has been lurking in the corner for six months, your cute denim
-                  upcycling concept is lingering lavishly on MaybeSomeday Island along with your raging rebel rockstar dreams, you&apos;re low key torn
-                  up about your contribution to the fast fashion machine that is actively destroying the planet….. and at the end of the day you honestly
+                  stores open at night and would love to shop outside normal retail hours in a non-retaily kinda way, you’re somehow both very bored and
+                  very overwhelmed with the state of your closet, your “giveaway tote” has been lurking in the corner for six months, your cute denim
+                  upcycling concept is lingering lavishly on MaybeSomeday Island along with your raging rebel rockstar dreams, you’re low key torn up
+                  about your contribution to the fast fashion machine that is actively destroying the planet….. and at the end of the day you honestly
                   kinda miss being 5 and just really want to play dress up in a magical make believe land with friends all day!!!!
                 </p>
-                <p className="font-bold text-[1.3em]">Well it&apos;s time to make.... BELIEVE. (And then believe bigger.)</p>
+                <p>Well it’s time to make…. BELIEVE. (And then believe bigger.)</p>
               </div>
             </div>
           </div>
