@@ -131,7 +131,7 @@ section[id] {
     @apply font-ranchers;
   }
   body {
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Knewave', cursive;
     @apply text-foreground;
     min-height: 100vh;
   }
