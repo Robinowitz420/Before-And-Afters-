@@ -84,10 +84,10 @@ function LandingClient() {
         <div className="w-full py-16 md:py-20">
           <div className="w-full">
             <Image
-              src="/images/herobannere.jpg?v=5"
+              src="/images/herobannere.jpg?v=6"
               alt="Before & Afters"
-              width={576}
-              height={216}
+              width={403}
+              height={151}
               className="h-auto w-full"
               priority
             />
