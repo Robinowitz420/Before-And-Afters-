@@ -379,7 +379,7 @@ export function ProfileWizard() {
         <div className="sticky top-6 space-y-4">
           <div className="overflow-hidden rounded-2xl border border-white/10 bg-[hsl(var(--ink))] p-6 text-white shadow-sm">
             <div className="text-sm font-medium opacity-90">Profile Ritual</div>
-            <div className="mt-1 text-2xl font-semibold">Step {step} of {totalSteps}</div>
+            <div className="mt-1 text-2xl font-ranchers">Step {step} of {totalSteps}</div>
             <div className="mt-2 text-sm opacity-90">Under 5 minutes. Zero pressure. Maximum clarity.</div>
           </div>
 
@@ -397,7 +397,7 @@ export function ProfileWizard() {
       <div className="lg:col-span-8">
         <Card className="overflow-hidden border-[hsl(var(--border))] bg-[hsl(var(--background))] shadow-xl">
           <CardHeader>
-            <CardTitle className="text-2xl">{stepTitle}</CardTitle>
+            <CardTitle className="text-2xl font-ranchers">{stepTitle}</CardTitle>
             <CardDescription>{stepDescription}</CardDescription>
 
             <div className="mt-4">
@@ -413,7 +413,7 @@ export function ProfileWizard() {
             {submitted ? (
               <div className="space-y-4">
                 <div className="rounded-xl border border-black/10 bg-white/60 p-6 shadow-sm">
-                  <div className="text-lg font-semibold">Profile saved ✨</div>
+                  <div className="text-lg font-ranchers">Profile saved ✨</div>
                   <div className="mt-2 text-sm text-[hsl(var(--ink))]/80">
                     You can revisit this anytime — your answers are stored locally for now (MVP).
                   </div>
