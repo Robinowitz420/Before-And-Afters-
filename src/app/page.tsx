@@ -218,10 +218,10 @@ function LandingClient() {
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Before &amp; Afters (Flagship)</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80">
-                Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and the primary Dress Up collection.
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em]">
+                Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and primary Dress Up collection.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em]">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Access to clothes after other stores close — and before they open.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>A portal for getting-ready, afters programming, and intentional play.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Creative organization + rotation systems designed for NYC life.</span></li>
@@ -230,10 +230,10 @@ function LandingClient() {
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Dorothy the Dress Up Bus</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em]">
                 Dorothy is our mobile extension — distributing dream dress-up options across NYC.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em]">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>From shelters and schools to street-corner surprises.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>On-call help for members: deliveries, last-minute essentials, donation pickup.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Built to support brains, heart, courage — and outfits.</span></li>
@@ -255,10 +255,10 @@ function LandingClient() {
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Spritz n Glitz Bar</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em]">
                 Beauty and hygiene essentials for quick fixes or full party prep.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em]">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Makeup, hair supplies, sparkles, fragrance, deodorant, wipes, dental care.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>DIY anytime, or get help from in-house / featured artists.</span></li>
               </ul>
