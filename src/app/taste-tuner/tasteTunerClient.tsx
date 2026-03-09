@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import * as Dialog from '@radix-ui/react-dialog'
+import { QRCodeSVG } from 'qrcode.react'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -437,6 +438,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const [deleteProfileOpen, setDeleteProfileOpen] = useState(false)
   const [deletingProfile, setDeletingProfile] = useState(false)
+
+  const [qrFullscreen, setQrFullscreen] = useState(false)
 
   const usingCatalogue = images.length === 0
 
@@ -1777,6 +1780,27 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
             )}
 
+            {/* Personalized QR Code */}
+            <div className="rounded-2xl border-[3px] border-purple-500 bg-white/40 p-4 shadow-sm">
+              <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Your QR Code</div>
+              <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Scan at Events</div>
+              
+              <button
+                type="button"
+                onClick={() => setQrFullscreen(true)}
+                className="mt-4 flex w-full flex-col items-center rounded-xl bg-white p-3 shadow-inner hover:shadow-md transition cursor-pointer"
+              >
+                <QRCodeSVG
+                  value={`https://beforeandafters.clothing/profile/${user?.id || 'guest'}`}
+                  size={180}
+                  level="H"
+                  includeMargin={false}
+                  className="h-auto w-full max-w-[180px]"
+                />
+                <p className="mt-2 text-xs text-purple-600 font-medium">Tap to enlarge</p>
+              </button>
+            </div>
+
             <Button
               type="button"
               variant="outline"
@@ -1842,6 +1866,41 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 </Button>
               </div>
             </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* QR Fullscreen Modal */}
+      <Dialog.Root open={qrFullscreen} onOpenChange={setQrFullscreen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 z-50 bg-white" />
+          <Dialog.Content className="fixed inset-0 z-50 flex flex-col items-center justify-center p-8">
+            <Dialog.Close asChild>
+              <button
+                type="button"
+                className="absolute right-4 top-4 rounded-full bg-gray-100 p-3 text-gray-600 hover:bg-gray-200 transition"
+              >
+                ✕
+              </button>
+            </Dialog.Close>
+
+            <div className="text-center">
+              <div className="font-ranchers text-2xl font-semibold text-[hsl(var(--ink))]">Your QR Code</div>
+              <p className="mt-2 text-sm text-muted-foreground">Show this at event check-in</p>
+            </div>
+
+            <div className="mt-8 rounded-3xl bg-white p-6 shadow-2xl">
+              <QRCodeSVG
+                value={`https://beforeandafters.clothing/profile/${user?.id || 'guest'}`}
+                size={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 80 : 320)}
+                level="H"
+                includeMargin={true}
+              />
+            </div>
+
+            <p className="mt-6 text-center text-xs text-muted-foreground max-w-xs">
+              {profile.displayName ? `${profile.displayName}'s profile` : 'Your personalized code'}
+            </p>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
