@@ -6,7 +6,6 @@ import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { MembershipSignupForm } from './MembershipSignupForm'
 
 const TIER_IMAGE: Record<MembershipTier, string> = {
   Eeeehs: '/images/MEMBERSHIPS/Eeeehs.png',
@@ -35,7 +34,6 @@ export function MembershipList() {
   const [membership, setMembership] = useState<Membership | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedTier, setSelectedTier] = useState<MembershipTier | ''>('')
   const [checkoutTier, setCheckoutTier] = useState<MembershipTier | null>(null)
 
@@ -183,21 +181,6 @@ export function MembershipList() {
           </div>
         </div>
       </div>
-
-      {showCreateForm && (
-        <MembershipSignupForm
-          initialTier={selectedTier}
-          onClose={() => {
-            setShowCreateForm(false)
-            setSelectedTier('')
-          }}
-          onSuccess={() => {
-            setShowCreateForm(false)
-            setSelectedTier('')
-            fetchMemberships()
-          }}
-        />
-      )}
 
       {membership ? (
         <Card>
