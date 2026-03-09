@@ -1423,10 +1423,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
                 >
-                  <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-                    {currentCard.category}
-                  </div>
-
                   <div
                     className="pointer-events-none absolute left-6 top-20 z-10 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
                     style={{ opacity: likeIntensity }}
@@ -1738,11 +1734,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   })()}
 
                   <div className="flex w-full flex-col gap-2">
-                    {profile.avatar ? (
-                      <div className="text-center text-xs text-green-600 font-medium">✓ Photo uploaded</div>
-                    ) : null}
-                    <label className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-2 cursor-pointer hover:bg-white/80 transition">
-                      <span className="text-xs text-muted-foreground">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change photo' : 'Choose photo'}</span>
+                    <label className="flex items-center justify-center rounded-lg border-[3px] border-blue-600 bg-white px-4 py-3 cursor-pointer hover:bg-blue-50 transition">
+                      <span className="font-ranchers text-base font-semibold text-[hsl(var(--ink))]">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change Photo' : 'Choose Photo'}</span>
                       <input
                         type="file"
                         accept="image/*"
@@ -1789,7 +1782,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               variant="outline"
               size="sm"
               onClick={() => setDeleteProfileOpen(true)}
-              className="fixed bottom-3 right-4 z-50 w-auto bg-red-600 text-white hover:bg-red-700 border-red-600"
+              className="fixed bottom-3 left-4 z-50 w-auto bg-red-600 text-white hover:bg-red-700 border-red-600"
             >
               🗑️ Delete Profile
             </Button>
