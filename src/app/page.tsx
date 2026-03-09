@@ -124,7 +124,7 @@ function LandingClient() {
             </figure>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
-              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl font-permanent-marker">
+              <div className="space-y-6 text-base leading-relaxed">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
                   time without spending all your money or time doing it, you want to slay the business meeting AND the theme party AND the bodega run,
@@ -143,7 +143,7 @@ function LandingClient() {
           {/* Row 2: Short blurb + JoniHero image side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
-              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl font-permanent-marker">
+              <div className="space-y-6 text-base leading-relaxed">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
                   make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
@@ -177,7 +177,7 @@ function LandingClient() {
             </figure>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
-              <div className="space-y-6 text-base leading-relaxed font-permanent-marker">
+              <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Helloooo love, I’m Michelle Joni!</p>
                 <p>
                   Born from my own (horrifyingly first world) clothing problem of having too many clothes to fit in my 5 closets, entire basement and two
@@ -191,8 +191,8 @@ function LandingClient() {
 
           {/* Row 4: Text blurb only - full width */}
           <div className="mt-14 lg:mt-16">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl font-permanent-marker">
-              <div className="space-y-6 text-base leading-relaxed font-permanent-marker">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl space-y-6 text-base leading-relaxed">
+              <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Not just to solve my silly avoidable problem…</p>
                 <p>
                   To activate a glorious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
@@ -218,10 +218,10 @@ function LandingClient() {
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Before &amp; Afters (Flagship)</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] font-permanent-marker">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and primary Dress Up collection.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] font-permanent-marker">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Access to clothes after other stores close — and before they open.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>A portal for getting-ready, afters programming, and intentional play.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Creative organization + rotation systems designed for NYC life.</span></li>
@@ -230,10 +230,10 @@ function LandingClient() {
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Dorothy the Dress Up Bus</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] font-permanent-marker">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Dorothy is our mobile extension — distributing dream dress-up options across NYC.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] font-permanent-marker">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>From shelters and schools to street-corner surprises.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>On-call help for members: deliveries, last-minute essentials, donation pickup.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Built to support brains, heart, courage — and outfits.</span></li>
@@ -244,10 +244,10 @@ function LandingClient() {
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Isle of Check Meowt</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] font-permanent-marker">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Our for-sale essentials &amp; delights — the little things that complete the look.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] font-permanent-marker">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Stockings, socks, undies, accessories, gifts, last-minute add-ons.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Low prices, high dopamine — many items are 1 Glitcoin for members.</span></li>
               </ul>
@@ -255,10 +255,10 @@ function LandingClient() {
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Spritz n Glitz Bar</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] font-permanent-marker">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Beauty and hygiene essentials for quick fixes or full party prep.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] font-permanent-marker">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Makeup, hair supplies, sparkles, fragrance, deodorant, wipes, dental care.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>DIY anytime, or get help from in-house / featured artists.</span></li>
               </ul>
@@ -273,10 +273,10 @@ function LandingClient() {
           <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur">
-              <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl font-permanent-marker">If you feel the call, you&apos;re already part of it.</p>
+              <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl space-y-6 text-base leading-relaxed">If you feel the call, you&apos;re already part of it.</p>
             </div>
             <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur">
-              <p className="text-black font-permanent-marker">Enter to build your profile and start exploring.</p>
+              <p className="text-black space-y-6 text-base leading-relaxed">Enter to build your profile and start exploring.</p>
             </div>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
