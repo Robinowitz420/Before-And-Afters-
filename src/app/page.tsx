@@ -82,7 +82,7 @@ function LandingClient() {
       {/* Hero Section - Pink Backgrounds Update */}
       <section id="portal" className="relative text-white">
         <div className="w-full py-16 md:py-20">
-          <div className="w-full">
+          <div className="w-full max-w-[70%] mx-auto">
             <Image
               src="/images/herobannere.jpg?v=6"
               alt="Before & Afters"
