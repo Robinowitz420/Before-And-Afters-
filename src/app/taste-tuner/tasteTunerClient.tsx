@@ -1312,13 +1312,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
                   <Link href="/calendar" className="block">
                     <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
-                      <div className="relative h-40 w-full overflow-hidden">
+                      <div className="relative w-full overflow-hidden">
                         <Image
                           src="/images/Joni%20Images/JoniCalander.jpg"
                           alt="Calendar"
-                          fill
+                          width={380}
+                          height={500}
                           sizes="380px"
-                          className="object-cover"
+                          className="h-auto w-full object-contain"
                         />
                       </div>
 
@@ -1365,6 +1366,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   className="w-full bg-black text-white hover:bg-black/80 border-white/20"
                 >
                   ✏️ Edit profile
+                </Button>
+              </Link>
+              <Link href="/search" className="w-full">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
+                >
+                  🔍 Search Clothing
                 </Button>
               </Link>
             </div>
