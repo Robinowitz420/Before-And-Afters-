@@ -1339,7 +1339,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <section className="flex w-full flex-col items-center justify-start lg:items-center lg:justify-center">
           {/* Mode toggle */}
           {usingCatalogue && !catalogueLoading && !catalogueError ? (
-            <div className="mb-4 grid w-full max-w-[520px] grid-cols-3 gap-2">
+            <div className="mb-4 grid w-full max-w-[520px] grid-cols-4 gap-2">
               <Button
                 type="button"
                 variant={browseMode ? 'outline' : 'default'}
@@ -1349,6 +1349,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               >
                 Swipe
               </Button>
+              <Link href="/search">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
+                >
+                  Search
+                </Button>
+              </Link>
               <Button
                 type="button"
                 variant={browseMode ? 'default' : 'outline'}
@@ -1356,26 +1366,16 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 onClick={() => setBrowseMode(true)}
                 className={browseMode ? '' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]'}
               >
-                Browse All
+                Browse
               </Button>
-              <Link href="/profile-wizard" className="w-full">
+              <Link href="/profile-wizard">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   className="w-full bg-black text-white hover:bg-black/80 border-white/20"
                 >
-                  ✏️ Edit profile
-                </Button>
-              </Link>
-              <Link href="/search" className="w-full">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
-                >
-                  🔍 Search Clothing
+                  Edit
                 </Button>
               </Link>
             </div>
