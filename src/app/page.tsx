@@ -44,38 +44,16 @@ function LandingClient() {
       return
     }
 
+    // Signed in: go straight to /profile, let it handle wizard vs profile
     setEntering(true)
-    try {
-      const res = await fetch('/api/profile')
-      if (res.status === 401) {
-        // Session expired or invalid, go to sign in
-        router.push('/sign-in')
-        return
-      }
-      if (res.ok) {
-        const profile = await res.json().catch(() => null)
-        if (profile && typeof profile === 'object' && 'clerkUserId' in profile) {
-          router.push('/profile')
-          return
-        }
-      }
-    } catch (e) {
-      console.error('Profile check error:', e)
-    } finally {
-      setEntering(false)
-    }
-
-    // No profile found, go to wizard
-    router.push('/profile-wizard')
+    router.push('/profile')
   }
 
   const buttonText = !isLoaded
     ? 'Enter'
     : !isSignedIn
       ? 'Enter'
-      : hasProfile
-        ? 'Enter'
-        : 'Create Profile'
+      : 'Enter'
 
   return (
     <main className="text-[hsl(var(--foreground))]">

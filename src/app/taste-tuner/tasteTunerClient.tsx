@@ -880,6 +880,20 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     }
   }
 
+  const onEnterCloset = async () => {
+    if (!isLoaded || entering) return
+
+    // If not signed in, go straight to profile (it will handle wizard redirect if needed)
+    if (!isSignedIn) {
+      router.push('/sign-in')
+      return
+    }
+
+    // Signed in: go straight to /profile, let it handle wizard vs profile decision
+    setEntering(true)
+    router.push('/profile')
+  }
+
   return (
     <div className="min-h-screen w-full">
       <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 sm:py-10">
@@ -1233,7 +1247,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px]">
+      <div className="grid gap-6 lg:grid-cols-[minmax(300px,380px),1fr,minmax(280px,340px)]">
         <aside className="w-full">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
