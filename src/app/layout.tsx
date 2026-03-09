@@ -28,6 +28,11 @@ const ranchers = Ranchers({
   variable: '--font-ranchers',
 })
 
+const knewaveClass = Knewave({
+  weight: '400',
+  subsets: ['latin'],
+})
+
 export const metadata: Metadata = {
   title: 'Before And Afters',
   description: 'Change your outfit, change the world!',
@@ -43,7 +48,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${montez.variable} ${ranchers.variable} ${knewave.variable} ${marckScript.variable} min-h-screen text-foreground`}
+          className={`${knewaveClass.className} ${montez.variable} ${ranchers.variable} ${knewave.variable} ${marckScript.variable} min-h-screen text-foreground`}
         >
           <AppShell>{children}</AppShell>
         </body>

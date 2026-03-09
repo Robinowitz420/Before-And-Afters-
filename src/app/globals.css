@@ -131,9 +131,6 @@ section[id] {
     @apply font-ranchers;
   }
   body {
-    font-family: "Knewave", system-ui;
-    font-weight: 400;
-    font-style: normal;
     @apply text-foreground;
     min-height: 100vh;
   }
