@@ -6,6 +6,8 @@ import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { DEPOSIT_GLITCOIN } from '@/lib/business-rules'
 import { getAdminFirestore } from '@/lib/firebase/admin'
 
+const PROMO_CODE = 'FIRST70'
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 if (!webhookSecret) {
   console.warn('STRIPE_WEBHOOK_SECRET is not set; webhook signature verification will fail')
@@ -34,6 +36,8 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session
     const clerkUserId = session.metadata?.clerkUserId as string | undefined
     const membershipTier = session.metadata?.membershipTier as string | undefined
+    const promoReservationId = session.metadata?.promoReservationId as string | undefined
+    const promoCode = session.metadata?.promoCode as string | undefined
     const referralCodeRaw = session.metadata?.referralCode as string | undefined
     const referralCode = typeof referralCodeRaw === 'string' ? referralCodeRaw.trim() : ''
     const email = session.customer_details?.email ?? session.customer_email ?? null
@@ -117,6 +121,34 @@ export async function POST(request: NextRequest) {
           description: `Monthly free Glitcoins for ${membershipTier} membership`,
         },
       })
+    }
+
+    if (promoReservationId && promoCode === PROMO_CODE) {
+      try {
+        const db = getAdminFirestore()
+        if (!db) {
+          throw new Error('Firestore unavailable')
+        }
+
+        await db
+          .collection('promotions')
+          .doc(PROMO_CODE)
+          .collection('redemptions')
+          .doc(promoReservationId)
+          .set(
+            {
+              status: 'redeemed',
+              redeemedAt: new Date().toISOString(),
+              stripeSessionId: session.id,
+              email,
+              clerkUserId: clerkUserId ?? null,
+              updatedAt: new Date().toISOString(),
+            },
+            { merge: true }
+          )
+      } catch (error) {
+        console.error('Failed to finalize promo redemption (Stripe webhook):', error)
+      }
     }
 
     if (referralCode && clerkUserId) {

@@ -3,6 +3,105 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { stripe } from '@/lib/stripe'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 import { DEPOSIT_AMOUNT } from '@/lib/business-rules'
+import { getAdminFirestore } from '@/lib/firebase/admin'
+
+const PROMO_CODE = 'FIRST70'
+const PROMO_MAX_USES = 70
+const PROMO_AMOUNT_OFF_CENTS = 5000
+const PROMO_RESERVATION_MINUTES = 30
+
+type PromoStatus = {
+  eligible: boolean
+  remaining: number
+  amountOffCents: number
+  reservationId?: string
+}
+
+async function getPromoStatus(params: { clerkUserId: string; email: string }): Promise<PromoStatus> {
+  const db = getAdminFirestore()
+  if (!db) {
+    return { eligible: false, remaining: 0, amountOffCents: 0 }
+  }
+
+  const promoRef = db.collection('promotions').doc(PROMO_CODE)
+  const redemptionsRef = promoRef.collection('redemptions')
+  const userRedemptionRef = redemptionsRef.doc(params.clerkUserId)
+
+  const now = new Date()
+  const expiresAt = new Date(now.getTime() + PROMO_RESERVATION_MINUTES * 60 * 1000)
+
+  const result = await db.runTransaction(async (tx) => {
+    const promoSnap = await tx.get(promoRef)
+    const promoData = promoSnap.exists ? (promoSnap.data() as any) : null
+
+    const active = promoData?.active ?? true
+    const maxUses = typeof promoData?.maxUses === 'number' ? promoData.maxUses : PROMO_MAX_USES
+    const amountOffCents = typeof promoData?.amountOffCents === 'number' ? promoData.amountOffCents : PROMO_AMOUNT_OFF_CENTS
+    const used = typeof promoData?.used === 'number' ? promoData.used : 0
+
+    // Initialize promo doc if missing.
+    if (!promoSnap.exists) {
+      tx.set(promoRef, {
+        code: PROMO_CODE,
+        name: 'First 70 memberships – $50 off first month',
+        maxUses,
+        amountOffCents,
+        used: 0,
+        active: true,
+        createdAt: now.toISOString(),
+        updatedAt: now.toISOString(),
+      })
+    }
+
+    const remaining = Math.max(0, maxUses - used)
+
+    const redemptionSnap = await tx.get(userRedemptionRef)
+    const redemptionData = redemptionSnap.exists ? (redemptionSnap.data() as any) : null
+    const status = redemptionData?.status as string | undefined
+
+    // One-per-person: if they've already reserved or redeemed, not eligible.
+    if (redemptionSnap.exists && (status === 'reserved' || status === 'redeemed')) {
+      return {
+        eligible: false,
+        remaining,
+        amountOffCents: 0,
+      } as PromoStatus
+    }
+
+    if (!active || remaining <= 0) {
+      return {
+        eligible: false,
+        remaining,
+        amountOffCents: 0,
+      } as PromoStatus
+    }
+
+    // Reserve a slot immediately so we never exceed 70.
+    const reservationId = userRedemptionRef.id
+    tx.set(
+      userRedemptionRef,
+      {
+        clerkUserId: params.clerkUserId,
+        email: params.email,
+        status: 'reserved',
+        reservedAt: now.toISOString(),
+        expiresAt: expiresAt.toISOString(),
+        updatedAt: now.toISOString(),
+      },
+      { merge: true }
+    )
+    tx.set(promoRef, { used: used + 1, updatedAt: now.toISOString() }, { merge: true })
+
+    return {
+      eligible: true,
+      remaining: Math.max(0, remaining - 1),
+      amountOffCents,
+      reservationId,
+    } as PromoStatus
+  })
+
+  return result
+}
 
 function getBaseUrl(request: NextRequest): string {
   const host = request.headers.get('host') || request.headers.get('x-forwarded-host')
@@ -56,8 +155,24 @@ export async function POST(request: NextRequest) {
     const firstMonthCents = Math.round(level.monthlyPrice * 100)
     const depositCents = Math.round(DEPOSIT_AMOUNT * 100)
     const baseUrl = getBaseUrl(request)
+
+    const promo = await getPromoStatus({ clerkUserId: userId, email })
+    const promoAmountOffCents = promo.eligible ? Math.min(promo.amountOffCents, firstMonthCents) : 0
+    const discountedFirstMonthCents = firstMonthCents - promoAmountOffCents
     
-    console.log('Stripe checkout - Creating session:', { tier, email, baseUrl, firstMonthCents, depositCents })
+    console.log('Stripe checkout - Creating session:', {
+      tier,
+      email,
+      baseUrl,
+      firstMonthCents,
+      depositCents,
+      promo: {
+        canUsePromo: promo.eligible,
+        remaining: promo.remaining,
+        discountedFirstMonthCents,
+        promoAmountOffCents,
+      },
+    })
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -72,7 +187,7 @@ export async function POST(request: NextRequest) {
               description: level.name.split(' - ')[1] ?? undefined,
               images: undefined,
             },
-            unit_amount: firstMonthCents,
+            unit_amount: discountedFirstMonthCents,
           },
         },
         {
@@ -92,9 +207,21 @@ export async function POST(request: NextRequest) {
       metadata: {
         clerkUserId: userId,
         membershipTier: tier,
+        ...(promo.reservationId ? { promoReservationId: promo.reservationId, promoCode: PROMO_CODE } : {}),
         ...(referralCode ? { referralCode } : {}),
       },
     })
+
+    if (promo.reservationId) {
+      const db = getAdminFirestore()
+      if (db) {
+        const promoRef = db.collection('promotions').doc(PROMO_CODE)
+        await promoRef
+          .collection('redemptions')
+          .doc(promo.reservationId)
+          .set({ stripeSessionId: session.id, updatedAt: new Date().toISOString() }, { merge: true })
+      }
+    }
 
     console.log('Stripe checkout - Session created:', session.id, 'URL:', session.url ? 'Valid' : 'Missing')
 
@@ -106,7 +233,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    return NextResponse.json({ url: session.url })
+    return NextResponse.json({
+      url: session.url,
+      promo: {
+        applied: promoAmountOffCents > 0,
+        remaining: promo.remaining,
+        amountOffCents: promoAmountOffCents,
+        code: PROMO_CODE,
+      },
+    })
   } catch (error) {
     console.error('Stripe create-checkout-session error:', error)
     console.error('Error type:', typeof error)

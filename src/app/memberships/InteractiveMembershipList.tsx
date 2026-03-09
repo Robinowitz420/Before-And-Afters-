@@ -11,6 +11,7 @@ export default function InteractiveMembershipList() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const [checkoutTier, setCheckoutTier] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [promoInfo, setPromoInfo] = useState<{ applied: boolean; remaining: number } | null>(null)
   const [disclaimerOpen, setDisclaimerOpen] = useState(false)
   const [disclaimerAgreed, setDisclaimerAgreed] = useState(false)
   const [pendingTier, setPendingTier] = useState<string | null>(null)
@@ -90,6 +91,16 @@ All borrowed items must be returned before cancellation is finalized.
         return {}
       })
       console.log('Checkout session response data:', data)
+
+      const promo = (data as any)?.promo
+      if (promo && typeof promo === 'object') {
+        setPromoInfo({
+          applied: !!promo.applied,
+          remaining: typeof promo.remaining === 'number' ? promo.remaining : 0,
+        })
+      } else {
+        setPromoInfo(null)
+      }
       
       if (!res.ok) {
         if (res.status === 401) {
@@ -127,6 +138,12 @@ All borrowed items must be returned before cancellation is finalized.
 
   return (
     <div className="relative h-[100svh] w-screen overflow-hidden bg-black">
+      {promoInfo?.applied ? (
+        <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-xl border border-yellow-300/60 bg-yellow-200/90 px-4 py-3 text-center text-sm font-semibold text-black shadow-lg backdrop-blur">
+          $50 off applied to your first month. {promoInfo.remaining > 0 ? `${promoInfo.remaining} spots left.` : ''}
+        </div>
+      ) : null}
+
       {error && (
         <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive">
           {error}
