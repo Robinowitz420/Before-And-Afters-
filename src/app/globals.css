@@ -203,3 +203,7 @@ section[id] {
     #140018 100%
   );
 }
+
+.font-permanent-marker {
+  font-family: 'Permanent Marker', cursive !important;
+}
