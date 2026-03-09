@@ -114,7 +114,7 @@ function LandingClient() {
           <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
             <figure className="lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JONISUPERHERO.jpg?v=1"
+                src="/images/Joni%20Images/JONISUPERHERO.png?v=1"
                 alt="Before & Afters"
                 width={2400}
                 height={1500}
