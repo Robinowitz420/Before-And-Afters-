@@ -44,16 +44,38 @@ function LandingClient() {
       return
     }
 
-    // Signed in: go straight to /profile, let it handle wizard vs profile
     setEntering(true)
-    router.push('/profile')
+    try {
+      const res = await fetch('/api/profile')
+      if (res.status === 401) {
+        // Session expired or invalid, go to sign in
+        router.push('/sign-in')
+        return
+      }
+      if (res.ok) {
+        const profile = await res.json().catch(() => null)
+        if (profile && typeof profile === 'object' && 'clerkUserId' in profile) {
+          router.push('/profile')
+          return
+        }
+      }
+    } catch (e) {
+      console.error('Profile check error:', e)
+    } finally {
+      setEntering(false)
+    }
+
+    // No profile found, go to wizard
+    router.push('/profile-wizard')
   }
 
   const buttonText = !isLoaded
     ? 'Enter'
     : !isSignedIn
       ? 'Enter'
-      : 'Enter'
+      : hasProfile
+        ? 'Enter'
+        : 'Create Profile'
 
   return (
     <main className="text-[hsl(var(--foreground))]">
@@ -64,9 +86,9 @@ function LandingClient() {
             <Image
               src="/images/herobannere.jpg"
               alt="Before & Afters"
-              width={1920}
-              height={720}
-              className="mx-auto h-auto w-[80%]"
+              width={2400}
+              height={900}
+              className="h-auto w-full"
               priority
             />
           </div>

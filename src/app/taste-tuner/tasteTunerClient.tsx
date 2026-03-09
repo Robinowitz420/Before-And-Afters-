@@ -1233,7 +1233,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(300px,380px),1fr,minmax(280px,340px)]">
+      <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px]">
         <aside className="w-full">
           <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
@@ -1312,17 +1312,19 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
                   <Link href="/calendar" className="block">
                     <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
-                      <div className="relative h-40 w-full overflow-hidden">
+                      <div className="relative h-32 w-full">
                         <Image
-                          src={encodeURI('/images/Joni Images/JoniCalander.jpg')}
+                          src={encodeURI('/images/Boxes/LemmeGetThisStraight.jpg')}
                           alt="Calendar"
                           fill
-                          sizes="380px"
+                          sizes="280px"
                           className="object-cover"
                         />
                       </div>
                       <div className="p-3">
-                        <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
+                        <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Events</div>
+                        <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Calendar & Details</div>
+                        <Button type="button" className="mt-3 w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
                           View Calendar
                         </Button>
                       </div>
@@ -1437,6 +1439,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
                 >
+                  <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+                    {currentCard.category}
+                  </div>
+
                   <div
                     className="pointer-events-none absolute left-6 top-20 z-10 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
                     style={{ opacity: likeIntensity }}
