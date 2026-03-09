@@ -84,10 +84,10 @@ function LandingClient() {
         <div className="w-full py-16 md:py-20">
           <div className="w-full">
             <Image
-              src="/images/herobannere.jpg"
+              src="/images/herobannere.jpg?v=2"
               alt="Before & Afters"
-              width={2400}
-              height={900}
+              width={1680}
+              height={630}
               className="h-auto w-full"
               priority
             />
@@ -114,7 +114,7 @@ function LandingClient() {
           <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
             <figure className="lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JoniHero.jpeg"
+                src="/images/Joni%20Images/JoniHero.jpeg?v=2"
                 alt="Before & Afters"
                 width={2400}
                 height={1500}
@@ -155,7 +155,7 @@ function LandingClient() {
 
             <figure className="lg:col-span-8">
               <Image
-                src="/images/Joni%20Images/JoniSofa.jpg"
+                src="/images/Joni%20Images/JoniSofa.jpg?v=2"
                 alt="Michelle Joni"
                 width={2400}
                 height={3000}
@@ -168,7 +168,7 @@ function LandingClient() {
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
             <figure className="lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JoniColorsGlam.jpg"
+                src="/images/Joni%20Images/JoniColorsGlam.jpg?v=2"
                 alt="Editorial"
                 width={2000}
                 height={1250}
