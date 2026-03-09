@@ -31,7 +31,10 @@ async function getPromoStatus(params: { clerkUserId: string; email: string }): P
   const expiresAt = new Date(now.getTime() + PROMO_RESERVATION_MINUTES * 60 * 1000)
 
   const result = await db.runTransaction(async (tx) => {
+    // Firestore transactions require all reads to happen before any writes.
     const promoSnap = await tx.get(promoRef)
+    const redemptionSnap = await tx.get(userRedemptionRef)
+
     const promoData = promoSnap.exists ? (promoSnap.data() as any) : null
 
     const active = promoData?.active ?? true
@@ -39,7 +42,11 @@ async function getPromoStatus(params: { clerkUserId: string; email: string }): P
     const amountOffCents = typeof promoData?.amountOffCents === 'number' ? promoData.amountOffCents : PROMO_AMOUNT_OFF_CENTS
     const used = typeof promoData?.used === 'number' ? promoData.used : 0
 
-    // Initialize promo doc if missing.
+    const remaining = Math.max(0, maxUses - used)
+    const redemptionData = redemptionSnap.exists ? (redemptionSnap.data() as any) : null
+    const status = redemptionData?.status as string | undefined
+
+    // Initialize promo doc if missing (write happens after all reads above).
     if (!promoSnap.exists) {
       tx.set(promoRef, {
         code: PROMO_CODE,
@@ -52,12 +59,6 @@ async function getPromoStatus(params: { clerkUserId: string; email: string }): P
         updatedAt: now.toISOString(),
       })
     }
-
-    const remaining = Math.max(0, maxUses - used)
-
-    const redemptionSnap = await tx.get(userRedemptionRef)
-    const redemptionData = redemptionSnap.exists ? (redemptionSnap.data() as any) : null
-    const status = redemptionData?.status as string | undefined
 
     // One-per-person: if they've already reserved or redeemed, not eligible.
     if (redemptionSnap.exists && (status === 'reserved' || status === 'redeemed')) {
