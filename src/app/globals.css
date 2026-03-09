@@ -131,7 +131,7 @@ section[id] {
     @apply font-ranchers;
   }
   body {
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Fuzzy Bubbles', cursive;
     @apply text-foreground;
     min-height: 100vh;
   }
@@ -209,7 +209,7 @@ section[id] {
 }
 
 .font-permanent-marker {
-  font-family: 'Permanent Marker', cursive !important;
+  font-family: 'Fuzzy Bubbles', cursive !important;
   font-weight: 700;
   font-size: 1.15em;
   letter-spacing: 0.02em;
