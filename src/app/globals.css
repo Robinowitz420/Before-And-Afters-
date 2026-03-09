@@ -210,4 +210,8 @@ section[id] {
 
 .font-permanent-marker {
   font-family: 'Permanent Marker', cursive !important;
+  font-weight: 700;
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+  text-shadow: 0.5px 0.5px 0 rgba(0,0,0,0.1);
 }
