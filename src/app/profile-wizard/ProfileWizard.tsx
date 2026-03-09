@@ -35,6 +35,7 @@ type WizardData = {
   excitementReasons: string[]
   closetMascot: string
   signatureColor: string
+  powerLetter: string
   selfieUrl: string
 }
 
@@ -48,6 +49,8 @@ const HEIGHT_RANGES = [
 ]
 
 const SIZE_RANGES_TOP = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Varies']
+
+const POWER_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
 const EXCITEMENT_OPTIONS = [
   'Trying out different styles, shapes, colors and vibes without the long term commitment',
@@ -112,6 +115,7 @@ function defaultData(): WizardData {
     excitementReasons: [],
     closetMascot: '',
     signatureColor: '',
+    powerLetter: '',
     selfieUrl: '',
   }
 }
@@ -333,7 +337,7 @@ export function ProfileWizard() {
           <div className="sticky top-6 space-y-4">
             <div className="overflow-hidden rounded-2xl border border-white/10 bg-[url('/images/Backgrounds/plain%20wallpaper.png')] bg-cover bg-center bg-no-repeat p-6 text-white shadow-sm">
               <div className="text-sm font-medium opacity-90">Profile Ritual</div>
-              <div className="mt-1 text-2xl font-semibold">Step {step} of 2</div>
+              <div className="mt-1 text-2xl font-ranchers">Step {step} of 4</div>
               <div className="mt-2 text-sm opacity-90">
                 {step === 1 ? 'Quick and easy. Just the essentials.' : 'Sizing + fabric allergies for better pulls.'}
               </div>
@@ -1003,6 +1007,47 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
                         ✓
                       </div>
                     )}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Power Letter */}
+      <div className="max-w-4xl mx-auto">
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 via-fuchsia-500 to-pink-600 rounded-3xl blur opacity-20"></div>
+          <div className="relative bg-white/80 rounded-3xl p-8 shadow-lg border-2 border-transparent bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50">
+            <div className="text-center">
+              <div className="text-2xl mb-2">🔮</div>
+              <h3 className="text-lg font-bold text-gray-900">Power Letter</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Choose the letter that resonates most with your energy
+              </p>
+              {data.powerLetter && (
+                <div className="mt-2 text-sm font-medium text-purple-700">
+                  ✨ Your power letter: {data.powerLetter}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 grid grid-cols-6 md:grid-cols-9 gap-2 max-w-2xl mx-auto">
+              {POWER_LETTERS.map((letter) => {
+                const selected = data.powerLetter === letter
+                return (
+                  <button
+                    key={letter}
+                    type="button"
+                    onClick={() => setData({ ...data, powerLetter: letter })}
+                    className={`aspect-square rounded-lg border-2 text-lg font-bold transition-all ${
+                      selected
+                        ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white border-purple-500 shadow-lg scale-105'
+                        : 'bg-white hover:bg-purple-50 border-gray-200 hover:border-purple-300'
+                    }`}
+                  >
+                    {letter}
                   </button>
                 )
               })}
