@@ -84,10 +84,10 @@ function LandingClient() {
         <div className="w-full py-16 md:py-20">
           <div className="w-full">
             <Image
-              src="/images/herobannere.jpg?v=3"
+              src="/images/herobannere.jpg?v=4"
               alt="Before & Afters"
-              width={1176}
-              height={441}
+              width={823}
+              height={309}
               className="h-auto w-full"
               priority
             />
@@ -244,10 +244,10 @@ function LandingClient() {
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Isle of Check Meowt</h3>
-              <p className="mt-3 text-[hsl(var(--ink))]/80">
+              <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em]">
                 Our for-sale essentials &amp; delights — the little things that complete the look.
               </p>
-              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85">
+              <ul className="mt-5 space-y-3 text-[hsl(var(--ink))]/85 font-bold text-[1.3em]">
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Stockings, socks, undies, accessories, gifts, last-minute add-ons.</span></li>
                 <li className="flex gap-3"><span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-[hsl(var(--primary))]" /><span>Low prices, high dopamine — many items are 1 Glitcoin for members.</span></li>
               </ul>
