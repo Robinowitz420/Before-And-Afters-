@@ -43,7 +43,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${montez.className} ${montez.variable} ${ranchers.variable} ${knewave.variable} ${marckScript.variable} min-h-screen text-foreground`}
+          className={`${montez.variable} ${ranchers.variable} ${knewave.variable} ${marckScript.variable} min-h-screen text-foreground`}
         >
           <AppShell>{children}</AppShell>
         </body>

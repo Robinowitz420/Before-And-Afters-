@@ -127,7 +127,11 @@ section[id] {
   h1, h2, h3, h4, h5, h6 {
     @apply font-ranchers;
   }
+  button {
+    @apply font-ranchers;
+  }
   body {
+    font-family: 'Permanent Marker', cursive;
     @apply text-foreground;
     min-height: 100vh;
   }

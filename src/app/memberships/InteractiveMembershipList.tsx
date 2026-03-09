@@ -178,7 +178,7 @@ All borrowed items must be returned before cancellation is finalized.
           <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-2xl">
             <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership Agreement</div>
             <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))]">Membership Agreement & Disclaimer</div>
-            <div className="mt-4 max-h-[40vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-4 text-sm leading-relaxed text-[hsl(var(--ink))] font-['Funnel_Sans',sans-serif]">
+            <div className="mt-4 max-h-[40vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-4 text-sm leading-relaxed text-[hsl(var(--ink))]">
               {membershipDisclaimer}
             </div>
 

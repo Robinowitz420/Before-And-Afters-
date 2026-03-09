@@ -210,7 +210,7 @@ function LandingClient() {
       <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
           <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur md:px-12">
-            <h2 className="font-marck text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center">
+            <h2 className="text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center">
               How we do it
             </h2>
           </div>
@@ -270,7 +270,7 @@ function LandingClient() {
       {/* Call to action */}
       <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-          <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
+          <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur">
               <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl font-permanent-marker">If you feel the call, you&apos;re already part of it.</p>
