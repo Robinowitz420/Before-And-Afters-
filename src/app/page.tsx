@@ -124,7 +124,7 @@ function LandingClient() {
             </figure>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
-              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
+              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl font-['Permanent_Marker',cursive]">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
                   time without spending all your money or time doing it, you want to slay the business meeting AND the theme party AND the bodega run,
@@ -143,7 +143,7 @@ function LandingClient() {
           {/* Row 2: Short blurb + JoniHero image side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
-              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl">
+              <div className="space-y-6 text-base leading-relaxed sm:text-lg md:text-xl font-['Permanent_Marker',cursive]">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
                   make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
@@ -177,7 +177,7 @@ function LandingClient() {
             </figure>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
-              <div className="space-y-6 text-base leading-relaxed">
+              <div className="space-y-6 text-base leading-relaxed font-['Permanent_Marker',cursive]">
                 <p>Helloooo love, I’m Michelle Joni!</p>
                 <p>
                   Born from my own (horrifyingly first world) clothing problem of having too many clothes to fit in my 5 closets, entire basement and two
@@ -191,8 +191,8 @@ function LandingClient() {
 
           {/* Row 4: Text blurb only - full width */}
           <div className="mt-14 lg:mt-16">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl">
-              <div className="space-y-6 text-base leading-relaxed">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl font-['Permanent_Marker',cursive]">
+              <div className="space-y-6 text-base leading-relaxed font-['Permanent_Marker',cursive]">
                 <p>Not just to solve my silly avoidable problem…</p>
                 <p>
                   To activate a glorious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
@@ -273,10 +273,10 @@ function LandingClient() {
           <h2 className="font-marck text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur">
-              <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl">If you feel the call, you&apos;re already part of it.</p>
+              <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl font-['Permanent_Marker',cursive]">If you feel the call, you&apos;re already part of it.</p>
             </div>
             <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur">
-              <p className="text-black">Enter to build your profile and start exploring.</p>
+              <p className="text-black font-['Permanent_Marker',cursive]">Enter to build your profile and start exploring.</p>
             </div>
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
