@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 
 const BASE_IMAGE_SRC =
   '/images/Backgrounds/Website%20Page%20Breakdown%20(USE%20THIS)%20(1)/1.png'
@@ -30,7 +31,72 @@ export default function InteractiveMembershipList() {
     }
   }, [])
 
-  const STRIPE_TIER_ID = 'Oooohs'
+  const redirectToStripeCheckout = async (tier: string) => {
+    setCheckoutTier(tier)
+    setError(null)
+    try {
+      console.log('Creating checkout session for tier:', tier)
+
+      let referralCode: string | null = null
+      try {
+        referralCode = window.localStorage.getItem('baa_ref')
+        if (referralCode) referralCode = referralCode.trim()
+        if (!referralCode) referralCode = null
+      } catch {
+        referralCode = null
+      }
+
+      const res = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ tier, referralCode }),
+      })
+      console.log('Checkout session response status:', res.status)
+      
+      const data = await res.json().catch((e) => {
+        console.error('Failed to parse response:', e)
+        return {}
+      })
+      console.log('Checkout session response data:', data)
+
+      const promo = (data as any)?.promo
+      if (promo && typeof promo === 'object') {
+        setPromoInfo({
+          applied: !!promo.applied,
+          remaining: typeof promo.remaining === 'number' ? promo.remaining : 0,
+        })
+      } else {
+        setPromoInfo(null)
+      }
+      
+      if (!res.ok) {
+        if (res.status === 401) {
+          setError('Please sign in to join a membership.')
+          return
+        }
+        const errorMsg = (data as any)?.error || `Server error (${res.status}). Please try again.`
+        console.error('Checkout error:', errorMsg)
+        setError(errorMsg)
+        return
+      }
+      
+      const url = (data as any)?.url
+      if (!url || typeof url !== 'string') {
+        console.error('Invalid checkout URL received:', data)
+        setError('Invalid checkout URL received from server.')
+        return
+      }
+      
+      console.log('Redirecting to Stripe checkout:', url)
+      window.location.assign(url)
+    } catch (e) {
+      console.error('Checkout error:', e)
+      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.')
+    } finally {
+      setCheckoutTier(null)
+    }
+  }
 
   const membershipDisclaimer = `Membership Agreement & Disclaimer
 Please read carefully before completing your purchase.
@@ -150,37 +216,55 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
       )}
 
-      <button
-        type="button"
-        className="group absolute inset-0 cursor-pointer select-none disabled:cursor-not-allowed"
-        onClick={() => {
-          setSelectedTier(STRIPE_TIER_ID)
-          openDisclaimerForTier(STRIPE_TIER_ID)
-        }}
-        disabled={checkoutTier !== null}
-        aria-label="Become a member"
-      >
-        <div className="relative h-full w-full">
-          <Image
-            src={BASE_IMAGE_SRC}
-            alt="Membership"
-            fill
-            priority
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.01] group-active:scale-[0.995]"
-            sizes="100vw"
-          />
+      <div className="relative h-full w-full">
+        <Image
+          src={BASE_IMAGE_SRC}
+          alt="Membership"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
 
-          <div className="absolute inset-0 bg-black/10 transition-colors duration-300 group-hover:bg-black/20" />
+        <div className="absolute inset-0 bg-black/20" />
 
-          <div className="pointer-events-none absolute inset-0 flex items-end justify-center pb-10 sm:pb-12">
-            <div className="rounded-full border border-white/30 bg-black/40 px-6 py-3 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition-colors duration-300 group-hover:bg-black/55">
-              Become a Member
-            </div>
+        <div className="absolute inset-0 flex items-center justify-center px-4">
+          <div className="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
+              const level = MEMBERSHIP_LEVELS[tier]
+              return (
+                <button
+                  key={tier}
+                  type="button"
+                  className="group relative rounded-2xl border border-white/20 bg-black/40 p-6 text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-black/60 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={() => {
+                    setSelectedTier(tier)
+                    openDisclaimerForTier(tier)
+                  }}
+                  disabled={checkoutTier !== null}
+                >
+                  <div className="pointer-events-none">
+                    <div className="text-2xl font-bold">{level.name.split(' — ')[0]}</div>
+                    <div className="mt-2 text-lg font-semibold">{level.name.split(' — ')[1]}</div>
+                    <div className="mt-4 space-y-2 text-left">
+                      {level.benefits.slice(0, 3).map((benefit, idx) => (
+                        <div key={idx} className="text-sm opacity-90">
+                          • {benefit}
+                        </div>
+                      ))}
+                      {level.benefits.length > 3 && (
+                        <div className="text-xs opacity-75">+{level.benefits.length - 3} more benefits</div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="absolute inset-0 rounded-2xl ring-0 ring-white/30 transition-[ring-width] duration-300 group-hover:ring-2" />
+                </button>
+              )
+            })}
           </div>
-
-          <div className="pointer-events-none absolute inset-0 ring-0 ring-white/30 transition-[ring-width] duration-300 group-hover:ring-4" />
         </div>
-      </button>
+      </div>
 
       {checkoutTier ? (
         <div className="absolute inset-x-0 bottom-6 z-40 flex justify-center px-4">
