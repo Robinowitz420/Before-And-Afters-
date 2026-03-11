@@ -8,10 +8,10 @@ import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 const BASE_IMAGE_SRC = '/images/Backgrounds/Background2.jpg'
 
 const TIER_IMAGES: Record<MembershipTier, string> = {
-  Eeeehs: '/images/Membership Images/EeeehsSelected.jpg',
-  Oooohs: '/images/Membership Images/OooohsSelected.jpg',
-  Aaaaahs: '/images/Membership Images/AaaagsSelected.jpg',
-  Mmmmms: '/images/Membership Images/MmmmsSelected.jpg',
+  Eeeehs: '/images/Memberships/eeeehs.jpg',
+  Oooohs: '/images/Memberships/Oooohs.jpg',
+  Aaaaahs: '/images/Memberships/Aaaahs.jpg',
+  Mmmmms: '/images/Memberships/Mmmms.jpg',
 }
 
 export default function InteractiveMembershipList() {
