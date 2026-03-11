@@ -5,8 +5,14 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
 
-const BASE_IMAGE_SRC =
-  '/images/Backgrounds/Website%20Page%20Breakdown%20(USE%20THIS)%20(1)/1.png'
+const BASE_IMAGE_SRC = '/images/Backgrounds/Background2.jpg'
+
+const TIER_IMAGES: Record<MembershipTier, string> = {
+  Eeeehs: '/images/Membership Images/EeeehsSelected.jpg',
+  Oooohs: '/images/Membership Images/OooohsSelected.jpg',
+  Aaaaahs: '/images/Membership Images/AaaagsSelected.jpg',
+  Mmmmms: '/images/Membership Images/MmmmsSelected.jpg',
+}
 
 export default function InteractiveMembershipList() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null)
@@ -161,37 +167,33 @@ All borrowed items must be returned before cancellation is finalized.
 
         <div className="absolute inset-0 bg-black/20" />
 
-        <div className="absolute inset-0 flex items-center justify-center px-4">
-          <div className="grid w-full max-w-5xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="absolute inset-0 flex items-center justify-center px-4 py-8">
+          <div className="grid w-full max-w-6xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
               const level = MEMBERSHIP_LEVELS[tier]
               return (
                 <button
                   key={tier}
                   type="button"
-                  className="group relative rounded-2xl border border-white/20 bg-black/40 p-6 text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-black/60 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="group relative aspect-[3/4] overflow-hidden rounded-2xl border-2 border-white/20 transition-all duration-300 hover:border-white/60 hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => {
                     setSelectedTier(tier)
                     openDisclaimerForTier(tier)
                   }}
                   disabled={checkoutTier !== null}
                 >
-                  <div className="pointer-events-none">
-                    <div className="text-2xl font-bold">{level.name.split(' — ')[0]}</div>
-                    <div className="mt-2 text-lg font-semibold">{level.name.split(' — ')[1]}</div>
-                    <div className="mt-4 space-y-2 text-left">
-                      {level.benefits.slice(0, 3).map((benefit, idx) => (
-                        <div key={idx} className="text-sm opacity-90">
-                          • {benefit}
-                        </div>
-                      ))}
-                      {level.benefits.length > 3 && (
-                        <div className="text-xs opacity-75">+{level.benefits.length - 3} more benefits</div>
-                      )}
-                    </div>
+                  <Image
+                    src={TIER_IMAGES[tier]}
+                    alt={level.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <div className="text-xl font-bold">{level.name.split(' — ')[0]}</div>
+                    <div className="text-lg font-semibold text-white/90">{level.name.split(' — ')[1]}</div>
                   </div>
-
-                  <div className="absolute inset-0 rounded-2xl ring-0 ring-white/30 transition-[ring-width] duration-300 group-hover:ring-2" />
                 </button>
               )
             })}
