@@ -189,11 +189,6 @@ All borrowed items must be returned before cancellation is finalized.
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <div className="text-xl font-bold">{level.name.split(' — ')[0]}</div>
-                    <div className="text-lg font-semibold text-white/90">{level.name.split(' — ')[1]}</div>
-                  </div>
                 </button>
               )
             })}
