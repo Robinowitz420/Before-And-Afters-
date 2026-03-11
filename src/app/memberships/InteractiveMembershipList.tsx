@@ -167,28 +167,31 @@ All borrowed items must be returned before cancellation is finalized.
 
         <div className="absolute inset-0 bg-black/20" />
 
-        <div className="absolute inset-0 flex items-center justify-center p-6">
-          <div className="grid w-full h-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
+          <div className="grid w-full max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
               const level = MEMBERSHIP_LEVELS[tier]
               return (
                 <button
                   key={tier}
                   type="button"
-                  className="group relative w-full h-full overflow-hidden rounded-2xl border-2 border-white/20 transition-all duration-300 hover:border-white/60 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
                   onClick={() => {
                     setSelectedTier(tier)
                     openDisclaimerForTier(tier)
                   }}
                   disabled={checkoutTier !== null}
                 >
-                  <Image
-                    src={TIER_IMAGES[tier]}
-                    alt={level.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  />
+                  <div className="relative w-full">
+                    <Image
+                      src={TIER_IMAGES[tier]}
+                      alt={level.name}
+                      width={400}
+                      height={533}
+                      className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
                 </button>
               )
             })}
