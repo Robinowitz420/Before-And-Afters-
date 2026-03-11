@@ -28,9 +28,16 @@ export default function InteractiveMembershipList() {
     try {
       const url = new URL(window.location.href)
       const ref = url.searchParams.get('ref')
+      const tierParam = url.searchParams.get('tier') as string | null
 
       if (ref && ref.trim()) {
         window.localStorage.setItem('baa_ref', ref.trim())
+      }
+
+      // Auto-select tier if valid tier parameter in URL
+      if (tierParam && Object.keys(MEMBERSHIP_LEVELS).includes(tierParam)) {
+        setSelectedTier(tierParam)
+        openDisclaimerForTier(tierParam)
       }
     } catch {
       // ignore
