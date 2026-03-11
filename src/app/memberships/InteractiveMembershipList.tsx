@@ -167,15 +167,15 @@ All borrowed items must be returned before cancellation is finalized.
 
         <div className="absolute inset-0 bg-black/20" />
 
-        <div className="absolute inset-0 flex items-center justify-center px-4 py-8">
-          <div className="grid w-full max-w-6xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="absolute inset-0 flex items-center justify-center p-2">
+          <div className="grid w-full h-full grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-4">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
               const level = MEMBERSHIP_LEVELS[tier]
               return (
                 <button
                   key={tier}
                   type="button"
-                  className="group relative aspect-[3/4] overflow-hidden rounded-2xl border-2 border-white/20 transition-all duration-300 hover:border-white/60 hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="group relative w-full h-full overflow-hidden rounded-2xl border-2 border-white/20 transition-all duration-300 hover:border-white/60 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={() => {
                     setSelectedTier(tier)
                     openDisclaimerForTier(tier)
