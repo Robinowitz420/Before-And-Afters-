@@ -106,7 +106,7 @@ By purchasing a Before & Afters membership, you acknowledge and agree to the fol
 Financial Responsibility
 
 You are financially responsible for any borrowed items that are not returned, damaged beyond normal wear, or lost while in your possession.
-Replacement costs will be charged to your payment method on file based on the item’s current resale value.
+Replacement costs will be charged to your payment method on file based on the item's current resale value.
 Continued failure to return items may result in membership suspension or termination and potential legal action.
 
 Health & Safety
@@ -128,73 +128,6 @@ Memberships are billed monthly and renew automatically until canceled.
 You may cancel at any time, but no refunds will be issued for partial months.
 All borrowed items must be returned before cancellation is finalized.
 `
-
-  const redirectToStripeCheckout = async (tier: string) => {
-    setCheckoutTier(tier)
-    setError(null)
-    try {
-      console.log('Creating checkout session for tier:', tier)
-
-      let referralCode: string | null = null
-      try {
-        referralCode = window.localStorage.getItem('baa_ref')
-        if (referralCode) referralCode = referralCode.trim()
-        if (!referralCode) referralCode = null
-      } catch {
-        referralCode = null
-      }
-
-      const res = await fetch('/api/stripe/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ tier, referralCode }),
-      })
-      console.log('Checkout session response status:', res.status)
-      
-      const data = await res.json().catch((e) => {
-        console.error('Failed to parse response:', e)
-        return {}
-      })
-      console.log('Checkout session response data:', data)
-
-      const promo = (data as any)?.promo
-      if (promo && typeof promo === 'object') {
-        setPromoInfo({
-          applied: !!promo.applied,
-          remaining: typeof promo.remaining === 'number' ? promo.remaining : 0,
-        })
-      } else {
-        setPromoInfo(null)
-      }
-      
-      if (!res.ok) {
-        if (res.status === 401) {
-          setError('Please sign in to join a membership.')
-          return
-        }
-        const errorMsg = (data as any)?.error || `Server error (${res.status}). Please try again.`
-        console.error('Checkout error:', errorMsg)
-        setError(errorMsg)
-        return
-      }
-      
-      const url = (data as any)?.url
-      if (!url || typeof url !== 'string') {
-        console.error('Invalid checkout URL received:', data)
-        setError('Invalid checkout URL received from server.')
-        return
-      }
-      
-      console.log('Redirecting to Stripe checkout:', url)
-      window.location.assign(url)
-    } catch (e) {
-      console.error('Checkout error:', e)
-      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.')
-    } finally {
-      setCheckoutTier(null)
-    }
-  }
 
   const openDisclaimerForTier = (tier: string) => {
     setPendingTier(tier)
