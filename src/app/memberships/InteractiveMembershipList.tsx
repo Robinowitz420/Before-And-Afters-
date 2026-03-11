@@ -167,8 +167,8 @@ All borrowed items must be returned before cancellation is finalized.
 
         <div className="absolute inset-0 bg-black/20" />
 
-        <div className="absolute inset-0 flex items-center justify-center p-2">
-          <div className="grid w-full h-full grid-cols-1 gap-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="absolute inset-0 flex items-center justify-center p-6">
+          <div className="grid w-full h-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
               const level = MEMBERSHIP_LEVELS[tier]
               return (
