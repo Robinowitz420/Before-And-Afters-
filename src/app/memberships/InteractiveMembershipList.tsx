@@ -149,7 +149,7 @@ All borrowed items must be returned before cancellation is finalized.
   }
 
   return (
-    <div className="relative h-[100svh] w-screen overflow-hidden bg-black">
+    <div className="relative min-h-[100svh] w-screen overflow-x-hidden overflow-y-auto bg-black lg:h-[100svh] lg:overflow-hidden">
       {promoInfo?.applied ? (
         <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-xl border border-yellow-300/60 bg-yellow-200/90 px-4 py-3 text-center text-sm font-semibold text-black shadow-lg backdrop-blur">
           $50 off applied to your first month. {promoInfo.remaining > 0 ? `${promoInfo.remaining} spots left.` : ''}
@@ -162,7 +162,8 @@ All borrowed items must be returned before cancellation is finalized.
         </div>
       )}
 
-      <div className="relative h-full w-full">
+      {/* Mobile: scrollable single column, Desktop: fixed fullscreen */}
+      <div className="relative min-h-full w-full lg:fixed lg:inset-0">
         <Image
           src={BASE_IMAGE_SRC}
           alt="Membership"
@@ -174,8 +175,39 @@ All borrowed items must be returned before cancellation is finalized.
 
         <div className="absolute inset-0 bg-black/20" />
 
-        <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
-          <div className="grid w-full max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Mobile: vertical scrollable layout, Desktop: centered grid */}
+        <div className="relative flex flex-col items-center gap-4 p-4 pb-8 sm:hidden">
+          {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
+            const level = MEMBERSHIP_LEVELS[tier]
+            return (
+              <button
+                key={tier}
+                type="button"
+                className="group relative w-full max-w-sm overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+                onClick={() => {
+                  setSelectedTier(tier)
+                  openDisclaimerForTier(tier)
+                }}
+                disabled={checkoutTier !== null}
+              >
+                <div className="relative w-full">
+                  <Image
+                    src={TIER_IMAGES[tier]}
+                    alt={level.name}
+                    width={400}
+                    height={533}
+                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                    sizes="100vw"
+                  />
+                </div>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Desktop: centered 4-column grid */}
+        <div className="absolute inset-0 hidden items-center justify-center p-8 sm:flex">
+          <div className="grid w-full max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
               const level = MEMBERSHIP_LEVELS[tier]
               return (
@@ -196,7 +228,7 @@ All borrowed items must be returned before cancellation is finalized.
                       width={400}
                       height={533}
                       className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      sizes="(max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
                 </button>
