@@ -99,7 +99,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-32 py-16 text-5xl font-bold"
+              className="border-[3px] border-[#FFD700] px-6 py-4 text-xl font-bold sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>
@@ -254,7 +254,7 @@ function LandingClient() {
             </div>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Spritz n Glitz Bar</h3>
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Spritz and Sparkle Station</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Beauty and hygiene essentials for quick fixes or full party prep.
               </p>
@@ -285,7 +285,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-16 py-8 text-3xl font-bold"
+              className="border-[3px] border-[#FFD700] px-6 py-3 text-lg font-bold sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>
