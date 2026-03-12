@@ -123,7 +123,7 @@ function LandingClient() {
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5 font-[family-name:var(--font-macondo)]">
               <div className="space-y-6 text-base leading-relaxed">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
@@ -142,7 +142,7 @@ function LandingClient() {
 
           {/* Row 2: Short blurb + JoniHero image side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4 font-[family-name:var(--font-macondo)]">
               <div className="space-y-6 text-base leading-relaxed">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
@@ -176,7 +176,7 @@ function LandingClient() {
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5 font-[family-name:var(--font-macondo)]">
               <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Helloooo love, I’m Michelle Joni!</p>
                 <p>
@@ -191,7 +191,7 @@ function LandingClient() {
 
           {/* Row 4: Text blurb only - full width */}
           <div className="mt-14 lg:mt-16">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl space-y-6 text-base leading-relaxed">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl space-y-6 text-base leading-relaxed font-[family-name:var(--font-macondo)]">
               <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Not just to solve my silly avoidable problem…</p>
                 <p>
@@ -216,7 +216,7 @@ function LandingClient() {
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Before &amp; Afters (Flagship)</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and primary Dress Up collection.
@@ -228,7 +228,7 @@ function LandingClient() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Dorothy the Dress Up Bus</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Dorothy is our mobile extension — distributing dream dress-up options across NYC.
@@ -242,7 +242,7 @@ function LandingClient() {
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Isle of Check Meowt</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Our for-sale essentials &amp; delights — the little things that complete the look.
@@ -253,7 +253,7 @@ function LandingClient() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
               <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Spritz and Sparkle Station</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Beauty and hygiene essentials for quick fixes or full party prep.
@@ -272,10 +272,10 @@ function LandingClient() {
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
           <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
-            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur">
+            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur font-[family-name:var(--font-macondo)]">
               <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl space-y-6 text-base leading-relaxed">If you feel the call, you&apos;re already part of it.</p>
             </div>
-            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur">
+            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur font-[family-name:var(--font-macondo)]">
               <p className="text-black space-y-6 text-base leading-relaxed">Enter to build your profile and start exploring.</p>
             </div>
           </div>
