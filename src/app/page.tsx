@@ -99,7 +99,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-6 py-4 text-xl font-bold sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
+              className="border-[3px] border-[#FFD700] px-6 py-4 text-xl font-bold font-[family-name:var(--font-im-fell)] sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>
@@ -210,14 +210,14 @@ function LandingClient() {
       <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
           <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur md:px-12">
-            <h2 className="text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center">
+            <h2 className="text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center font-[family-name:var(--font-im-fell)]">
               How we do it
             </h2>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Before &amp; Afters (Flagship)</h3>
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">Before &amp; Afters (Flagship)</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and primary Dress Up collection.
               </p>
@@ -229,7 +229,7 @@ function LandingClient() {
             </div>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Dorothy the Dress Up Bus</h3>
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">Dorothy the Dress Up Bus</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Dorothy is our mobile extension — distributing dream dress-up options across NYC.
               </p>
@@ -243,7 +243,7 @@ function LandingClient() {
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Isle of Check Meowt</h3>
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">The Isle of Check Meowt</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Our for-sale essentials &amp; delights — the little things that complete the look.
               </p>
@@ -254,7 +254,7 @@ function LandingClient() {
             </div>
 
             <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Spritz and Sparkle Station</h3>
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">Spritz and Sparkle Station</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Beauty and hygiene essentials for quick fixes or full party prep.
               </p>
@@ -270,7 +270,7 @@ function LandingClient() {
       {/* Call to action */}
       <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-          <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
+          <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur font-[family-name:var(--font-im-fell)]">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
             <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur font-[family-name:var(--font-macondo)]">
               <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl space-y-6 text-base leading-relaxed">If you feel the call, you&apos;re already part of it.</p>
@@ -285,7 +285,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-6 py-3 text-lg font-bold sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
+              className="border-[3px] border-[#FFD700] px-6 py-3 text-lg font-bold font-[family-name:var(--font-im-fell)] sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>

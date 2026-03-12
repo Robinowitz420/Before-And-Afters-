@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Knewave, Macondo, Marck_Script, Montez, Ranchers } from 'next/font/google'
+import { Knewave, Macondo, Marck_Script, Montez, Ranchers, IM_Fell_DW_Pica_SC } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { AppShell } from '@/components/AppShell'
 import './globals.css'
@@ -14,6 +14,12 @@ const macondo = Macondo({
   weight: '400',
   subsets: ['latin'],
   variable: '--font-macondo',
+})
+
+const imFellDWPicaSC = IM_Fell_DW_Pica_SC({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-im-fell',
 })
 
 const marckScript = Marck_Script({
@@ -54,7 +60,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${knewaveClass.className} ${montez.variable} ${ranchers.variable} ${knewave.variable} ${marckScript.variable} ${macondo.variable} min-h-screen text-foreground`}
+          className={`${knewaveClass.className} ${montez.variable} ${ranchers.variable} ${knewave.variable} ${marckScript.variable} ${macondo.variable} ${imFellDWPicaSC.variable} min-h-screen text-foreground`}
         >
           <AppShell>{children}</AppShell>
         </body>
