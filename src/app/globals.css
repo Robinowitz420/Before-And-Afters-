@@ -17,6 +17,21 @@
   --brand-border-hex: #D8CFC2;
 }
 
+/* Sitewide font defaults */
+@layer base {
+  body {
+    font-family: var(--font-macondo), cursive;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-im-fell), serif;
+  }
+  
+  button, [type="button"], [type="submit"], [type="reset"] {
+    font-family: var(--font-im-fell), serif;
+  }
+}
+
 .wizard-theme-alt {
   --primary: 338 74% 56%;
   --primary-foreground: 0 0% 100%;
