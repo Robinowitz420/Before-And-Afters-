@@ -957,11 +957,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
               <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                 <Dialog.Close asChild>
-                  <Button type="button" variant="outline" disabled={detailsSaving}>
+                  <Button type="button" variant="outline" disabled={detailsSaving} className="font-[family-name:var(--font-im-fell)]">
                     Cancel
                   </Button>
                 </Dialog.Close>
-                <Button type="button" onClick={saveDetails} disabled={detailsSaving}>
+                <Button type="button" onClick={saveDetails} disabled={detailsSaving} className="font-[family-name:var(--font-im-fell)]">
                   {detailsSaving ? 'Saving…' : 'Save'}
                 </Button>
               </div>
@@ -1109,7 +1109,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             <Button
                               type="button"
                               variant="outline"
-                              className="shrink-0 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                              className="shrink-0 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))] font-[family-name:var(--font-im-fell)]"
                               onClick={() => {
                                 const cleaned = vibesOtherText.trim()
                                 if (!cleaned) return
@@ -1148,11 +1148,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   type="button"
                   variant="outline"
                   onClick={closeEditor}
-                  className="bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                  className="bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))] font-[family-name:var(--font-im-fell)]"
                 >
                   Cancel
                 </Button>
-                <Button type="button" onClick={saveEditor}>
+                <Button type="button" onClick={saveEditor} className="font-[family-name:var(--font-im-fell)]">
                   Save
                 </Button>
               </div>
@@ -1214,7 +1214,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 <Button
                   type="button"
                   variant="destructive"
-                  className="flex-1"
+                  className="flex-1 font-[family-name:var(--font-im-fell)]"
                   onClick={() => {
                     const idOrSrc = closetItemSrc
                     if (!idOrSrc) return
@@ -1301,7 +1301,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       </div>
 
                       <div className="p-3">
-                        <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
+                        <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold font-[family-name:var(--font-im-fell)]">
                           View Calendar
                         </Button>
                       </div>
@@ -1322,7 +1322,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 variant={browseMode ? 'outline' : 'default'}
                 size="sm"
                 onClick={() => setBrowseMode(false)}
-                className={!browseMode ? '' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]'}
+                className={!browseMode ? 'font-[family-name:var(--font-im-fell)]' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))] font-[family-name:var(--font-im-fell)]'}
               >
                 Swipe
               </Button>
@@ -1331,7 +1331,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20 font-[family-name:var(--font-im-fell)]"
                 >
                   Search
                 </Button>
@@ -1341,7 +1341,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 variant={browseMode ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => setBrowseMode(true)}
-                className={browseMode ? '' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]'}
+                className={browseMode ? 'font-[family-name:var(--font-im-fell)]' : 'bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))] font-[family-name:var(--font-im-fell)]'}
               >
                 Browse
               </Button>
@@ -1350,7 +1350,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
+                  className="w-full bg-black text-white hover:bg-black/80 border-white/20 font-[family-name:var(--font-im-fell)]"
                 >
                   Edit
                 </Button>
@@ -1466,11 +1466,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     type="button"
                     variant="outline"
                     onClick={onDislike}
-                    className="flex-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                    className="flex-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))] font-[family-name:var(--font-im-fell)]"
                   >
                     Not for you
                   </Button>
-                  <Button type="button" onClick={onLike} className="flex-1">
+                  <Button type="button" onClick={onLike} className="flex-1 font-[family-name:var(--font-im-fell)]">
                     Like
                   </Button>
                 </div>
@@ -1480,7 +1480,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                      className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))] font-[family-name:var(--font-im-fell)]"
                       onClick={() => {
                         if (!currentCard) return
                         reserveCurrent(currentCard.id).catch(() => {
@@ -1572,7 +1572,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         <>
                           <Button
                             type="button"
-                            className="w-full"
+                            className="w-full font-[family-name:var(--font-im-fell)]"
                             onClick={() => {
                               reserveCurrent(detailGarmentId).catch(() => {
                                 // ignore
@@ -1585,7 +1585,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             <Button
                               type="button"
                               variant="destructive"
-                              className="w-full"
+                              className="w-full font-[family-name:var(--font-im-fell)]"
                               onClick={() => {
                                 if (save.likes.includes(detailGarmentId)) removeFromSaved(detailGarmentId)
                                 if (reservedIds.includes(detailGarmentId)) removeFromReserved(detailGarmentId)

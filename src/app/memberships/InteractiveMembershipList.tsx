@@ -274,6 +274,7 @@ All borrowed items must be returned before cancellation is finalized.
                   setPendingTier(null)
                 }}
                 disabled={checkoutTier !== null}
+                className="font-[family-name:var(--font-inter)]"
               >
                 Cancel
               </Button>
@@ -285,6 +286,7 @@ All borrowed items must be returned before cancellation is finalized.
                   await redirectToStripeCheckout(pendingTier)
                 }}
                 disabled={!disclaimerAgreed || pendingTier === null || checkoutTier !== null}
+                className="font-[family-name:var(--font-inter)]"
               >
                 Continue to Payment
               </Button>
