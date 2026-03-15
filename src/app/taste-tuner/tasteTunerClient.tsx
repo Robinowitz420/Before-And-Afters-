@@ -436,6 +436,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [dragging, setDragging] = useState(false)
   const dragStartX = useRef<number | null>(null)
 
+  const [likedAllOpen, setLikedAllOpen] = useState(false)
+
   const [deleteProfileOpen, setDeleteProfileOpen] = useState(false)
   const [deletingProfile, setDeletingProfile] = useState(false)
 
@@ -1214,7 +1216,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 <Button
                   type="button"
                   variant="destructive"
-                  className="flex-1 font-[family-name:var(--font-im-fell)]"
+                  className="flex-1 font-[family-name:var(--font-im-fell)] shadow-lg ring-2 ring-white/70 bg-red-600 text-white hover:bg-red-700"
                   onClick={() => {
                     const idOrSrc = closetItemSrc
                     if (!idOrSrc) return
@@ -1247,37 +1249,55 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 <div>
                   <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
                   {savedItems.length ? (
-                    <div className="mt-2 grid grid-cols-3 gap-2">
-                      {savedItems.slice(0, 8).map((src) => (
-                        <button
-                          key={src}
+                    <>
+                      <div className="mt-2 grid grid-cols-3 gap-2">
+                        {savedItems.slice(0, 8).map((src) => (
+                          <button
+                            key={src}
+                            type="button"
+                            onClick={() => {
+                              if (usingCatalogue) {
+                                openGarmentDetails(src)
+                                return
+                              }
+                              openClosetItem(src)
+                            }}
+                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                          >
+                            <Image
+                              src={
+                                usingCatalogue
+                                  ? (() => {
+                                      const g = catalogueItems.find((x) => x.id === src)
+                                      return (
+                                        g?.primaryPhotoUrl ??
+                                        (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                                        '/placeholder.png'
+                                      )
+                                    })()
+                                  : src
+                              }
+                              alt="Liked"
+                              width={120}
+                              height={120}
+                              className="h-24 w-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="mt-3">
+                        <Button
                           type="button"
-                          onClick={() => {
-                            if (usingCatalogue) {
-                              openGarmentDetails(src)
-                              return
-                            }
-                            openClosetItem(src)
-                          }}
-                          className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                          variant="outline"
+                          size="sm"
+                          className="w-full bg-white/70 hover:bg-white font-[family-name:var(--font-im-fell)]"
+                          onClick={() => setLikedAllOpen(true)}
                         >
-                          <Image
-                            src={
-                              usingCatalogue
-                                ? (() => {
-                                    const g = catalogueItems.find((x) => x.id === src)
-                                    return g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ?? '/placeholder.png'
-                                  })()
-                                : src
-                            }
-                            alt="Liked"
-                            width={120}
-                            height={120}
-                            className="h-24 w-full object-cover"
-                          />
-                        </button>
-                      ))}
-                    </div>
+                          View All
+                        </Button>
+                      </div>
+                    </>
                   ) : (
                     <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
                       Swipe right to like
@@ -1493,11 +1513,91 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 ) : null}
 
-                <div className="mt-4 text-center text-sm text-muted-foreground">Swipe left or right. No wrong answers.</div>
+                <div className="mt-4 text-center text-sm text-muted-foreground">
+                  <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/80 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
+                    Swipe left or right. No wrong answers.
+                  </div>
+                </div>
               </>
             )}
           </div>
         </section>
+
+        <Dialog.Root open={likedAllOpen} onOpenChange={setLikedAllOpen}>
+          <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+            <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[min(760px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-6 shadow-2xl">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">
+                    My Closet
+                  </div>
+                  <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">
+                    All liked garments ({save.likes.length})
+                  </div>
+                </div>
+                <Dialog.Close asChild>
+                  <button
+                    type="button"
+                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-sm font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
+                  >
+                    Close
+                  </button>
+                </Dialog.Close>
+              </div>
+
+              <div className="mt-5 max-h-[70vh] overflow-auto rounded-xl border border-[hsl(var(--border))] bg-white/70 p-4">
+                {savedItems.length ? (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                    {savedItems.map((src) => (
+                      <button
+                        key={src}
+                        type="button"
+                        onClick={() => {
+                          setLikedAllOpen(false)
+                          if (usingCatalogue) {
+                            openGarmentDetails(src)
+                            return
+                          }
+                          openClosetItem(src)
+                        }}
+                        className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white shadow-sm transition hover:shadow-md"
+                      >
+                        <Image
+                          src={
+                            usingCatalogue
+                              ? (() => {
+                                  const g = catalogueItems.find((x) => x.id === src)
+                                  return (
+                                    g?.primaryPhotoUrl ??
+                                    (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                                    '/placeholder.png'
+                                  )
+                                })()
+                              : src
+                          }
+                          alt="Liked"
+                          width={240}
+                          height={240}
+                          className="h-36 w-full object-cover"
+                        />
+                        <div className="px-3 py-2">
+                          <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/80 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
+                            Tap to view
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="rounded-lg border border-dashed border-[hsl(var(--border))] bg-white p-6 text-center text-sm text-[hsl(var(--ink))]/70">
+                    No liked garments yet.
+                  </div>
+                )}
+              </div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
 
         <Dialog.Root open={detailOpen} onOpenChange={(open) => (open ? setDetailOpen(true) : setDetailOpen(false))}>
           <Dialog.Portal>
