@@ -1266,97 +1266,108 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
       <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px] lg:items-start">
         <aside className="w-full">
-          <FrameBox frameClassName="scale-[1.12] rotate-[-1.5deg]">
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
-              <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
-              <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
+          <div className="relative">
+            <div className="absolute inset-0 -m-2">
+              <Image
+                src="/images/Boxes/frame-closet.png"
+                fill
+                className="object-fill scale-[1.08] pointer-events-none"
+                alt=""
+              />
+            </div>
 
-              <div className="mt-4 space-y-4">
-                <div>
-                  <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
-                  {savedItems.length ? (
-                    <>
-                      <div className="mt-2 grid grid-cols-3 gap-2">
-                        {savedItems.slice(0, 8).map((src) => (
-                          <button
-                            key={src}
+            <div className="relative z-10 p-4">
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
+                <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
+                <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
+
+                <div className="mt-4 space-y-4">
+                  <div>
+                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
+                    {savedItems.length ? (
+                      <>
+                        <div className="mt-2 grid grid-cols-3 gap-2">
+                          {savedItems.slice(0, 8).map((src) => (
+                            <button
+                              key={src}
+                              type="button"
+                              onClick={() => {
+                                if (usingCatalogue) {
+                                  openGarmentDetails(src)
+                                  return
+                                }
+                                openClosetItem(src)
+                              }}
+                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                            >
+                              <Image
+                                src={
+                                  usingCatalogue
+                                    ? (() => {
+                                        const g = catalogueItems.find((x) => x.id === src)
+                                        return (
+                                          g?.primaryPhotoUrl ??
+                                          (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                                          '/placeholder.png'
+                                        )
+                                      })()
+                                    : src
+                                }
+                                alt="Liked"
+                                width={120}
+                                height={120}
+                                className="h-24 w-full object-cover"
+                              />
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="mt-3">
+                          <Button
                             type="button"
-                            onClick={() => {
-                              if (usingCatalogue) {
-                                openGarmentDetails(src)
-                                return
-                              }
-                              openClosetItem(src)
-                            }}
-                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                            variant="outline"
+                            size="sm"
+                            className="w-full bg-white/70 hover:bg-white"
+                            onClick={() => setLikedAllOpen(true)}
                           >
-                            <Image
-                              src={
-                                usingCatalogue
-                                  ? (() => {
-                                      const g = catalogueItems.find((x) => x.id === src)
-                                      return (
-                                        g?.primaryPhotoUrl ??
-                                        (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
-                                        '/placeholder.png'
-                                      )
-                                    })()
-                                  : src
-                              }
-                              alt="Liked"
-                              width={120}
-                              height={120}
-                              className="h-24 w-full object-cover"
-                            />
-                          </button>
-                        ))}
+                            View All
+                          </Button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                        Swipe right to like
                       </div>
+                    )}
+                  </div>
 
-                      <div className="mt-3">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          className="w-full bg-white/70 hover:bg-white"
-                          onClick={() => setLikedAllOpen(true)}
-                        >
-                          View All
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
-                      Swipe right to like
-                    </div>
-                  )}
-                </div>
+                  <div>
+                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
+                    <Link href="/calendar" className="block">
+                      <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
+                        <div className="relative w-full overflow-hidden">
+                          <Image
+                            src="/images/Joni%20Images/JoniCalander.jpg"
+                            alt="Calendar"
+                            width={380}
+                            height={500}
+                            sizes="380px"
+                            className="h-auto w-full object-contain"
+                          />
+                        </div>
 
-                <div>
-                  <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
-                  <Link href="/calendar" className="block">
-                    <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
-                      <div className="relative w-full overflow-hidden">
-                        <Image
-                          src="/images/Joni%20Images/JoniCalander.jpg"
-                          alt="Calendar"
-                          width={380}
-                          height={500}
-                          sizes="380px"
-                          className="h-auto w-full object-contain"
-                        />
+                        <div className="p-3">
+                          <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
+                            View Calendar
+                          </Button>
+                        </div>
                       </div>
-
-                      <div className="p-3">
-                        <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
-                          View Calendar
-                        </Button>
-                      </div>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
-          </FrameBox>
+          </div>
         </aside>
 
         <section className="flex w-full flex-col items-center justify-start lg:items-center lg:justify-center">
@@ -1798,113 +1809,153 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         <aside className="w-full lg:sticky lg:top-6">
           <div className="space-y-3">
-            <FrameBox frameClassName="scale-[1.10] rotate-[1.2deg]">
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
-                <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
-                <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
+            <div className="relative">
+              <div className="absolute inset-0 -m-2">
+                <Image
+                  src="/images/Boxes/frame-profile.png"
+                  fill
+                  className="object-fill scale-[1.10] rotate-[0.5deg] pointer-events-none"
+                  alt=""
+                />
+              </div>
 
-                <div className="mt-3 flex flex-col items-center gap-3">
-                  <div
-                    className="h-80 w-64 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
-                  >
-                    {profile.avatar ? (
-                      <Image
-                        src={profile.avatar}
-                        alt="Avatar"
-                        width={256}
-                        height={320}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
-                    )}
-                  </div>
+              <div className="relative z-10 p-4">
+                <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
+                  <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
+                  <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
-                  {(() => {
-                    const profileFields = [
-                      profile.fullName,
-                      profile.permaPlayaName,
-                      profile.igHandle,
-                      profile.birthday,
-                      profile.neighborhood,
-                      profile.signatureColor,
-                      profile.closetMascot,
-                      profile.styleVibe,
-                      profile.aboutYou,
-                      profile.wardrobeGripes,
-                      profile.favoriteStores,
-                      profile.excitementReasons?.length ? 'hasExcitement' : null,
-                      profile.selfieUrl,
-                      profile.avatar,
-                      profile.tones?.length ? 'hasTones' : null,
-                      profile.vibes?.length ? 'hasVibes' : null,
-                      profile.eras?.length ? 'hasEras' : null,
-                    ]
-                    const filledFields = profileFields.filter(Boolean).length
-                    const totalFields = profileFields.length
-                    const completionPercent = Math.round((filledFields / totalFields) * 100)
+                  <div className="mt-3 flex flex-col items-center gap-3">
+                    <div
+                      className="h-80 w-64 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
+                    >
+                      {profile.avatar ? (
+                        <Image
+                          src={profile.avatar}
+                          alt="Avatar"
+                          width={256}
+                          height={320}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
+                      )}
+                    </div>
 
-                    return (
-                      <div className="w-full space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div className="font-ranchers text-sm font-medium text-[hsl(var(--ink))]/70">Profile</div>
-                          <div className="inline-flex items-center rounded-full bg-gradient-to-r from-pink-400 to-pink-600 px-3 py-1 text-sm font-bold text-white shadow-md">
-                            {completionPercent}%
+                    {(() => {
+                      const profileFields = [
+                        profile.fullName,
+                        profile.permaPlayaName,
+                        profile.igHandle,
+                        profile.birthday,
+                        profile.neighborhood,
+                        profile.signatureColor,
+                        profile.closetMascot,
+                        profile.styleVibe,
+                        profile.aboutYou,
+                        profile.wardrobeGripes,
+                        profile.favoriteStores,
+                        profile.excitementReasons?.length ? 'hasExcitement' : null,
+                        profile.selfieUrl,
+                        profile.avatar,
+                        profile.tones?.length ? 'hasTones' : null,
+                        profile.vibes?.length ? 'hasVibes' : null,
+                        profile.eras?.length ? 'hasEras' : null,
+                      ]
+                      const filledFields = profileFields.filter(Boolean).length
+                      const totalFields = profileFields.length
+                      const completionPercent = Math.round((filledFields / totalFields) * 100)
+
+                      return (
+                        <div className="w-full space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="font-ranchers text-sm font-medium text-[hsl(var(--ink))]/70">Profile</div>
+                            <div className="inline-flex items-center rounded-full bg-gradient-to-r from-pink-400 to-pink-600 px-3 py-1 text-sm font-bold text-white shadow-md">
+                              {completionPercent}%
+                            </div>
+                          </div>
+                          <div className="h-4 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
+                              style={{ width: `${completionPercent}%` }}
+                            />
                           </div>
                         </div>
-                        <div className="h-4 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
-                            style={{ width: `${completionPercent}%` }}
-                          />
-                        </div>
-                      </div>
-                    )
-                  })()}
+                      )
+                    })()}
 
-                  <div className="flex w-full flex-col gap-2">
-                    <label className="flex items-center justify-center rounded-lg border-[3px] border-blue-600 bg-white px-4 py-3 cursor-pointer hover:bg-blue-50 transition">
-                      <span className="font-ranchers text-base font-semibold text-[hsl(var(--ink))]">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change Photo' : 'Choose Photo'}</span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        disabled={avatarUploading}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          const file = e.target.files?.[0]
-                          if (!file) return
-                          setAvatarUploading(true)
-                          const reader = new FileReader()
-                          reader.onload = () => {
-                            const result = typeof reader.result === 'string' ? reader.result : ''
-                            if (result) {
-                              const next = { ...(profile || {}), avatar: result } as WizardProfile
-                              setProfile(next)
-                              saveProfile(next).catch(() => {
-                                // ignore
-                              })
+                    <div className="flex w-full flex-col gap-2">
+                      <label className="flex items-center justify-center rounded-lg border-[3px] border-blue-600 bg-white px-4 py-3 cursor-pointer hover:bg-blue-50 transition">
+                        <span className="font-ranchers text-base font-semibold text-[hsl(var(--ink))]">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change Photo' : 'Choose Photo'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          disabled={avatarUploading}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const file = e.target.files?.[0]
+                            if (!file) return
+                            setAvatarUploading(true)
+                            const reader = new FileReader()
+                            reader.onload = () => {
+                              const result = typeof reader.result === 'string' ? reader.result : ''
+                              if (result) {
+                                const next = { ...(profile || {}), avatar: result } as WizardProfile
+                                setProfile(next)
+                                saveProfile(next).catch(() => {
+                                  // ignore
+                                })
+                              }
+                              setAvatarUploading(false)
                             }
-                            setAvatarUploading(false)
-                          }
-                          reader.onerror = () => {
-                            setAvatarUploading(false)
-                          }
-                          reader.readAsDataURL(file)
-                        }}
-                        className="hidden"
-                      />
-                    </label>
+                            reader.onerror = () => {
+                              setAvatarUploading(false)
+                            }
+                            reader.readAsDataURL(file)
+                          }}
+                          className="hidden"
+                        />
+                      </label>
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setDetailsOpen(true)}
+                        className="border-[3px] border-blue-600 bg-white text-[hsl(var(--ink))] hover:bg-blue-50"
+                      >
+                        Edit Profile
+                      </Button>
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setEditOpen(true)}
+                        className="border-[3px] border-blue-600 bg-white text-[hsl(var(--ink))] hover:bg-blue-50"
+                      >
+                        Edit Vibes
+                      </Button>
+
+                      {!membership ? (
+                        <Button
+                          type="button"
+                          onClick={() => router.push('/memberships')}
+                          className="border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold"
+                        >
+                          Become A Member
+                        </Button>
+                      ) : null}
+
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={() => setDeleteProfileOpen(true)}
+                        className="rounded-xl border border-red-300/40 bg-red-50/70 text-red-700 px-3 py-2 text-xs shadow-sm hover:bg-red-100/80"
+                      >
+                        Delete Profile
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </FrameBox>
-
-            {(membership && membership.membershipTier) ? null : (
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm">
-                <Button asChild className="w-full" size="sm">
-                  <Link href="/memberships">Become A Member</Link>
-                </Button>
-              </div>
-            )}
+            </div>
 
             {/* Personalized QR Code */}
             <div className="rounded-2xl border-[3px] border-purple-500 bg-white/40 p-4 shadow-sm">
