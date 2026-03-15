@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export const dynamic = 'force-dynamic'
-
 function getVibeImageSrc(vibe: string): string {
   const slug = vibe.toLowerCase().replace(/\s+/g, '-')
   return `${encodeURI('/images/Vibe Buttons')}/${slug}.jpg`

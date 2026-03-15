@@ -1,9 +1,5 @@
-'use client'
-
 import { Suspense } from 'react'
 import InteractiveMembershipList from './InteractiveMembershipList'
-
-export const dynamic = 'force-dynamic'
 
 export default function MembershipsPage() {
   return (

@@ -1,7 +1,5 @@
 import { TasteTunerClient } from '../taste-tuner/tasteTunerClient'
 
-export const dynamic = 'force-dynamic'
-
 export default function ProfilePage() {
   return (
     <div className="relative min-h-screen">
