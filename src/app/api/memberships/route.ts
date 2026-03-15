@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { MEMBERSHIP_LEVELS } from '@/types'
-import { DEPOSIT_GLITCOIN } from '@/lib/business-rules'
 import { getAdminFirestore } from '@/lib/firebase/admin'
 
 export async function GET() {
@@ -268,24 +267,6 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    if (!existingUser || !existingUser.depositPaid) {
-      // Deposit (required upfront)
-      await prisma.glitcoinTransaction.create({
-        data: {
-          userId: newMembership.id,
-          amount: -DEPOSIT_GLITCOIN, // Negative for debit - deposit
-          type: 'fee',
-          description: 'Membership deposit payment',
-        },
-      })
-
-      // Mark deposit as paid
-      await prisma.user.update({
-        where: { id: newMembership.id },
-        data: { depositPaid: true }
-      })
-    }
-
     // Add first month's free Glitcoins
     if (membershipLevel.freeMonthlyGlitcoins > 0) {
       await prisma.glitcoinTransaction.create({
@@ -303,8 +284,7 @@ export async function POST(request: NextRequest) {
       membership: newMembership,
       charges: {
         membershipFee: membershipLevel.glitcoinValue,
-        deposit: DEPOSIT_GLITCOIN,
-        total: membershipLevel.glitcoinValue + DEPOSIT_GLITCOIN
+        total: membershipLevel.glitcoinValue
       }
     })
   } catch (error) {

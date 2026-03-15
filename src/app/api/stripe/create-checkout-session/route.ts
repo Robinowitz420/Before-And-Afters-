@@ -194,17 +194,6 @@ export async function POST(request: NextRequest) {
             unit_amount: discountedFirstMonthCents,
           },
         },
-        {
-          quantity: 1,
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Membership deposit',
-              description: '$25 deposit (refundable per terms)',
-            },
-            unit_amount: depositCents,
-          },
-        },
       ],
       success_url: `${baseUrl}/post-checkout?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/memberships?canceled=1`,

@@ -3,7 +3,6 @@ import Stripe from 'stripe'
 import { stripe } from '@/lib/stripe'
 import { prisma } from '@/lib/prisma'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
-import { DEPOSIT_GLITCOIN } from '@/lib/business-rules'
 import { getAdminFirestore } from '@/lib/firebase/admin'
 
 const PROMO_CODE = 'FIRST70'
@@ -100,15 +99,6 @@ export async function POST(request: NextRequest) {
         amount: -level.glitcoinValue,
         type: 'membership',
         description: `Initial ${membershipTier} membership payment (Stripe)`,
-      },
-    })
-
-    await prisma.glitcoinTransaction.create({
-      data: {
-        userId: user.id,
-        amount: -DEPOSIT_GLITCOIN,
-        type: 'fee',
-        description: 'Membership deposit payment (Stripe)',
       },
     })
 

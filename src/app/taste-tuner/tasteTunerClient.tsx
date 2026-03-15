@@ -1772,9 +1772,9 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               </div>
             </FrameBox>
 
-            {!membershipTitle && (
+            {(membership && membership.membershipTier) ? null : (
               <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm">
-                <Button asChild className="w-full" size="sm">
+                <Button asChild className="w-full font-[family-name:var(--font-im-fell)]" size="sm">
                   <Link href="/memberships">Become A Member</Link>
                 </Button>
               </div>
@@ -1803,12 +1803,12 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => setDeleteProfileOpen(true)}
-              className="fixed bottom-3 left-4 z-50 w-auto bg-red-600 text-white hover:bg-red-700 border-red-600"
+              className="fixed bottom-3 left-4 z-50 w-auto text-xs text-muted-foreground hover:text-red-600 hover:bg-red-50"
             >
-              🗑️ Delete Profile
+              Delete Profile
             </Button>
           </div>
         </aside>
