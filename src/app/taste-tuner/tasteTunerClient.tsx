@@ -477,19 +477,21 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const current = deck[index % Math.max(1, deck.length)] as any
 
-  const currentCard: { id: string; src: string; category: string } | null = useMemo(() => {
+  const currentCard = useMemo(() => {
     if (!current) return null
-    if (usingCatalogue) {
-      const g = current as CatalogueGarmentCard
-      return {
-        id: g.id,
-        src: typeof g.primaryPhotoUrl === 'string' && g.primaryPhotoUrl ? g.primaryPhotoUrl : (Array.isArray(g.photoUrls) && g.photoUrls[0] ? g.photoUrls[0] : ''),
-        category: typeof g.category === 'string' && g.category ? g.category : 'Garment',
-      }
-    }
+    if (usingCatalogue) return current
     const img = current as ClothingImage
-    return { id: img.src, src: img.src, category: img.category }
+    return {
+      id: img.src,
+      src: img.src,
+    }
   }, [current, usingCatalogue])
+
+  const currentCardKey = useMemo(() => {
+    if (!currentCard) return null
+    if (usingCatalogue) return currentCard.id as string
+    return currentCard.src as string
+  }, [currentCard, usingCatalogue])
 
   useEffect(() => {
     setMounted(true)
@@ -497,6 +499,24 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     setReservedIds(readStringArray(RESERVED_KEY))
     setRequestedIds(readStringArray(REQUESTED_KEY))
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    setSave((prev) => {
+      const likes = Array.isArray(prev.likes) ? prev.likes : []
+      const dislikes = Array.isArray(prev.dislikes) ? prev.dislikes : []
+      if (usingCatalogue) {
+        return {
+          likes: likes.filter((v) => typeof v === 'string' && !v.startsWith('/') && !v.startsWith('http') && !v.startsWith('data:')),
+          dislikes: dislikes.filter((v) => typeof v === 'string' && !v.startsWith('/') && !v.startsWith('http') && !v.startsWith('data:')),
+        }
+      }
+      return {
+        likes: likes.filter((v) => typeof v === 'string' && (v.startsWith('/') || v.startsWith('http') || v.startsWith('data:'))),
+        dislikes: dislikes.filter((v) => typeof v === 'string' && (v.startsWith('/') || v.startsWith('http') || v.startsWith('data:'))),
+      }
+    })
+  }, [mounted, usingCatalogue])
 
   useEffect(() => {
     if (!mounted) return
@@ -742,21 +762,21 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   }
 
   const onLike = () => {
-    if (!currentCard) return
+    if (!currentCardKey) return
     setSave((prev) => ({
-      likes: prev.likes.includes(currentCard.id) ? prev.likes : [...prev.likes, currentCard.id],
+      likes: prev.likes.includes(currentCardKey) ? prev.likes : [...prev.likes, currentCardKey],
       dislikes: prev.dislikes,
     }))
-    advance()
+    setIndex((prev) => prev + 1)
   }
 
   const onDislike = () => {
-    if (!currentCard) return
+    if (!currentCardKey) return
     setSave((prev) => ({
       likes: prev.likes,
-      dislikes: prev.dislikes.includes(currentCard.id) ? prev.dislikes : [...prev.dislikes, currentCard.id],
+      dislikes: prev.dislikes.includes(currentCardKey) ? prev.dislikes : [...prev.dislikes, currentCardKey],
     }))
-    advance()
+    setIndex((prev) => prev + 1)
   }
 
   const openGarmentDetails = (garmentId: string) => {
