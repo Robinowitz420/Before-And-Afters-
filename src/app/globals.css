@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@300..800&family=Bonbon&family=Fuzzy+Bubbles:wght@400;700&family=Permanent+Marker&display=swap');
-
 :root {
   --brand-ink-hex: #3A1542;
   --brand-ink-dark-hex: #2A0F2E;
@@ -220,10 +218,4 @@ section[id] {
     #2A0F2E 45%,
     #140018 100%
   );
-}
-
-.knewave-regular {
-  font-family: "Knewave", system-ui;
-  font-weight: 400;
-  font-style: normal;
 }

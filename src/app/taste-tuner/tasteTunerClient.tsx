@@ -479,7 +479,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const currentCard = useMemo(() => {
     if (!current) return null
-    if (usingCatalogue) return current
+    if (usingCatalogue) {
+      const g = current as CatalogueGarmentCard
+      const src =
+        (typeof g.primaryPhotoUrl === 'string' && g.primaryPhotoUrl) ||
+        (Array.isArray(g.photoUrls) && typeof g.photoUrls[0] === 'string' ? g.photoUrls[0] : null) ||
+        ''
+      return { ...g, src }
+    }
     const img = current as ClothingImage
     return {
       id: img.src,
@@ -489,8 +496,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const currentCardKey = useMemo(() => {
     if (!currentCard) return null
-    if (usingCatalogue) return currentCard.id as string
-    return currentCard.src as string
+    return currentCard.id as string
   }, [currentCard, usingCatalogue])
 
   useEffect(() => {
