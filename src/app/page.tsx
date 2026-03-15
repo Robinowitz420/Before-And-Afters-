@@ -99,7 +99,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-6 py-4 text-xl font-bold font-[family-name:var(--font-im-fell)] sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
+              className="border-[3px] border-[#FFD700] px-6 py-4 text-xl font-bold sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>
@@ -123,7 +123,7 @@ function LandingClient() {
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5 font-[family-name:var(--font-macondo)]">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
@@ -142,11 +142,12 @@ function LandingClient() {
 
           {/* Row 2: Short blurb + JoniHero image side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4 font-[family-name:var(--font-macondo)]">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur md:p-8 lg:col-span-4">
               <div className="space-y-6 text-base leading-relaxed">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
-                  make your iconic mark, leave your lasting legacy, and have the absolute most fun possible while doing it…. Ask yourself: ARE YOU
+                  satisfy your deep longing for novelty and play and dopamine for the little girl who never grew up.
+absolute most fun possible while doing it…. Ask yourself: ARE YOU
                   DRESSING THE PART??!?!?
                 </p>
                 <p>Welcome to Before & Afters.</p>
@@ -166,21 +167,22 @@ function LandingClient() {
 
           {/* Row 3: JoniColorsGlam image + Text blurb side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <figure className="lg:col-span-7">
+            <figure className="relative overflow-hidden rounded-3xl lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JoniColorsGlam.jpg?v=2"
-                alt="Editorial"
-                width={2000}
-                height={1250}
+                src="/images/Joni%20Images/JONI2.png?v=1"
+                alt="Before & Afters"
+                width={2400}
+                height={1500}
                 className="h-auto w-full rounded-3xl shadow-lg"
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5 font-[family-name:var(--font-macondo)]">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Helloooo love, I’m Michelle Joni!</p>
                 <p>
-                  Born from my own (horrifyingly first world) clothing problem of having too many clothes to fit in my 5 closets, entire basement and two
+                  I’ve lived in New York City for 15 years and I’ve been throwing myself singularly into the wild whirlwind of nightlife culture for about
+sets, entire basement and two
                   storage units combined, but never wanting to sell, swap, say goodbye to a damn thing, or have to stop myself from acquiring more and more
                   amazing clothing for any reason whatsoever…… I desperately needed a solution to save my space, my sanity, and my sartorial soul!
                 </p>
@@ -191,11 +193,12 @@ function LandingClient() {
 
           {/* Row 4: Text blurb only - full width */}
           <div className="mt-14 lg:mt-16">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl space-y-6 text-base leading-relaxed font-[family-name:var(--font-macondo)]">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 text-[hsl(var(--ink))] shadow-sm backdrop-blur sm:text-lg md:p-8 md:text-xl space-y-6 text-base leading-relaxed">
               <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Not just to solve my silly avoidable problem…</p>
                 <p>
-                  To activate a glorious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
+                  But to do something bigger:
+ious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment to clothing, the brave baby steps I took
                   along the way to expand my comfort zone inch by inch. Solutions to problems I wouldn’t have known existed if not for my self inflicted
                   regimen of self-development mixed with passionate public shenanigans where I was pushed to discover just how much clothing, adornment,
                   and dressing up really does matter… if you let it!
@@ -210,14 +213,14 @@ function LandingClient() {
       <section id="offerings" className="relative text-[hsl(var(--foreground))]">
         <div className="mx-auto max-w-5xl px-6 py-20 md:py-28">
           <div className="mx-auto w-fit rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur md:px-12">
-            <h2 className="text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center font-[family-name:var(--font-im-fell)]">
+            <h2 className="text-balance text-3xl leading-tight tracking-tight text-black sm:text-4xl md:text-5xl text-center">
               How we do it
             </h2>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">Before &amp; Afters (Flagship)</h3>
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Before &amp; Afters (Flagship)</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Tucked away at 222 Bogart St in Brooklyn, our 24-hour flagship houses clothing operations and primary Dress Up collection.
               </p>
@@ -228,8 +231,8 @@ function LandingClient() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">Dorothy the Dress Up Bus</h3>
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Dorothy the Dress Up Bus</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Dorothy is our mobile extension — distributing dream dress-up options across NYC.
               </p>
@@ -242,8 +245,8 @@ function LandingClient() {
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">The Isle of Check Meowt</h3>
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">The Isle of Check Meowt</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Our for-sale essentials &amp; delights — the little things that complete the look.
               </p>
@@ -253,8 +256,8 @@ function LandingClient() {
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur font-[family-name:var(--font-macondo)]">
-              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))] font-[family-name:var(--font-im-fell)]">Spritz and Sparkle Station</h3>
+            <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-8 shadow-sm backdrop-blur">
+              <h3 className="text-2xl font-extrabold tracking-tight text-[hsl(var(--ink))]">Spritz and Sparkle Station</h3>
               <p className="mt-3 text-[hsl(var(--ink))]/80 font-bold text-[1.3em] space-y-6 text-base leading-relaxed">
                 Beauty and hygiene essentials for quick fixes or full party prep.
               </p>
@@ -270,12 +273,12 @@ function LandingClient() {
       {/* Call to action */}
       <section id="invitation" className="relative text-white">
         <div className="mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
-          <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur font-[family-name:var(--font-im-fell)]">Ready to play?</h2>
+          <h2 className="text-balance text-4xl leading-tight tracking-tight text-black sm:text-5xl md:text-6xl inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-6 shadow-lg backdrop-blur">Ready to play?</h2>
           <div className="mt-8 space-y-6 text-base leading-relaxed text-white/85 sm:text-lg md:text-xl">
-            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur font-[family-name:var(--font-macondo)]">
+            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-8 py-4 shadow-lg backdrop-blur">
               <p className="text-xl font-bold text-black sm:text-2xl md:text-3xl space-y-6 text-base leading-relaxed">If you feel the call, you&apos;re already part of it.</p>
             </div>
-            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur font-[family-name:var(--font-macondo)]">
+            <div className="inline-block rounded-3xl border border-black/10 bg-pink-200/80 px-6 py-3 shadow-lg backdrop-blur">
               <p className="text-black space-y-6 text-base leading-relaxed">Enter to build your profile and start exploring.</p>
             </div>
           </div>
@@ -285,7 +288,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-6 py-3 text-lg font-bold font-[family-name:var(--font-im-fell)] sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
+              className="border-[3px] border-[#FFD700] px-6 py-3 text-lg font-bold sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>

@@ -20,15 +20,15 @@
 /* Sitewide font defaults */
 @layer base {
   body {
-    font-family: var(--font-macondo), cursive;
+    font-family: var(--font-crimson-text), serif;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-im-fell), serif;
+    font-family: var(--font-ranchers), sans-serif;
   }
   
   button, [type="button"], [type="submit"], [type="reset"] {
-    font-family: var(--font-im-fell), serif;
+    font-family: var(--font-ranchers), sans-serif;
   }
 }
 

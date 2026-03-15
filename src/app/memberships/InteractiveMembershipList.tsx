@@ -248,7 +248,7 @@ All borrowed items must be returned before cancellation is finalized.
 
       {disclaimerOpen ? (
         <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-4 pt-10">
-          <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-2xl font-[family-name:var(--font-inter)]">
+          <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-2xl">
             <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership Agreement</div>
             <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))]">Membership Agreement & Disclaimer</div>
             <div className="mt-4 max-h-[40vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-4 text-sm leading-relaxed text-[hsl(var(--ink))]">
@@ -274,7 +274,6 @@ All borrowed items must be returned before cancellation is finalized.
                   setPendingTier(null)
                 }}
                 disabled={checkoutTier !== null}
-                className="font-[family-name:var(--font-inter)]"
               >
                 Cancel
               </Button>
@@ -286,7 +285,6 @@ All borrowed items must be returned before cancellation is finalized.
                   await redirectToStripeCheckout(pendingTier)
                 }}
                 disabled={!disclaimerAgreed || pendingTier === null || checkoutTier !== null}
-                className="font-[family-name:var(--font-inter)]"
               >
                 Continue to Payment
               </Button>
