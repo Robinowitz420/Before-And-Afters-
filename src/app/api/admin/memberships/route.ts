@@ -35,32 +35,60 @@ export async function GET(request: NextRequest) {
 
     const url = new URL(request.url)
     const emailRaw = url.searchParams.get('email')
+    const clerkUserIdRaw = url.searchParams.get('clerkUserId')
 
-    if (!emailRaw || !emailRaw.trim()) {
-      return NextResponse.json({ error: 'Missing email' }, { status: 400 })
+    if ((!emailRaw || !emailRaw.trim()) && (!clerkUserIdRaw || !clerkUserIdRaw.trim())) {
+      return NextResponse.json({ error: 'Missing email or clerkUserId' }, { status: 400 })
     }
 
-    const email = emailRaw.trim().toLowerCase()
+    const email = emailRaw?.trim().toLowerCase() || null
+    const clerkUserId = clerkUserIdRaw?.trim() || null
 
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: {
-        id: true,
-        clerkUserId: true,
-        email: true,
-        name: true,
-        displayName: true,
-        phone: true,
-        membershipTier: true,
-        membershipStartDate: true,
-        membershipEndDate: true,
-        maxItemsAllowed: true,
-        monthlyFreeGlitcoins: true,
-        depositPaid: true,
-        updatedAt: true,
-        createdAt: true,
-      },
-    })
+    // Try to find by email first, then by clerkUserId
+    let user = null
+    if (email) {
+      user = await prisma.user.findUnique({
+        where: { email },
+        select: {
+          id: true,
+          clerkUserId: true,
+          email: true,
+          name: true,
+          displayName: true,
+          phone: true,
+          membershipTier: true,
+          membershipStartDate: true,
+          membershipEndDate: true,
+          maxItemsAllowed: true,
+          monthlyFreeGlitcoins: true,
+          depositPaid: true,
+          updatedAt: true,
+          createdAt: true,
+        },
+      })
+    }
+
+    if (!user && clerkUserId) {
+      user = await prisma.user.findFirst({
+        where: { clerkUserId },
+        select: {
+          id: true,
+          clerkUserId: true,
+          email: true,
+          name: true,
+          displayName: true,
+          phone: true,
+          membershipTier: true,
+          membershipStartDate: true,
+          membershipEndDate: true,
+          maxItemsAllowed: true,
+          monthlyFreeGlitcoins: true,
+          depositPaid: true,
+          updatedAt: true,
+          createdAt: true,
+        },
+      })
+    }
 
     if (!user) {
       return NextResponse.json({ user: null }, { status: 200 })
