@@ -917,11 +917,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     <div className="min-h-screen w-full">
       <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 sm:py-10">
       {membershipTitle ? (
-        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/90 p-4 shadow-sm sm:p-6">
+        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-pink-100/95 p-4 shadow-sm sm:p-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
           <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))] sm:text-2xl">{membershipTitle}</div>
           {membershipSubtitle ? (
-            <div className="mt-1 text-sm text-[hsl(var(--ink))]/75">{membershipSubtitle}</div>
+            <div className="mt-1 text-sm text-[hsl(var(--ink))]/70">{membershipSubtitle}</div>
           ) : null}
         </div>
       ) : null}
@@ -1079,7 +1079,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       {VIBES_GROUPS.map((group) => (
                         <div
                           key={group.title}
-                          className="rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-4 shadow-sm"
+                          className="rounded-2xl border border-[hsl(var(--border))] bg-pink-100/95 p-4 shadow-sm"
                         >
                           <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[hsl(var(--ink))]/70">
                             {group.title}
@@ -1117,7 +1117,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       />
 
                       {vibesOtherEnabled ? (
-                        <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-4 shadow-sm">
+                        <div className="rounded-2xl border border-[hsl(var(--border))] bg-pink-100/95 p-4 shadow-sm">
                           <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[hsl(var(--ink))]/70">
                             What’s the other vibe?
                           </div>
@@ -1262,7 +1262,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px] lg:items-start">
         <aside className="w-full">
           <div className="p-4">
-            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/90 p-4 shadow-sm">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
                 <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
                 <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
@@ -1321,7 +1321,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         </div>
                       </>
                     ) : (
-                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/95 p-3 text-center text-xs text-muted-foreground">
+                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-3 text-center text-xs text-muted-foreground">
                         Swipe right to like
                       </div>
                     )}
@@ -1330,7 +1330,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   <div>
                     <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
                     <Link href="/calendar" className="block">
-                      <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/95 shadow-sm transition hover:shadow-md">
+                      <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-pink-100/95 shadow-sm transition hover:shadow-md">
                         <div className="relative w-full overflow-hidden">
                           <Image
                             src="/images/Joni%20Images/JoniCalander.jpg"

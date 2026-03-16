@@ -75,12 +75,6 @@ export async function GET(request: NextRequest) {
     const emails = Array.from(new Set(rawRows.map((r) => r.email).filter(Boolean))) as string[]
     const clerkUserIds = Array.from(new Set(rawRows.map((r) => r.clerkUserId).filter(Boolean))) as string[]
 
-    // Debug: check if hughes.khalil@gmail.com is in profiles
-    const hughesProfile = rawRows.find(r => r.email?.toLowerCase() === 'hughes.khalil@gmail.com')
-    console.log('DEBUG: hughes.khalil@gmail.com profile found:', !!hughesProfile, hughesProfile)
-    console.log('DEBUG: All emails being looked up:', emails)
-    console.log('DEBUG: All clerkUserIds being looked up:', clerkUserIds)
-
     // Look up Prisma users by email or clerkUserId
     const prismaUsers = await prisma.user.findMany({
       where: {
@@ -97,8 +91,6 @@ export async function GET(request: NextRequest) {
         membershipEndDate: true,
       },
     })
-
-    console.log('DEBUG: Prisma users found:', prismaUsers.length, prismaUsers.map(u => ({ email: u.email, clerkUserId: u.clerkUserId, tier: u.membershipTier })))
 
     // Build lookup maps
     const byEmail = new Map<string, typeof prismaUsers[0]>()
