@@ -1463,16 +1463,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
               >
                 Browse
               </Button>
-              <Link href="/profile-wizard">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="w-full bg-black text-white hover:bg-black/80 border-white/20"
-                >
-                  Edit
-                </Button>
-              </Link>
             </div>
           ) : null}
 
@@ -2015,15 +2005,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 </div>
             </div>
 
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setDeleteProfileOpen(true)}
-              className="mt-4 w-auto text-xs text-muted-foreground hover:text-red-600 hover:bg-red-50"
-            >
-              Delete Profile
-            </Button>
           </div>
         </aside>
       </div>
