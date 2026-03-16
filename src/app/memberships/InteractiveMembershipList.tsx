@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { MEMBERSHIP_LEVELS, type MembershipTier } from '@/types'
@@ -14,8 +14,73 @@ const TIER_IMAGES: Record<MembershipTier, string> = {
   Mmmmms: '/images/Memberships/Mmmms.jpg',
 }
 
+const membershipDisclaimer = `Membership Agreement & Disclaimer
+Please read carefully before completing your purchase.
+
+By purchasing a Before & Afters membership, you acknowledge and agree to the following:
+
+Financial Responsibility
+
+You are financially responsible for any borrowed items that are not returned, damaged beyond normal wear, or lost while in your possession.
+Replacement costs will be charged to your payment method on file based on the item's current resale value.
+Continued failure to return items may result in membership suspension or termination and potential legal action.
+
+Health & Safety
+
+You use all clothing, accessories, makeup, and beauty products at your own risk.
+Before & Afters is not responsible for any allergic reactions, skin sensitivities, or health issues that may arise from use of shared clothing, cosmetics, or hygiene products.
+If you have known allergies or sensitivities, please take appropriate precautions before using any shared items.
+All items are cleaned according to our standard protocols, but we cannot guarantee they will be suitable for individuals with specific sensitivities.
+
+General Liability
+
+You participate in all Before & Afters activities, events, and services at your own risk.
+Before & Afters, its owners, staff, and affiliates are not liable for any injuries, losses, damages, or adverse reactions that may occur while using our services, facilities, or borrowed items.
+Photography and media taken at Before & Afters events or facilities may be used for promotional purposes unless you explicitly opt out.
+
+Membership Terms
+
+Memberships are billed monthly and renew automatically until canceled.
+You may cancel at any time, but no refunds will be issued for partial months.
+All borrowed items must be returned before cancellation is finalized.
+`
+
+const TierCard = memo(function TierCard({
+  tier,
+  disabled,
+  onSelect,
+  sizes,
+  className,
+}: {
+  tier: MembershipTier
+  disabled: boolean
+  onSelect: (tier: MembershipTier) => void
+  sizes: string
+  className: string
+}) {
+  const level = MEMBERSHIP_LEVELS[tier]
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={() => onSelect(tier)}
+      disabled={disabled}
+    >
+      <div className="relative w-full">
+        <Image
+          src={TIER_IMAGES[tier]}
+          alt={level.name}
+          width={400}
+          height={533}
+          className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          sizes={sizes}
+        />
+      </div>
+    </button>
+  )
+})
+
 export default function InteractiveMembershipList() {
-  const [selectedTier, setSelectedTier] = useState<string | null>(null)
   const [checkoutTier, setCheckoutTier] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [promoInfo, setPromoInfo] = useState<{ applied: boolean; remaining: number } | null>(null)
@@ -36,7 +101,6 @@ export default function InteractiveMembershipList() {
 
       // Auto-select tier if valid tier parameter in URL
       if (tierParam && Object.keys(MEMBERSHIP_LEVELS).includes(tierParam)) {
-        setSelectedTier(tierParam)
         openDisclaimerForTier(tierParam)
       }
     } catch {
@@ -111,42 +175,15 @@ export default function InteractiveMembershipList() {
     }
   }
 
-  const membershipDisclaimer = `Membership Agreement & Disclaimer
-Please read carefully before completing your purchase.
-
-By purchasing a Before & Afters membership, you acknowledge and agree to the following:
-
-Financial Responsibility
-
-You are financially responsible for any borrowed items that are not returned, damaged beyond normal wear, or lost while in your possession.
-Replacement costs will be charged to your payment method on file based on the item's current resale value.
-Continued failure to return items may result in membership suspension or termination and potential legal action.
-
-Health & Safety
-
-You use all clothing, accessories, makeup, and beauty products at your own risk.
-Before & Afters is not responsible for any allergic reactions, skin sensitivities, or health issues that may arise from use of shared clothing, cosmetics, or hygiene products.
-If you have known allergies or sensitivities, please take appropriate precautions before using any shared items.
-All items are cleaned according to our standard protocols, but we cannot guarantee they will be suitable for individuals with specific sensitivities.
-
-General Liability
-
-You participate in all Before & Afters activities, events, and services at your own risk.
-Before & Afters, its owners, staff, and affiliates are not liable for any injuries, losses, damages, or adverse reactions that may occur while using our services, facilities, or borrowed items.
-Photography and media taken at Before & Afters events or facilities may be used for promotional purposes unless you explicitly opt out.
-
-Membership Terms
-
-Memberships are billed monthly and renew automatically until canceled.
-You may cancel at any time, but no refunds will be issued for partial months.
-All borrowed items must be returned before cancellation is finalized.
-`
-
   const openDisclaimerForTier = (tier: string) => {
     setPendingTier(tier)
     setDisclaimerAgreed(false)
     setDisclaimerOpen(true)
   }
+
+  const onSelectTier = useCallback((tier: MembershipTier) => {
+    openDisclaimerForTier(tier)
+  }, [])
 
   return (
     <div className="relative min-h-[100svh] w-screen overflow-x-hidden overflow-y-auto bg-black lg:h-[100svh] lg:overflow-hidden">
@@ -178,29 +215,15 @@ All borrowed items must be returned before cancellation is finalized.
         {/* Mobile: vertical scrollable layout, Desktop: centered grid */}
         <div className="relative flex flex-col items-center gap-4 p-4 pb-8 sm:hidden">
           {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
-            const level = MEMBERSHIP_LEVELS[tier]
             return (
-              <button
+              <TierCard
                 key={tier}
-                type="button"
-                className="group relative w-full max-w-sm overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
-                onClick={() => {
-                  setSelectedTier(tier)
-                  openDisclaimerForTier(tier)
-                }}
+                tier={tier}
                 disabled={checkoutTier !== null}
-              >
-                <div className="relative w-full">
-                  <Image
-                    src={TIER_IMAGES[tier]}
-                    alt={level.name}
-                    width={400}
-                    height={533}
-                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                    sizes="100vw"
-                  />
-                </div>
-              </button>
+                onSelect={onSelectTier}
+                sizes="100vw"
+                className="group relative w-full max-w-sm overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+              />
             )
           })}
         </div>
@@ -209,29 +232,15 @@ All borrowed items must be returned before cancellation is finalized.
         <div className="absolute inset-0 hidden items-center justify-center p-8 sm:flex">
           <div className="grid w-full max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
-              const level = MEMBERSHIP_LEVELS[tier]
               return (
-                <button
+                <TierCard
                   key={tier}
-                  type="button"
-                  className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
-                  onClick={() => {
-                    setSelectedTier(tier)
-                    openDisclaimerForTier(tier)
-                  }}
+                  tier={tier}
                   disabled={checkoutTier !== null}
-                >
-                  <div className="relative w-full">
-                    <Image
-                      src={TIER_IMAGES[tier]}
-                      alt={level.name}
-                      width={400}
-                      height={533}
-                      className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                      sizes="(max-width: 1024px) 50vw, 25vw"
-                    />
-                  </div>
-                </button>
+                  onSelect={onSelectTier}
+                  sizes="(max-width: 1024px) 50vw, 25vw"
+                  className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+                />
               )
             })}
           </div>
