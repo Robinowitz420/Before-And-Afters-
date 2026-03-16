@@ -7,6 +7,7 @@ const isProtectedRoute = createRouteMatcher([
   '/memberships(.*)',
 
   '/api/profile(.*)',
+  '/api/taste-tuner-state(.*)',
   '/api/deposit(.*)',
   '/api/rentals(.*)',
   '/api/memberships(.*)',

@@ -248,6 +248,14 @@ type TasteTunerSave = {
   dislikes: string[]
 }
 
+type TasteTunerStatePayload = {
+  likes: string[]
+  dislikes: string[]
+  reservedIds: string[]
+  requestedIds: string[]
+  reservationToken: string | null
+}
+
 const STORAGE_KEY = 'cyo_taste_tuner_v1'
 const RESERVED_KEY = 'cyo_reserved_v1'
 const REQUESTED_KEY = 'cyo_requested_v1'
@@ -280,6 +288,37 @@ function getReservationToken(): string {
       : `anon_${Date.now()}_${Math.random().toString(16).slice(2)}`
   window.localStorage.setItem(RESERVATION_TOKEN_KEY, token)
   return token
+}
+
+async function fetchTasteTunerState(): Promise<TasteTunerStatePayload | null> {
+  const res = await fetch('/api/taste-tuner-state', {
+    method: 'GET',
+    headers: { 'content-type': 'application/json' },
+    cache: 'no-store',
+  })
+
+  if (!res.ok) return null
+  const payload = (await res.json().catch(() => null)) as { data?: unknown } | null
+  if (!payload?.data || typeof payload.data !== 'object') return null
+  const d = payload.data as Partial<TasteTunerStatePayload>
+  return {
+    likes: Array.isArray(d.likes) ? d.likes.filter((v) => typeof v === 'string') : [],
+    dislikes: Array.isArray(d.dislikes) ? d.dislikes.filter((v) => typeof v === 'string') : [],
+    reservedIds: Array.isArray(d.reservedIds) ? d.reservedIds.filter((v) => typeof v === 'string') : [],
+    requestedIds: Array.isArray(d.requestedIds) ? d.requestedIds.filter((v) => typeof v === 'string') : [],
+    reservationToken: typeof d.reservationToken === 'string' && d.reservationToken.trim() ? d.reservationToken.trim() : null,
+  }
+}
+
+async function saveTasteTunerState(state: TasteTunerStatePayload): Promise<void> {
+  await fetch('/api/taste-tuner-state', {
+    method: 'PUT',
+    headers: { 'content-type': 'application/json' },
+    cache: 'no-store',
+    body: JSON.stringify(state),
+  }).catch(() => {
+    // ignore
+  })
 }
 
 const TONES = [
@@ -429,6 +468,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [requestedIds, setRequestedIds] = useState<string[]>([])
   const [reservePopup, setReservePopup] = useState<{ type: 'accepted' | 'unavailable'; message: string; alternatives: CatalogueGarmentCard[] } | null>(null)
 
+  const [reservationToken, setReservationToken] = useState<string | null>(null)
+
   const [browseMode, setBrowseMode] = useState(false)
 
   const [save, setSave] = useState<TasteTunerSave>({ likes: [], dislikes: [] })
@@ -446,6 +487,9 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [qrFullscreen, setQrFullscreen] = useState(false)
 
   const usingCatalogue = images.length === 0
+
+  const syncTimer = useRef<number | null>(null)
+  const ignoreNextLocalWrite = useRef(false)
 
   // Group garments by category for browse mode
   const garmentsByCategory = useMemo(() => {
@@ -506,7 +550,33 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     setSave(readTasteSave())
     setReservedIds(readStringArray(RESERVED_KEY))
     setRequestedIds(readStringArray(REQUESTED_KEY))
+    setReservationToken(getReservationToken())
   }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!isLoaded) return
+    if (!userId) return
+
+    fetchTasteTunerState()
+      .then((state) => {
+        if (!state) return
+
+        ignoreNextLocalWrite.current = true
+        setSave({ likes: state.likes, dislikes: state.dislikes })
+        setReservedIds(state.reservedIds)
+        setRequestedIds(state.requestedIds)
+        if (state.reservationToken) {
+          setReservationToken(state.reservationToken)
+          if (typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem(RESERVATION_TOKEN_KEY, state.reservationToken)
+          }
+        }
+      })
+      .catch(() => {
+        // ignore
+      })
+  }, [isLoaded, mounted, userId])
 
   useEffect(() => {
     if (!mounted) return
@@ -638,18 +708,48 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   useEffect(() => {
     if (!mounted) return
+    if (ignoreNextLocalWrite.current) {
+      ignoreNextLocalWrite.current = false
+      return
+    }
     writeTasteSave(save)
   }, [mounted, save])
 
   useEffect(() => {
     if (!mounted) return
+    if (ignoreNextLocalWrite.current) return
     writeStringArray(RESERVED_KEY, reservedIds)
   }, [mounted, reservedIds])
 
   useEffect(() => {
     if (!mounted) return
+    if (ignoreNextLocalWrite.current) return
     writeStringArray(REQUESTED_KEY, requestedIds)
   }, [mounted, requestedIds])
+
+  useEffect(() => {
+    if (!mounted) return
+    if (!isLoaded) return
+    if (!userId) return
+
+    if (syncTimer.current) window.clearTimeout(syncTimer.current)
+    syncTimer.current = window.setTimeout(() => {
+      const payload: TasteTunerStatePayload = {
+        likes: Array.isArray(save.likes) ? save.likes : [],
+        dislikes: Array.isArray(save.dislikes) ? save.dislikes : [],
+        reservedIds: Array.isArray(reservedIds) ? reservedIds : [],
+        requestedIds: Array.isArray(requestedIds) ? requestedIds : [],
+        reservationToken: reservationToken ?? null,
+      }
+      saveTasteTunerState(payload).catch(() => {
+        // ignore
+      })
+    }, 350)
+
+    return () => {
+      if (syncTimer.current) window.clearTimeout(syncTimer.current)
+    }
+  }, [isLoaded, mounted, requestedIds, reservationToken, reservedIds, save.dislikes, save.likes, userId])
 
   const openEditor = (section: 'tones' | 'vibes' | 'eras') => {
     setEditSection(section)
@@ -826,7 +926,11 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const reserveCurrent = async (garmentId: string) => {
     if (!usingCatalogue) return
-    const token = getReservationToken()
+    const token = reservationToken ?? getReservationToken()
+
+    if (!reservationToken) {
+      setReservationToken(token)
+    }
 
     setReservePopup(null)
 
