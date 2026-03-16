@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAdminOrThrow } from '@/lib/admin'
 import { getAdminFirestore } from '@/lib/firebase/admin'
 
+export const dynamic = 'force-dynamic'
+
 function normalizeCode(input: string) {
   return input.trim().toLowerCase().replace(/\s+/g, '-')
 }

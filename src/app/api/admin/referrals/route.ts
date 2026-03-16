@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireAdminOrThrow } from '@/lib/admin'
 import { getAdminFirestore } from '@/lib/firebase/admin'
 
+export const dynamic = 'force-dynamic'
+
 type EmployeeDoc = {
   code?: string
   name?: string
