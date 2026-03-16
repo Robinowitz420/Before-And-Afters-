@@ -115,7 +115,7 @@ function ToggleSwitch({
       role="switch"
       aria-checked={checked}
       onClick={() => onCheckedChange(!checked)}
-      className="flex items-center justify-between gap-3 rounded-xl border border-[hsl(var(--border))] bg-white/40 px-4 py-3"
+      className="flex items-center justify-between gap-3 rounded-xl border border-[hsl(var(--border))] bg-white/90 px-4 py-3"
     >
       <span className="text-sm font-medium text-[hsl(var(--ink))]">{label}</span>
       <span
@@ -367,8 +367,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const [mounted, setMounted] = useState(false)
   const [profile, setProfile] = useState<WizardProfile>({})
   const [membership, setMembership] = useState<MembershipSummary>(null)
-  const { isLoaded, isSignedIn, user } = useUser()
+  const { isLoaded, user } = useUser()
   const router = useRouter()
+
+  const userId = user?.id ?? null
 
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [detailsDraftDisplayName, setDetailsDraftDisplayName] = useState('')
@@ -497,7 +499,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const currentCardKey = useMemo(() => {
     if (!currentCard) return null
     return currentCard.id as string
-  }, [currentCard, usingCatalogue])
+  }, [currentCard])
 
   useEffect(() => {
     setMounted(true)
@@ -553,7 +555,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     if (!mounted) return
     if (!isLoaded) return
 
-    if (!isSignedIn) return
+    if (!userId) return
 
     fetchProfile()
       .then((data) => {
@@ -562,19 +564,19 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       .catch(() => {
         // ignore
       })
-  }, [isLoaded, isSignedIn, mounted, user?.id])
+  }, [isLoaded, mounted, userId])
 
   useEffect(() => {
     if (!mounted) return
     if (!isLoaded) return
-    if (!isSignedIn) return
+    if (!userId) return
 
     fetchMembership()
       .then((data) => setMembership(data))
       .catch(() => {
         setMembership(null)
       })
-  }, [isLoaded, isSignedIn, mounted, user?.id])
+  }, [isLoaded, mounted, userId])
 
   const membershipLabel = membership?.membershipTier
     ? MEMBERSHIP_LEVELS[membership.membershipTier]?.name
@@ -587,7 +589,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     if (!mounted) return
     if (!isLoaded) return
 
-    if (!isSignedIn) {
+    if (!userId) {
       router.push(`/sign-in?redirect_url=${encodeURIComponent('/profile')}`)
       return
     }
@@ -602,7 +604,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       .catch(() => {
         router.push('/profile-wizard')
       })
-  }, [isLoaded, isSignedIn, mounted, router, user?.id, usingCatalogue])
+  }, [isLoaded, mounted, router, userId, usingCatalogue])
 
   useEffect(() => {
     if (!mounted) return
@@ -915,7 +917,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
     <div className="min-h-screen w-full">
       <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 sm:py-10">
       {membershipTitle ? (
-        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/40 p-4 shadow-sm backdrop-blur sm:p-6">
+        <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-white/90 p-4 shadow-sm sm:p-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
           <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))] sm:text-2xl">{membershipTitle}</div>
           {membershipSubtitle ? (
@@ -928,7 +930,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <Dialog.Portal>
           <Dialog.Overlay
             className={cn(
-              'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+              'fixed inset-0 z-50 bg-black/50',
               'transition-opacity duration-200 ease-out',
               'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
             )}
@@ -1002,7 +1004,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <Dialog.Portal>
           <Dialog.Overlay
             className={cn(
-              'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+              'fixed inset-0 z-50 bg-black/50',
               'transition-opacity duration-200 ease-out',
               'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
             )}
@@ -1077,7 +1079,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       {VIBES_GROUPS.map((group) => (
                         <div
                           key={group.title}
-                          className="rounded-2xl border border-[hsl(var(--border))] bg-white/40 p-4 shadow-sm"
+                          className="rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-4 shadow-sm"
                         >
                           <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[hsl(var(--ink))]/70">
                             {group.title}
@@ -1111,28 +1113,21 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             setDraftVibes((prev) => prev.filter((v) => ALLOWED_VIBES_SET.has(v)))
                           }
                         }}
-                        label="Other"
+                        label="Other vibe"
                       />
 
                       {vibesOtherEnabled ? (
-                        <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/40 p-4 shadow-sm">
+                        <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-4 shadow-sm">
                           <div className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-[hsl(var(--ink))]/70">
                             What’s the other vibe?
                           </div>
-                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+
+                          <div className="flex items-center gap-2">
                             <Input
                               value={vibesOtherText}
-                              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVibesOtherText(e.target.value)}
-                              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                if (e.key === 'Enter') {
-                                  e.preventDefault()
-                                  const cleaned = vibesOtherText.trim()
-                                  if (!cleaned) return
-                                  setDraftVibes((prev) => (prev.includes(cleaned) ? prev : [...prev, cleaned]))
-                                  setVibesOtherText('')
-                                }
-                              }}
+                              onChange={(e) => setVibesOtherText(e.target.value)}
                               placeholder="Type a vibe and add it"
+                              className="text-sm"
                             />
                             <Button
                               type="button"
@@ -1193,7 +1188,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <Dialog.Portal>
           <Dialog.Overlay
             className={cn(
-              'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+              'fixed inset-0 z-50 bg-black/50',
               'transition-opacity duration-200 ease-out',
               'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
             )}
@@ -1209,13 +1204,13 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           >
             <div className="p-5 sm:p-6">
               <div className="relative overflow-hidden rounded-2xl border border-[hsl(var(--border))] bg-white">
-                <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white backdrop-blur">
+                <div className="absolute left-4 top-4 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-medium text-white">
                   {closetItem?.category ?? 'Closet item'}
                 </div>
                 <Dialog.Close asChild>
                   <button
                     type="button"
-                    className="absolute right-4 top-4 z-10 rounded-full border border-white/30 bg-black/50 px-3 py-1 text-xs font-medium text-white backdrop-blur hover:bg-black/70"
+                    className="absolute right-4 top-4 z-10 rounded-full border border-white/30 bg-black/50 px-3 py-1 text-xs font-medium text-white hover:bg-black/70"
                   >
                     Close
                   </button>
@@ -1266,18 +1261,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
       <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px] lg:items-start">
         <aside className="w-full">
-          <div className="relative">
-            <div className="absolute inset-0 -m-2">
-              <Image
-                src="/images/Boxes/frame-closet.png"
-                fill
-                className="object-fill scale-[1.08] pointer-events-none"
-                alt=""
-              />
-            </div>
-
-            <div className="relative z-10 p-4">
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
+          <div className="p-4">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-white/90 p-4 shadow-sm">
                 <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
                 <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
 
@@ -1313,6 +1298,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                                       })()
                                     : src
                                 }
+                                loading="lazy"
                                 alt="Liked"
                                 width={120}
                                 height={120}
@@ -1335,7 +1321,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         </div>
                       </>
                     ) : (
-                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/50 p-3 text-center text-xs text-muted-foreground">
+                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/95 p-3 text-center text-xs text-muted-foreground">
                         Swipe right to like
                       </div>
                     )}
@@ -1344,7 +1330,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   <div>
                     <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
                     <Link href="/calendar" className="block">
-                      <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/50 shadow-sm backdrop-blur transition hover:shadow-md">
+                      <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-white/95 shadow-sm transition hover:shadow-md">
                         <div className="relative w-full overflow-hidden">
                           <Image
                             src="/images/Joni%20Images/JoniCalander.jpg"
@@ -1366,7 +1352,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </aside>
 
@@ -1562,7 +1547,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         <Dialog.Root open={likedAllOpen} onOpenChange={setLikedAllOpen}>
           <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
+            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60" />
             <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[min(760px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-6 shadow-2xl">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -1583,7 +1568,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 </Dialog.Close>
               </div>
 
-              <div className="mt-5 max-h-[70vh] overflow-auto rounded-xl border border-[hsl(var(--border))] bg-white/70 p-4">
+              <div className="mt-5 max-h-[70vh] overflow-auto rounded-xl border border-[hsl(var(--border))] bg-white/90 p-4">
                 {savedItems.length ? (
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
                     {savedItems.map((src) => (
@@ -1613,13 +1598,14 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                                 })()
                               : src
                           }
+                          loading="lazy"
                           alt="Liked"
                           width={240}
                           height={240}
                           className="h-36 w-full object-cover"
                         />
                         <div className="px-3 py-2">
-                          <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/80 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
+                          <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/95 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
                             Tap to view
                           </div>
                         </div>
@@ -1627,7 +1613,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     ))}
                   </div>
                 ) : (
-                  <div className="rounded-lg border border-dashed border-[hsl(var(--border))] bg-white p-6 text-center text-sm text-[hsl(var(--ink))]/70">
+                  <div className="rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/90 p-6 text-center text-sm text-[hsl(var(--ink))]/70">
                     No liked garments yet.
                   </div>
                 )}
@@ -1641,7 +1627,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
             <Dialog.Overlay
               className={cn(
                 'fixed inset-0 z-50 bg-[url("/images/checkered-background.jpg")] bg-cover bg-center bg-no-repeat',
-                'after:absolute after:inset-0 after:bg-black/40 after:backdrop-blur-sm after:content-[""]',
+                'after:absolute after:inset-0 after:bg-black/40 after:content-[""]',
                 'transition-opacity duration-200 ease-out',
                 'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
               )}
@@ -1693,7 +1679,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
 
                   <div>
-                    <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/40 p-4">
+                    <div className="rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-4">
                       <div className="text-sm font-semibold text-[hsl(var(--ink))]">Details</div>
                       <div className="mt-2 text-sm text-[hsl(var(--ink))]/80">
                         {detailGarment?.brand ? `Brand: ${detailGarment.brand}` : null}
@@ -1747,7 +1733,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           <Dialog.Portal>
             <Dialog.Overlay
               className={cn(
-                'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+                'fixed inset-0 z-50 bg-black/50',
                 'transition-opacity duration-200 ease-out',
                 'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
               )}
@@ -1809,18 +1795,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
         <aside className="w-full lg:sticky lg:top-6">
           <div className="space-y-3">
-            <div className="relative">
-              <div className="absolute inset-0 -m-2">
-                <Image
-                  src="/images/Boxes/frame-profile.png"
-                  fill
-                  className="object-fill scale-[1.10] rotate-[0.5deg] pointer-events-none"
-                  alt=""
-                />
-              </div>
-
-              <div className="relative z-10 p-4">
-                <div className="rounded-2xl border-[3px] border-blue-600 bg-white/40 p-4 shadow-sm backdrop-blur">
+            <div className="p-4">
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/90 p-4 shadow-sm">
                   <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
                   <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
 
@@ -1954,11 +1930,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
 
             {/* Personalized QR Code */}
-            <div className="rounded-2xl border-[3px] border-purple-500 bg-white/40 p-4 shadow-sm">
+            <div className="rounded-2xl border-[3px] border-purple-500 bg-white/90 p-4 shadow-sm">
               <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Your QR Code</div>
               <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Scan at Events</div>
               
@@ -1968,7 +1943,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 className="mt-4 flex w-full flex-col items-center rounded-xl bg-white p-3 shadow-inner hover:shadow-md transition cursor-pointer"
               >
                 <QRCodeSVG
-                  value={`https://beforeandafters.clothing/profile/${user?.id || 'guest'}`}
+                  value={`https://beforeandafters.clothing/profile/${userId || 'guest'}`}
                   size={180}
                   level="H"
                   includeMargin={false}
@@ -1997,7 +1972,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <Dialog.Portal>
           <Dialog.Overlay
             className={cn(
-              'fixed inset-0 z-50 bg-black/60 backdrop-blur-sm',
+              'fixed inset-0 z-50 bg-black/60',
               'transition-opacity duration-200 ease-out',
               'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
             )}
@@ -2068,7 +2043,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
             <div className="mt-8 rounded-3xl bg-white p-6 shadow-2xl">
               <QRCodeSVG
-                value={`https://beforeandafters.clothing/profile/${user?.id || 'guest'}`}
+                value={`https://beforeandafters.clothing/profile/${userId || 'guest'}`}
                 size={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 80 : 320)}
                 level="H"
                 includeMargin={true}
