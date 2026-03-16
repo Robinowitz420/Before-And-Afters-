@@ -1986,19 +1986,10 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                       <Button
                         type="button"
                         variant="outline"
-                        onClick={() => setDetailsOpen(true)}
+                        onClick={() => router.push('/profile-wizard')}
                         className="border-[3px] border-blue-600 bg-white text-[hsl(var(--ink))] hover:bg-blue-50"
                       >
                         Edit Profile
-                      </Button>
-
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setEditOpen(true)}
-                        className="border-[3px] border-blue-600 bg-white text-[hsl(var(--ink))] hover:bg-blue-50"
-                      >
-                        Edit Vibes
                       </Button>
 
                       {!membership ? (
