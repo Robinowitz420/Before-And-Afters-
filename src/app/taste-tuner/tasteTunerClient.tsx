@@ -1263,7 +1263,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[320px,1fr,280px] lg:items-start">
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[420px,1fr,380px] lg:items-start">
         {/* Mobile: Profile section at top */}
         <aside className="w-full lg:hidden">
           <div className="p-4">
@@ -1356,125 +1356,30 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
                 <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
 
-                <div className="mt-4 space-y-4">
-                  <div>
-                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
-                    {savedItems.length ? (
-                      <>
-                        <div className="mt-2 grid grid-cols-2 gap-2">
-                          {savedItems.map((src) => (
-                            <button
-                              key={src}
-                              type="button"
-                              onClick={() => {
-                                if (usingCatalogue) {
-                                  openGarmentDetails(src)
-                                  return
-                                }
-                                openClosetItem(src)
-                              }}
-                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                            >
-                              <Image
-                                src={
-                                  usingCatalogue
-                                    ? (() => {
-                                        const g = catalogueItems.find((x) => x.id === src)
-                                        return (
-                                          g?.primaryPhotoUrl ??
-                                          (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
-                                          '/placeholder.png'
-                                        )
-                                      })()
-                                    : src
-                                }
-                                loading="lazy"
-                                alt="Liked"
-                                width={120}
-                                height={120}
-                                className="h-24 w-full object-cover"
-                              />
-                            </button>
-                          ))}
-                        </div>
+                <div className="mt-4 flex flex-col gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full bg-white/70 hover:bg-white"
+                    onClick={() => setLikedAllOpen(true)}
+                  >
+                    Liked Items ({save.likes.length})
+                  </Button>
 
-                        <div className="mt-3">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            className="w-full bg-white/70 hover:bg-white"
-                            onClick={() => setLikedAllOpen(true)}
-                          >
-                            View All
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-3 text-center text-xs text-muted-foreground">
-                        Swipe right to like
-                      </div>
-                    )}
-                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full bg-white/70 hover:bg-white"
+                    onClick={() => {/* TODO: open reserved modal */}}
+                  >
+                    Reserved Items ({reservedIds.length})
+                  </Button>
 
-                  <div>
-                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
-                    {recentReserved.length ? (
-                      <>
-                        <div className="mt-2 grid grid-cols-2 gap-2">
-                          {recentReserved.map((id) => {
-                            const g = catalogueItems.find((x) => x.id === id)
-                            const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                            return (
-                              <button
-                                key={id}
-                                type="button"
-                                onClick={() => openGarmentDetails(id)}
-                                className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                              >
-                                <Image
-                                  src={img ?? '/placeholder.png'}
-                                  loading="lazy"
-                                  alt="Reserved"
-                                  width={120}
-                                  height={120}
-                                  className="h-24 w-full object-cover"
-                                />
-                              </button>
-                            )
-                          })}
-                        </div>
-                      </>
-                    ) : (
-                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-3 text-center text-xs text-muted-foreground">
-                        No reservations yet
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Calendar</div>
-                    <Link href="/calendar" className="block">
-                      <div className="mt-2 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-pink-100/95 shadow-sm transition hover:shadow-md">
-                        <div className="relative w-full overflow-hidden">
-                          <Image
-                            src="/images/Joni%20Images/JoniCalander.jpg"
-                            alt="Calendar"
-                            width={380}
-                            height={500}
-                            sizes="(max-width: 1024px) 100vw, 320px"
-                            className="h-auto w-full object-contain"
-                          />
-                        </div>
-
-                        <div className="p-3">
-                          <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
-                            View Calendar
-                          </Button>
-                        </div>
-                      </div>
-                    </Link>
-                  </div>
+                  <Link href="/calendar" className="block">
+                    <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
+                      View Calendar
+                    </Button>
+                  </Link>
                 </div>
               </div>
           </div>
@@ -1486,88 +1391,25 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
                 <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
 
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
-                    {savedItems.length ? (
-                      <div className="mt-2 grid grid-cols-2 gap-2">
-                        {savedItems.map((src) => (
-                          <button
-                            key={src}
-                            type="button"
-                            onClick={() => {
-                              if (usingCatalogue) {
-                                openGarmentDetails(src)
-                                return
-                              }
-                              openClosetItem(src)
-                            }}
-                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                          >
-                            <Image
-                              src={
-                                usingCatalogue
-                                  ? (() => {
-                                      const g = catalogueItems.find((x) => x.id === src)
-                                      return (
-                                        g?.primaryPhotoUrl ??
-                                        (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
-                                        '/placeholder.png'
-                                      )
-                                    })()
-                                  : src
-                              }
-                              loading="lazy"
-                              alt="Liked"
-                              width={80}
-                              height={80}
-                              className="h-16 w-full object-cover"
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-2 text-center text-xs text-muted-foreground">
-                        Swipe right
-                      </div>
-                    )}
-                  </div>
+                <div className="mt-4 flex flex-col gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full bg-white/70 hover:bg-white"
+                    onClick={() => setLikedAllOpen(true)}
+                  >
+                    Liked Items ({save.likes.length})
+                  </Button>
 
-                  <div>
-                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
-                    {recentReserved.length ? (
-                      <div className="mt-2 grid grid-cols-2 gap-2">
-                        {recentReserved.map((id) => {
-                          const g = catalogueItems.find((x) => x.id === id)
-                          const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
-                          return (
-                            <button
-                              key={id}
-                              type="button"
-                              onClick={() => openGarmentDetails(id)}
-                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
-                            >
-                              <Image
-                                src={img ?? '/placeholder.png'}
-                                loading="lazy"
-                                alt="Reserved"
-                                width={80}
-                                height={80}
-                                className="h-16 w-full object-cover"
-                              />
-                            </button>
-                          )
-                        })}
-                      </div>
-                    ) : (
-                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-2 text-center text-xs text-muted-foreground">
-                        None yet
-                      </div>
-                    )}
-                  </div>
-                </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full bg-white/70 hover:bg-white"
+                    onClick={() => {/* TODO: open reserved modal */}}
+                  >
+                    Reserved Items ({reservedIds.length})
+                  </Button>
 
-                <div className="mt-4">
                   <Link href="/calendar" className="block">
                     <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
                       View Calendar
@@ -2171,43 +2013,45 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 </div>
             </div>
 
-            {/* Personalized QR Code */}
-            <div className="rounded-2xl border-[3px] border-purple-500 bg-white/90 p-4 shadow-sm">
-              <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Your QR Code</div>
-              <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Scan at Events</div>
-              
-              <button
-                type="button"
-                onClick={() => setQrFullscreen(true)}
-                className="mt-4 flex w-full flex-col items-center rounded-xl bg-white p-3 shadow-inner hover:shadow-md transition cursor-pointer"
-              >
-                <QRCodeSVG
-                  value={`https://beforeandafters.clothing/profile/${userId || 'guest'}`}
-                  size={180}
-                  level="H"
-                  includeMargin={false}
-                  className="h-auto w-full max-w-[180px]"
-                />
-                <p className="mt-2 text-xs text-purple-600 font-medium">Tap to enlarge</p>
-              </button>
-            </div>
-
             <Button
               type="button"
               variant="ghost"
               size="sm"
               onClick={() => setDeleteProfileOpen(true)}
-              className="fixed bottom-3 left-4 z-50 w-auto text-xs text-muted-foreground hover:text-red-600 hover:bg-red-50"
+              className="mt-4 w-auto text-xs text-muted-foreground hover:text-red-600 hover:bg-red-50"
             >
               Delete Profile
             </Button>
           </div>
         </aside>
       </div>
-      </div>
 
-      {/* Delete Profile Dialog */}
-      <Dialog.Root open={deleteProfileOpen} onOpenChange={setDeleteProfileOpen}>
+      {/* QR Code - Big and Centered at Bottom */}
+      <div className="mt-8 flex flex-col items-center justify-center p-8">
+        <div className="text-center">
+          <div className="font-ranchers text-2xl font-semibold text-[hsl(var(--ink))]">Your QR Code</div>
+          <p className="mt-2 text-sm text-muted-foreground">Show this at event check-in</p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setQrFullscreen(true)}
+          className="mt-6 flex flex-col items-center rounded-3xl bg-white p-8 shadow-2xl hover:shadow-3xl transition cursor-pointer"
+        >
+          <QRCodeSVG
+            value={`https://beforeandafters.clothing/profile/${userId || 'guest'}`}
+            size={280}
+            level="H"
+            includeMargin={false}
+            className="h-auto w-full max-w-[280px]"
+          />
+          <p className="mt-4 text-sm text-purple-600 font-medium">Tap to enlarge</p>
+        </button>
+      </div>
+    </div>
+
+    {/* Delete Profile Dialog */}
+    <Dialog.Root open={deleteProfileOpen} onOpenChange={setDeleteProfileOpen}>
         <Dialog.Portal>
           <Dialog.Overlay
             className={cn(
