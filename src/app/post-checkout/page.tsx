@@ -3,6 +3,14 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
+async function fulfillStripeSession(sessionId: string): Promise<void> {
+  await fetch('/api/stripe/fulfill-session', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ sessionId }),
+  }).catch(() => {})
+}
+
 async function fetchWizardProfileExists(): Promise<boolean> {
   const res = await fetch('/api/profile', {
     method: 'GET',
@@ -37,7 +45,11 @@ function PostCheckoutInner() {
 
     let cancelled = false
 
-    fetchWizardProfileExists()
+    Promise.resolve()
+      .then(async () => {
+        await fulfillStripeSession(sessionId)
+        return fetchWizardProfileExists()
+      })
       .then((exists) => {
         if (cancelled) return
         router.replace(exists ? '/profile' : '/profile-wizard')
