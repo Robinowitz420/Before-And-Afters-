@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { getAdminFirestore } from '@/lib/firebase/admin'
 
+export const dynamic = 'force-dynamic'
+
 type ReferralDoc = {
   employeeCode?: string
   createdAt?: string

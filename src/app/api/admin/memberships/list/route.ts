@@ -4,6 +4,7 @@ import { requireAdminOrThrow } from '@/lib/admin'
 import { prisma } from '@/lib/prisma'
 
 export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 async function requireAdminOrSecret(request: NextRequest) {
   const sharedSecret = process.env.WARDROBE_MANAGER_ADMIN_SECRET
