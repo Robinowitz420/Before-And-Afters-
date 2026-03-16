@@ -166,8 +166,8 @@ absolute most fun possible while doing it…. Ask yourself: ARE YOU
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
             <figure className="relative overflow-hidden rounded-3xl lg:col-span-7">
               <Image
-                src="/images/Joni%20Images/JONI2.png?v=1"
-                alt="Before & Afters"
+                src="/images/Joni%20Images/JoniColorsGlam.jpg?v=1"
+                alt="Michelle Joni"
                 width={2400}
                 height={1500}
                 className="h-auto w-full rounded-3xl shadow-lg"
