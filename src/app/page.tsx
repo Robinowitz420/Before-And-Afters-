@@ -80,7 +80,7 @@ function LandingClient() {
       {/* Hero Section - Pink Backgrounds Update */}
       <section id="portal" className="relative text-white">
         <div className="w-full py-16 md:py-20">
-          <div className="w-full max-w-[70%] mx-auto">
+          <div className="w-full max-w-[91%] mx-auto md:max-w-[70%]">
             <Image
               src="/images/herobannere.jpg?v=6"
               alt="Before & Afters"
@@ -97,7 +97,7 @@ function LandingClient() {
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-6 py-4 text-xl font-bold sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
+              className="border-[3px] border-[#FFD700] px-10 py-6 text-2xl font-bold sm:px-10 sm:py-5 sm:text-2xl md:px-13 md:py-6 md:text-3xl lg:px-20 lg:py-10 lg:text-4xl xl:px-26 xl:py-12 xl:text-5xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>
@@ -120,7 +120,7 @@ function LandingClient() {
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[hsl(var(--ink))] shadow-sm md:p-8 lg:col-span-5">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[19px] font-bold text-[hsl(var(--ink))] shadow-sm sm:text-base sm:font-normal md:p-8 lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed">
                 <p className="first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-6xl first-letter:font-black first-letter:leading-none first-letter:text-[hsl(var(--ink-dark))]">
                   You’re busy AF, you want to look absolutely amazing and magnetic but not over the top, you want to try new outfits and vibes all the
@@ -139,7 +139,7 @@ function LandingClient() {
 
           {/* Row 2: Short blurb + JoniHero image side by side */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[hsl(var(--ink))] shadow-sm md:p-8 lg:col-span-4">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[19px] font-bold text-[hsl(var(--ink))] shadow-sm sm:text-base sm:font-normal md:p-8 lg:col-span-4">
               <div className="space-y-6 text-base leading-relaxed">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
@@ -174,7 +174,7 @@ absolute most fun possible while doing it…. Ask yourself: ARE YOU
               />
             </figure>
 
-            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[hsl(var(--ink))] shadow-sm sm:text-lg md:p-8 md:text-xl lg:col-span-5">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[19px] font-bold text-[hsl(var(--ink))] shadow-sm sm:text-lg sm:font-normal md:p-8 md:text-xl lg:col-span-5">
               <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Helloooo love, I’m Michelle Joni!</p>
                 <p>
@@ -190,7 +190,7 @@ sets, entire basement and two
 
           {/* Row 4: Text blurb only - full width */}
           <div className="mt-14 lg:mt-16">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[hsl(var(--ink))] shadow-sm sm:text-lg md:p-8 md:text-xl space-y-6 text-base leading-relaxed">
+            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[19px] font-bold text-[hsl(var(--ink))] shadow-sm sm:text-lg sm:font-normal md:p-8 md:text-xl space-y-6 text-base leading-relaxed">
               <div className="space-y-6 text-base leading-relaxed space-y-6 text-base leading-relaxed">
                 <p>Not just to solve my silly avoidable problem…</p>
                 <p>
@@ -285,7 +285,7 @@ ious symphony of SOLUTIONS! Solutions wrought through my cumbersome commitment t
               onClick={onEnterCloset}
               size="lg"
               disabled={entering}
-              className="border-[3px] border-[#FFD700] px-6 py-3 text-lg font-bold sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
+              className="border-[3px] border-[#FFD700] px-10 py-5 text-2xl font-bold sm:px-8 sm:py-4 sm:text-xl md:px-10 md:py-5 md:text-2xl lg:px-13 lg:py-6 lg:text-3xl"
             >
               {entering ? 'Loading...' : buttonText}
             </Button>
