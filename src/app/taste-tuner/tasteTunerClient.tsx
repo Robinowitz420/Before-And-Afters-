@@ -2105,7 +2105,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
       </div>
 
       {/* QR Code - Big and Centered at Bottom */}
-      <div className="mt-8 flex flex-col items-center justify-center p-8">
+      <div className="mt-8 flex w-full flex-col items-center justify-center p-8">
         <div className="rounded-2xl border-[3px] border-purple-500 bg-pink-100/95 p-6 shadow-sm text-center">
           <div className="font-ranchers text-2xl font-semibold text-[hsl(var(--ink))]">Your QR Code</div>
           <p className="mt-2 text-sm text-[hsl(var(--ink))]/70">Show this at event check-in</p>
