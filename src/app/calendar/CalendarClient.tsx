@@ -248,10 +248,10 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
           return (
             <div
               key={`${cell.date ?? 'blank'}_${idx}`}
-              className="min-h-24 rounded-2xl border border-black/10 bg-white/40 p-2 backdrop-blur"
+              className="min-h-32 rounded-2xl border border-black/10 bg-white/40 p-2 backdrop-blur"
             >
               {cell.day ? <div className="text-sm font-bold text-[hsl(var(--ink))]">{cell.day}</div> : null}
-              {dayEvents.slice(0, 3).map((ev) => (
+              {dayEvents.slice(0, 4).map((ev) => (
                 <button
                   key={ev.id}
                   type="button"
@@ -261,8 +261,8 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
                   {ev.title || 'Untitled'}
                 </button>
               ))}
-              {dayEvents.length > 3 ? (
-                <div className="mt-1 text-[10px] text-[hsl(var(--ink))]/70">+{dayEvents.length - 3} more</div>
+              {dayEvents.length > 4 ? (
+                <div className="mt-1 text-[10px] text-[hsl(var(--ink))]/70">+{dayEvents.length - 4} more</div>
               ) : null}
             </div>
           )
