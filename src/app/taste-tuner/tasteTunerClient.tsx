@@ -1374,11 +1374,22 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   >
                     Reserved Items ({reservedIds.length})
                   </Button>
+                </div>
 
+                <div className="mt-4">
                   <Link href="/calendar" className="block">
-                    <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
-                      View Calendar
-                    </Button>
+                    <div className="overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-pink-100/95 shadow-sm transition hover:shadow-md">
+                      <div className="relative w-full overflow-hidden">
+                        <Image
+                          src="/images/Joni%20Images/JoniCalander.jpg"
+                          alt="Calendar"
+                          width={380}
+                          height={500}
+                          sizes="420px"
+                          className="h-auto w-full object-contain"
+                        />
+                      </div>
+                    </div>
                   </Link>
                 </div>
               </div>
@@ -1568,7 +1579,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between gap-3">
+                <div className="mt-3 flex items-center justify-between gap-3">
                   <Button
                     type="button"
                     variant="outline"
@@ -1583,7 +1594,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                 </div>
 
                 {usingCatalogue ? (
-                  <div className="mt-3">
+                  <div className="mt-2">
                     <Button
                       type="button"
                       variant="outline"
@@ -2028,9 +2039,9 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
       {/* QR Code - Big and Centered at Bottom */}
       <div className="mt-8 flex flex-col items-center justify-center p-8">
-        <div className="text-center">
+        <div className="rounded-2xl border-[3px] border-purple-500 bg-pink-100/95 p-6 shadow-sm text-center">
           <div className="font-ranchers text-2xl font-semibold text-[hsl(var(--ink))]">Your QR Code</div>
-          <p className="mt-2 text-sm text-muted-foreground">Show this at event check-in</p>
+          <p className="mt-2 text-sm text-[hsl(var(--ink))]/70">Show this at event check-in</p>
         </div>
 
         <button
