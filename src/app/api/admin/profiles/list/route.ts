@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { requireAdminOrThrow } from '@/lib/admin'
 import { getAdminFirestore } from '@/lib/firebase/admin'
+import { prisma } from '@/lib/prisma'
 
 export const runtime = 'nodejs'
 
@@ -27,6 +28,8 @@ type ProfileListRow = {
   clerkUserId: string
   displayName: string | null
   email: string | null
+  membershipTier: string | null
+  membershipEndDate: string | null
 }
 
 export async function GET(request: NextRequest) {
@@ -43,7 +46,12 @@ export async function GET(request: NextRequest) {
 
     const snap = await db.collection('profiles').limit(limit).get()
 
-    const rows: ProfileListRow[] = snap.docs.map((doc) => {
+    const rawRows: Array<{
+      id: string
+      clerkUserId: string
+      displayName: string | null
+      email: string | null
+    }> = snap.docs.map((doc) => {
       const raw = doc.data() as any
       const data = raw?.data && typeof raw.data === 'object' ? (raw.data as any) : {}
 
@@ -60,6 +68,48 @@ export async function GET(request: NextRequest) {
         clerkUserId: String(raw?.clerkUserId || doc.id),
         displayName,
         email,
+      }
+    })
+
+    // Collect unique emails and clerkUserIds to look up memberships
+    const emails = Array.from(new Set(rawRows.map((r) => r.email).filter(Boolean))) as string[]
+    const clerkUserIds = Array.from(new Set(rawRows.map((r) => r.clerkUserId).filter(Boolean))) as string[]
+
+    // Look up Prisma users by email or clerkUserId
+    const prismaUsers = await prisma.user.findMany({
+      where: {
+        OR: [
+          { email: { in: emails } },
+          { clerkUserId: { in: clerkUserIds } },
+        ],
+      },
+      select: {
+        id: true,
+        email: true,
+        clerkUserId: true,
+        membershipTier: true,
+        membershipEndDate: true,
+      },
+    })
+
+    // Build lookup maps
+    const byEmail = new Map<string, typeof prismaUsers[0]>()
+    const byClerkUserId = new Map<string, typeof prismaUsers[0]>()
+    for (const u of prismaUsers) {
+      if (u.email) byEmail.set(u.email.toLowerCase(), u)
+      if (u.clerkUserId) byClerkUserId.set(u.clerkUserId, u)
+    }
+
+    // Join profiles with membership info
+    const rows: ProfileListRow[] = rawRows.map((r) => {
+      const membership = byEmail.get((r.email || '').toLowerCase()) || byClerkUserId.get(r.clerkUserId)
+      return {
+        id: r.id,
+        clerkUserId: r.clerkUserId,
+        displayName: r.displayName,
+        email: r.email,
+        membershipTier: membership?.membershipTier ?? null,
+        membershipEndDate: membership?.membershipEndDate?.toISOString() ?? null,
       }
     })
 
