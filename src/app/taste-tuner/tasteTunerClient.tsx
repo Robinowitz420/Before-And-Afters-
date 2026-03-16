@@ -1843,6 +1843,23 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
                       return (
                         <div className="w-full space-y-3">
+                         {/* Membership Tier Display */}
+                         {membershipTitle ? (
+                           <div className="flex items-center justify-between">
+                             <div className="font-ranchers text-sm font-medium text-[hsl(var(--ink))]/70">Membership</div>
+                             <div className="inline-flex items-center rounded-full bg-gradient-to-r from-purple-500 to-purple-600 px-3 py-1 text-sm font-bold text-white shadow-md">
+                               {membershipTitle}
+                             </div>
+                           </div>
+                         ) : (
+                           <div className="flex items-center justify-between">
+                             <div className="font-ranchers text-sm font-medium text-[hsl(var(--ink))]/70">Membership</div>
+                             <div className="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium text-[hsl(var(--ink))]/70">
+                               No membership
+                             </div>
+                           </div>
+                         )}
+
                           <div className="flex items-center justify-between">
                             <div className="font-ranchers text-sm font-medium text-[hsl(var(--ink))]/70">Profile</div>
                             <div className="inline-flex items-center rounded-full bg-gradient-to-r from-pink-400 to-pink-600 px-3 py-1 text-sm font-bold text-white shadow-md">
