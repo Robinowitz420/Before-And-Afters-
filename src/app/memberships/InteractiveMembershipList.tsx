@@ -51,12 +51,14 @@ const TierCard = memo(function TierCard({
   onSelect,
   sizes,
   className,
+  priority = false,
 }: {
   tier: MembershipTier
   disabled: boolean
   onSelect: (tier: MembershipTier) => void
   sizes: string
   className: string
+  priority?: boolean
 }) {
   const level = MEMBERSHIP_LEVELS[tier]
   return (
@@ -74,6 +76,7 @@ const TierCard = memo(function TierCard({
           height={533}
           className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
           sizes={sizes}
+          loading={priority ? 'eager' : 'lazy'}
         />
       </div>
     </button>
@@ -222,7 +225,8 @@ export default function InteractiveMembershipList() {
                 disabled={checkoutTier !== null}
                 onSelect={onSelectTier}
                 sizes="100vw"
-                className="group relative w-full max-w-sm overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+                priority={tier === 'Eeeehs'}
+                className="group relative w-full max-w-sm overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
               />
             )
           })}
@@ -239,7 +243,8 @@ export default function InteractiveMembershipList() {
                   disabled={checkoutTier !== null}
                   onSelect={onSelectTier}
                   sizes="(max-width: 1024px) 50vw, 25vw"
-                  className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-yellow-400/80 hover:shadow-yellow-400/20 hover:scale-105 hover:shadow-[0_0_30px_rgba(250,204,21,0.3)] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+                  priority={tier === 'Eeeehs'}
+                  className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
                 />
               )
             })}
