@@ -137,9 +137,19 @@ function LandingClient() {
             </div>
           </div>
 
-          {/* Row 2: Short blurb + JoniHero image side by side */}
+          {/* Row 2: JoniSofa image + Short blurb side by side (image first on mobile, text first on desktop) */}
           <div className="mt-14 grid gap-6 lg:mt-16 lg:grid-cols-12 lg:items-start">
-            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[19px] font-bold text-[hsl(var(--ink))] shadow-sm sm:text-base sm:font-normal md:p-8 lg:col-span-4">
+            <figure className="lg:col-span-8 lg:order-2">
+              <Image
+                src="/images/Joni%20Images/JoniSofa.jpg?v=2"
+                alt="Michelle Joni"
+                width={2400}
+                height={3000}
+                className="h-auto w-full rounded-3xl shadow-lg"
+              />
+            </figure>
+
+            <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 text-[19px] font-bold text-[hsl(var(--ink))] shadow-sm sm:text-base sm:font-normal md:p-8 lg:col-span-4 lg:order-1">
               <div className="space-y-6 text-base leading-relaxed">
                 <p>
                   All this free will you have, planted with intention right here in the cauldron of the greatest most creative city in the world, here to
@@ -150,16 +160,6 @@ absolute most fun possible while doing it…. Ask yourself: ARE YOU
                 <p>Welcome to Before & Afters.</p>
               </div>
             </div>
-
-            <figure className="lg:col-span-8">
-              <Image
-                src="/images/Joni%20Images/JoniSofa.jpg?v=2"
-                alt="Michelle Joni"
-                width={2400}
-                height={3000}
-                className="h-auto w-full rounded-3xl shadow-lg"
-              />
-            </figure>
           </div>
 
           {/* Row 3: JoniColorsGlam image + Text blurb side by side */}
