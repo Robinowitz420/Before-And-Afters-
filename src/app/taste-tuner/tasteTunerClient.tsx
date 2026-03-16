@@ -1263,8 +1263,95 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-6 lg:grid-cols-[320px,1fr,280px] lg:items-start">
-        <aside className="w-full">
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[320px,1fr,280px] lg:items-start">
+        {/* Mobile: Profile section at top */}
+        <aside className="w-full lg:hidden">
+          <div className="p-4">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
+                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">Profile</div>
+
+                <div className="mt-3 flex flex-col items-center gap-3">
+                    <div
+                      className="h-32 w-32 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
+                    >
+                      {profile.avatar ? (
+                        <Image
+                          src={profile.avatar}
+                          alt="Avatar"
+                          width={128}
+                          height={128}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">No photo</div>
+                      )}
+                    </div>
+
+                    {(() => {
+                      const profileFields = [
+                        profile.fullName,
+                        profile.permaPlayaName,
+                        profile.igHandle,
+                        profile.birthday,
+                        profile.neighborhood,
+                        profile.signatureColor,
+                        profile.closetMascot,
+                        profile.styleVibe,
+                        profile.aboutYou,
+                        profile.wardrobeGripes,
+                        profile.favoriteStores,
+                        profile.excitementReasons?.length ? 'hasExcitement' : null,
+                        profile.selfieUrl,
+                        profile.avatar,
+                        profile.tones?.length ? 'hasTones' : null,
+                        profile.vibes?.length ? 'hasVibes' : null,
+                        profile.eras?.length ? 'hasEras' : null,
+                      ]
+                      const filledFields = profileFields.filter(Boolean).length
+                      const totalFields = profileFields.length
+                      const completionPercent = Math.round((filledFields / totalFields) * 100)
+
+                      return (
+                        <div className="w-full space-y-2">
+                         {/* Membership Tier Display */}
+                         {membershipTitle ? (
+                           <div className="flex items-center justify-between">
+                             <div className="font-ranchers text-xs font-medium text-[hsl(var(--ink))]/70">Membership</div>
+                             <div className="inline-flex items-center rounded-full bg-gradient-to-r from-purple-500 to-purple-600 px-2 py-0.5 text-xs font-bold text-white shadow-md">
+                               {membershipTitle}
+                             </div>
+                           </div>
+                         ) : (
+                           <div className="flex items-center justify-between">
+                             <div className="font-ranchers text-xs font-medium text-[hsl(var(--ink))]/70">Membership</div>
+                             <div className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium text-[hsl(var(--ink))]/70">
+                               No membership
+                             </div>
+                           </div>
+                         )}
+
+                          <div className="flex items-center justify-between">
+                            <div className="font-ranchers text-xs font-medium text-[hsl(var(--ink))]/70">Profile</div>
+                            <div className="inline-flex items-center rounded-full bg-gradient-to-r from-pink-400 to-pink-600 px-2 py-0.5 text-xs font-bold text-white shadow-md">
+                              {completionPercent}%
+                            </div>
+                          </div>
+                          <div className="h-3 w-full overflow-hidden rounded-full bg-[hsl(var(--secondary))]">
+                            <div
+                              className="h-full rounded-full bg-gradient-to-r from-pink-400 to-pink-600 transition-all duration-500"
+                              style={{ width: `${completionPercent}%` }}
+                            />
+                          </div>
+                        </div>
+                      )
+                    })()}
+                </div>
+              </div>
+          </div>
+        </aside>
+
+        {/* Desktop: My Closet sidebar */}
+        <aside className="hidden w-full lg:block">
           <div className="p-4">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
                 <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
@@ -1375,19 +1462,117 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                             alt="Calendar"
                             width={380}
                             height={500}
-                            sizes="380px"
+                            sizes="(max-width: 1024px) 100vw, 320px"
                             className="h-auto w-full object-contain"
                           />
                         </div>
 
                         <div className="p-3">
-                          <Button type="button" className="w-full border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold">
+                          <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
                             View Calendar
                           </Button>
                         </div>
                       </div>
                     </Link>
                   </div>
+                </div>
+              </div>
+          </div>
+        </aside>
+
+        {/* Mobile: My Closet section below profile */}
+        <aside className="w-full lg:hidden">
+          <div className="p-4">
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
+                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
+
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
+                    {savedItems.length ? (
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {savedItems.map((src) => (
+                          <button
+                            key={src}
+                            type="button"
+                            onClick={() => {
+                              if (usingCatalogue) {
+                                openGarmentDetails(src)
+                                return
+                              }
+                              openClosetItem(src)
+                            }}
+                            className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                          >
+                            <Image
+                              src={
+                                usingCatalogue
+                                  ? (() => {
+                                      const g = catalogueItems.find((x) => x.id === src)
+                                      return (
+                                        g?.primaryPhotoUrl ??
+                                        (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                                        '/placeholder.png'
+                                      )
+                                    })()
+                                  : src
+                              }
+                              loading="lazy"
+                              alt="Liked"
+                              width={80}
+                              height={80}
+                              className="h-16 w-full object-cover"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-2 text-center text-xs text-muted-foreground">
+                        Swipe right
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
+                    {recentReserved.length ? (
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        {recentReserved.map((id) => {
+                          const g = catalogueItems.find((x) => x.id === id)
+                          const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                          return (
+                            <button
+                              key={id}
+                              type="button"
+                              onClick={() => openGarmentDetails(id)}
+                              className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                            >
+                              <Image
+                                src={img ?? '/placeholder.png'}
+                                loading="lazy"
+                                alt="Reserved"
+                                width={80}
+                                height={80}
+                                className="h-16 w-full object-cover"
+                              />
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : (
+                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-2 text-center text-xs text-muted-foreground">
+                        None yet
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <Link href="/calendar" className="block">
+                    <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
+                      View Calendar
+                    </Button>
+                  </Link>
                 </div>
               </div>
           </div>
@@ -1831,7 +2016,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </Dialog.Portal>
         </Dialog.Root>
 
-        <aside className="w-full lg:sticky lg:top-6">
+        <aside className="hidden w-full lg:sticky lg:top-6 lg:block">
           <div className="space-y-3">
             <div className="p-4">
               <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
