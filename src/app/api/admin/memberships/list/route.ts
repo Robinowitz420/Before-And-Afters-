@@ -33,12 +33,11 @@ export async function GET(request: NextRequest) {
     const users = await prisma.user.findMany({
       take: limit,
       ...(cursor ? { skip: 1, cursor: { id: cursor } } : {}),
-      orderBy: [{ displayName: 'asc' }, { name: 'asc' }, { email: 'asc' }],
+      orderBy: [{ name: 'asc' }, { email: 'asc' }],
       select: {
         id: true,
         email: true,
         name: true,
-        displayName: true,
         membershipTier: true,
         membershipEndDate: true,
       },
