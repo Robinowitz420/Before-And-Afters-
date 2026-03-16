@@ -755,8 +755,12 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
 
   const savedItems = useMemo(() => {
     const liked = Array.isArray(save.likes) ? save.likes : []
-    return liked.slice(0, 12)
+    return liked.slice(0, 4)
   }, [save.likes])
+
+  const recentReserved = useMemo(() => {
+    return reservedIds.slice(0, 4)
+  }, [reservedIds])
 
   const threshold = 140
   const likeIntensity = Math.min(1, Math.max(0, dragX / threshold))
@@ -1259,20 +1263,19 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="grid gap-6 lg:grid-cols-[380px,1fr,340px] lg:items-start">
+      <div className="grid gap-6 lg:grid-cols-[320px,1fr,280px] lg:items-start">
         <aside className="w-full">
           <div className="p-4">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
-                <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">My Closet</div>
-                <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">Liked & Reserved</div>
+                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
 
                 <div className="mt-4 space-y-4">
                   <div>
                     <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Liked ({save.likes.length})</div>
                     {savedItems.length ? (
                       <>
-                        <div className="mt-2 grid grid-cols-3 gap-2">
-                          {savedItems.slice(0, 8).map((src) => (
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          {savedItems.map((src) => (
                             <button
                               key={src}
                               type="button"
@@ -1323,6 +1326,41 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     ) : (
                       <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-3 text-center text-xs text-muted-foreground">
                         Swipe right to like
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="font-ranchers text-xs font-semibold text-[hsl(var(--ink))]">Reserved ({reservedIds.length})</div>
+                    {recentReserved.length ? (
+                      <>
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          {recentReserved.map((id) => {
+                            const g = catalogueItems.find((x) => x.id === id)
+                            const img = g?.primaryPhotoUrl ?? (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null)
+                            return (
+                              <button
+                                key={id}
+                                type="button"
+                                onClick={() => openGarmentDetails(id)}
+                                className="overflow-hidden rounded-lg border border-[hsl(var(--border))] bg-white transition hover:shadow-sm"
+                              >
+                                <Image
+                                  src={img ?? '/placeholder.png'}
+                                  loading="lazy"
+                                  alt="Reserved"
+                                  width={120}
+                                  height={120}
+                                  className="h-24 w-full object-cover"
+                                />
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="font-ranchers mt-2 rounded-lg border border-dashed border-[hsl(var(--border))] bg-pink-100/95 p-3 text-center text-xs text-muted-foreground">
+                        No reservations yet
                       </div>
                     )}
                   </div>
@@ -1796,13 +1834,12 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <aside className="w-full lg:sticky lg:top-6">
           <div className="space-y-3">
             <div className="p-4">
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-white/90 p-4 shadow-sm">
-                  <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">Avatar</div>
-                  <div className="font-ranchers mt-1 text-base font-semibold text-[hsl(var(--ink))]">Profile photo</div>
+              <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
+                  <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">Profile</div>
 
                   <div className="mt-3 flex flex-col items-center gap-3">
                     <div
-                      className="h-80 w-64 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
+                      className="h-48 w-48 shrink-0 overflow-hidden rounded-full border border-[hsl(var(--border))] bg-white"
                     >
                       {profile.avatar ? (
                         <Image
