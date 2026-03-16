@@ -2046,8 +2046,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                     })()}
 
                     <div className="flex w-full flex-col gap-2">
-                      <label className="flex items-center justify-center rounded-lg border-[3px] border-blue-600 bg-white px-4 py-3 cursor-pointer hover:bg-blue-50 transition">
-                        <span className="font-ranchers text-base font-semibold text-[hsl(var(--ink))]">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change Photo' : 'Choose Photo'}</span>
+                      <label className="flex items-center justify-center rounded-lg border-[3px] border-blue-600 bg-white px-3 py-2 cursor-pointer hover:bg-blue-50 transition">
+                        <span className="font-ranchers text-sm font-semibold text-[hsl(var(--ink))]">{avatarUploading ? 'Uploading...' : profile.avatar ? 'Change Photo' : 'Choose Photo'}</span>
                         <input
                           type="file"
                           accept="image/*"
