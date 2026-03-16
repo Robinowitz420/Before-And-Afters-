@@ -55,30 +55,30 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
   const [draftImagesText, setDraftImagesText] = useState('')
 
   const monthStart = month
-  const daysInMonth = useMemo(() => {
+
+  const calendarData = useMemo(() => {
     const year = monthStart.getFullYear()
     const m = monthStart.getMonth()
     const last = new Date(year, m + 1, 0)
-    return last.getDate()
-  }, [monthStart])
+    const daysInMonth = last.getDate()
 
-  const leadingBlanks = useMemo(() => {
-    // Monday=0
-    const d = monthStart.getDay() // Sun=0
-    const mondayIndex = (d + 6) % 7
-    return mondayIndex
-  }, [monthStart])
+    const d = monthStart.getDay()
+    const leadingBlanks = (d + 6) % 7
 
-  const eventsByDate = useMemo(() => {
-    const map = new Map<string, EventItem[]>()
+    const eventMap = new Map<string, EventItem[]>()
     for (const ev of events) {
       if (!ev.date) continue
-      const list = map.get(ev.date) ?? []
+      const list = eventMap.get(ev.date) ?? []
       list.push(ev)
-      map.set(ev.date, list)
+      eventMap.set(ev.date, list)
     }
-    return map
-  }, [events])
+
+    return { daysInMonth, leadingBlanks, eventsByDate: eventMap }
+  }, [monthStart, events])
+
+  const daysInMonth = calendarData.daysInMonth
+  const leadingBlanks = calendarData.leadingBlanks
+  const eventsByDate = calendarData.eventsByDate
 
   const refresh = async () => {
     setLoading(true)
@@ -202,7 +202,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
   }, [daysInMonth, leadingBlanks, monthStart])
 
   return (
-    <div className="rounded-3xl border border-black/10 bg-pink-200/80 p-6 shadow-sm backdrop-blur md:p-8">
+    <div className="rounded-3xl border border-black/10 bg-pink-200/95 p-6 shadow-sm md:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold text-[hsl(var(--ink))]">Calendar of Events</h1>
@@ -248,7 +248,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
           return (
             <div
               key={`${cell.date ?? 'blank'}_${idx}`}
-              className="min-h-32 rounded-2xl border border-black/10 bg-white/40 p-2 backdrop-blur"
+              className="min-h-32 rounded-2xl border border-black/10 bg-white/90 p-2"
             >
               {cell.day ? <div className="text-sm font-bold text-[hsl(var(--ink))]">{cell.day}</div> : null}
               {dayEvents.slice(0, 4).map((ev) => (
@@ -270,7 +270,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
       </div>
 
       {selectedEvent ? (
-        <div className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-6 shadow-sm backdrop-blur">
+        <div className="mt-8 rounded-3xl border border-black/10 bg-white/95 p-6 shadow-sm">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div className="text-2xl font-bold text-[hsl(var(--ink))]">{selectedEvent.title}</div>
@@ -296,7 +296,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
             <div className="mt-6 grid gap-3 sm:grid-cols-2">
               {selectedEvent.imageUrls.map((url) => (
                 <div key={url} className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-black/10 bg-white">
-                  <Image src={url} alt="Event" fill sizes="600px" className="object-cover" />
+                  <Image src={url} alt="Event" fill sizes="600px" className="object-cover" loading="lazy" />
                 </div>
               ))}
             </div>
@@ -422,7 +422,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
           )}
         </div>
       ) : canEdit ? (
-        <div className="mt-8 rounded-3xl border border-black/10 bg-white/60 p-6 shadow-sm backdrop-blur">
+        <div className="mt-8 rounded-3xl border border-black/10 bg-white/95 p-6 shadow-sm">
           <div className="text-lg font-semibold text-[hsl(var(--ink))]">Create Event</div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <label className="text-sm text-[hsl(var(--ink))]">
