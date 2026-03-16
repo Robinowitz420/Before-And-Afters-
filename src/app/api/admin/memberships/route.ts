@@ -138,22 +138,46 @@ export async function POST(request: NextRequest) {
     const email = emailRaw.trim().toLowerCase()
     const level = MEMBERSHIP_LEVELS[membershipTier]
 
-    const existing = await prisma.user.findUnique({ where: { email } })
-    if (!existing) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    // Also accept clerkUserId from body for creating new users
+    const clerkUserId = typeof body?.clerkUserId === 'string' ? body.clerkUserId.trim() : null
+    const name = typeof body?.name === 'string' ? body.name.trim() : null
+
+    // Find existing user by email or clerkUserId
+    let existing = await prisma.user.findUnique({ where: { email } })
+    if (!existing && clerkUserId) {
+      existing = await prisma.user.findFirst({ where: { clerkUserId } })
     }
 
-    const updated = await prisma.user.update({
-      where: { email },
-      data: {
-        membershipTier,
-        membershipStartDate: startDate,
-        membershipEndDate: endDate,
-        maxItemsAllowed: level.maxItems,
-        monthlyFreeGlitcoins: level.freeMonthlyGlitcoins,
-        ...(depositPaid === undefined ? {} : { depositPaid }),
-      },
-    })
+    let updated
+    if (existing) {
+      updated = await prisma.user.update({
+        where: { id: existing.id },
+        data: {
+          membershipTier,
+          membershipStartDate: startDate,
+          membershipEndDate: endDate,
+          maxItemsAllowed: level.maxItems,
+          monthlyFreeGlitcoins: level.freeMonthlyGlitcoins,
+          ...(clerkUserId && !existing.clerkUserId ? { clerkUserId } : {}),
+        },
+      })
+    } else {
+      // Create new user if not found (for cash payments / manual entry)
+      updated = await prisma.user.create({
+        data: {
+          email,
+          name: name || email.split('@')[0] || 'Member',
+          clerkUserId: clerkUserId || null,
+          membershipTier,
+          membershipStartDate: startDate,
+          membershipEndDate: endDate,
+          maxItemsAllowed: level.maxItems,
+          monthlyFreeGlitcoins: level.freeMonthlyGlitcoins,
+          depositPaid: true,
+          glitcoinBalance: 0,
+        },
+      })
+    }
 
     await prisma.glitcoinTransaction.create({
       data: {
