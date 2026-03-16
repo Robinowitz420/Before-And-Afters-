@@ -1538,7 +1538,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <section className="flex w-full flex-col items-center justify-start lg:items-center lg:justify-center">
           {/* Mode toggle */}
           {usingCatalogue && !catalogueLoading && !catalogueError ? (
-            <div className="mb-4 grid w-full max-w-[520px] grid-cols-4 gap-2">
+            <div className="mb-4 flex w-full max-w-[520px] justify-center gap-2">
               <Button
                 type="button"
                 variant={browseMode ? 'outline' : 'default'}
@@ -1673,26 +1673,26 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center justify-center gap-3">
+                <div className="mt-3 flex items-center justify-between gap-3">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={onDislike}
-                    className="bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                    className="flex-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
                   >
                     Not for you
                   </Button>
-                  <Button type="button" onClick={onLike}>
+                  <Button type="button" onClick={onLike} className="flex-1">
                     Like
                   </Button>
                 </div>
 
                 {usingCatalogue ? (
-                  <div className="mt-2 flex justify-center">
+                  <div className="mt-2">
                     <Button
                       type="button"
                       variant="outline"
-                      className="bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                      className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
                       onClick={() => {
                         if (!currentCard) return
                         reserveCurrent(currentCard.id).catch(() => {
