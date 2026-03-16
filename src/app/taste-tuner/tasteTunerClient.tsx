@@ -1673,26 +1673,26 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between gap-3">
+                <div className="mt-3 flex items-center justify-center gap-3">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={onDislike}
-                    className="flex-1 bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                    className="bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
                   >
                     Not for you
                   </Button>
-                  <Button type="button" onClick={onLike} className="flex-1">
+                  <Button type="button" onClick={onLike}>
                     Like
                   </Button>
                 </div>
 
                 {usingCatalogue ? (
-                  <div className="mt-2">
+                  <div className="mt-2 flex justify-center">
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                      className="bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
                       onClick={() => {
                         if (!currentCard) return
                         reserveCurrent(currentCard.id).catch(() => {
@@ -2095,15 +2095,6 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                           Become A Member
                         </Button>
                       ) : null}
-
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        onClick={() => setDeleteProfileOpen(true)}
-                        className="rounded-xl border border-red-300/40 bg-red-50/70 text-red-700 px-3 py-2 text-xs shadow-sm hover:bg-red-100/80"
-                      >
-                        Delete Profile
-                      </Button>
                     </div>
                   </div>
                 </div>
@@ -2134,6 +2125,15 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           />
           <p className="mt-4 text-sm text-purple-600 font-medium">Tap to enlarge</p>
         </button>
+
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setDeleteProfileOpen(true)}
+          className="mt-6 rounded-lg border-[3px] border-red-500 bg-red-50/70 text-red-700 px-2 py-1 text-[10px] shadow-sm hover:bg-red-100/80"
+        >
+          Delete Profile
+        </Button>
       </div>
     </div>
 
