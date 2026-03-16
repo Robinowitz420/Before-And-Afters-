@@ -463,9 +463,17 @@ export function ProfileWizard() {
                         </Button>
                       ) : null}
 
-                      <Button type="button" onClick={onSubmit} disabled={!hasRequiredName || saving}>
-                        {saving ? 'Saving...' : 'Complete'}
-                      </Button>
+                      <div className="relative">
+                        <Button type="button" onClick={onSubmit} disabled={!hasRequiredName || saving}>
+                          {saving ? 'Saving...' : 'Complete'}
+                        </Button>
+                        {hasRequiredName && step === 1 && !saving ? (
+                          <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg animate-bounce">
+                            You can now click Complete!
+                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-purple-500 rotate-45" />
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
 
