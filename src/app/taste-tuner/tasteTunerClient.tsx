@@ -1455,7 +1455,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </aside>
 
         {/* Desktop: My Closet sidebar */}
-        <aside className="hidden w-full lg:block">
+        <aside className="hidden w-full lg:sticky lg:top-6 lg:self-start lg:block">
           <div className="p-4">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
                 <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
@@ -1963,7 +1963,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </Dialog.Portal>
         </Dialog.Root>
 
-        <aside className="hidden w-full lg:sticky lg:top-6 lg:block">
+        <aside className="hidden w-full lg:sticky lg:top-6 lg:self-start lg:block">
           <div className="space-y-3">
             <div className="p-4">
               <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
