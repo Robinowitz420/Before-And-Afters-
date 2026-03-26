@@ -402,10 +402,15 @@ function writeTasteSave(save: TasteTunerSave) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(save))
 }
 
-export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
+export function TasteTunerClient({ images, membership: initialMembership }: { images: ClothingImage[]; membership?: string | null }) {
   const [mounted, setMounted] = useState(false)
   const [profile, setProfile] = useState<WizardProfile>({})
-  const [membership, setMembership] = useState<MembershipSummary>(null)
+  const [membership, setMembership] = useState<MembershipSummary>(() => {
+    if (initialMembership && initialMembership in MEMBERSHIP_LEVELS) {
+      return { membershipTier: initialMembership as MembershipTier }
+    }
+    return null
+  })
   const { isLoaded, user } = useUser()
   const router = useRouter()
 
@@ -480,6 +485,7 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   const dragStartX = useRef<number | null>(null)
 
   const [likedAllOpen, setLikedAllOpen] = useState(false)
+  const [reservedAllOpen, setReservedAllOpen] = useState(false)
 
   const [deleteProfileOpen, setDeleteProfileOpen] = useState(false)
   const [deletingProfile, setDeletingProfile] = useState(false)
@@ -1022,8 +1028,8 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
   }
 
   return (
-    <div className="min-h-screen w-full">
-      <div className="mx-auto w-full max-w-[1600px] px-4 py-4 sm:px-6 sm:py-10">
+    <div className="w-full">
+      <div className="mx-auto w-full">
       {membershipTitle ? (
         <div className="mb-6 rounded-3xl border border-[hsl(var(--border))] bg-pink-100/95 p-4 shadow-sm sm:p-6">
           <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership</div>
@@ -1367,7 +1373,21 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         </Dialog.Portal>
       </Dialog.Root>
 
-      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[420px,1fr,380px] lg:items-start">
+      <div className="flex flex-col gap-2 lg:grid lg:grid-cols-[420px,1fr,380px] lg:items-start lg:gap-4">
+        {/* Mobile: Become A Member button above Profile */}
+        {!membership ? (
+          <div className="w-full lg:hidden px-4 pt-2">
+            <Link href="/memberships" className="block">
+              <Button
+                type="button"
+                className="w-full border-[3px] border-[#FFD700] px-6 py-5 text-lg font-bold"
+              >
+                Become A Member
+              </Button>
+            </Link>
+          </div>
+        ) : null}
+        
         {/* Mobile: Profile section at top */}
         <aside className="w-full lg:hidden">
           <div className="p-4">
@@ -1458,42 +1478,26 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <aside className="hidden w-full lg:sticky lg:top-6 lg:self-start lg:block">
           <div className="p-4">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
-                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
+                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Calendar</div>
 
-                <div className="mt-4 flex flex-col gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-white/70 hover:bg-white"
-                    onClick={() => setLikedAllOpen(true)}
-                  >
-                    Liked Items ({save.likes.length})
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-white/70 hover:bg-white"
-                    onClick={() => {/* TODO: open reserved modal */}}
-                  >
-                    Reserved Items ({reservedIds.length})
-                  </Button>
+                <div className="mt-4 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-pink-100/95 shadow-sm">
+                  <div className="relative w-full overflow-hidden">
+                    <Image
+                      src="/images/Joni%20Images/JoniCalander.jpg"
+                      alt="Calendar"
+                      width={380}
+                      height={500}
+                      sizes="420px"
+                      className="h-auto w-full object-contain"
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-4">
                   <Link href="/calendar" className="block">
-                    <div className="overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-pink-100/95 shadow-sm transition hover:shadow-md">
-                      <div className="relative w-full overflow-hidden">
-                        <Image
-                          src="/images/Joni%20Images/JoniCalander.jpg"
-                          alt="Calendar"
-                          width={380}
-                          height={500}
-                          sizes="420px"
-                          className="h-auto w-full object-contain"
-                        />
-                      </div>
-                    </div>
+                    <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
+                      View Calendar
+                    </Button>
                   </Link>
                 </div>
               </div>
@@ -1504,27 +1508,20 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
         <aside className="w-full lg:hidden">
           <div className="p-4">
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
-                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Closet</div>
+                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Calendar</div>
 
-                <div className="mt-4 flex flex-col gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-white/70 hover:bg-white"
-                    onClick={() => setLikedAllOpen(true)}
-                  >
-                    Liked Items ({save.likes.length})
-                  </Button>
+                <div className="mt-4 overflow-hidden rounded-2xl border-[3px] border-[#FFD700] bg-pink-100/95 shadow-sm">
+                  <Image
+                    src="/images/Joni%20Images/JoniCalander.jpg"
+                    alt="Calendar"
+                    width={380}
+                    height={500}
+                    sizes="(max-width: 1024px) 100vw, 420px"
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-white/70 hover:bg-white"
-                    onClick={() => {/* TODO: open reserved modal */}}
-                  >
-                    Reserved Items ({reservedIds.length})
-                  </Button>
-
+                <div className="mt-4">
                   <Link href="/calendar" className="block">
                     <Button type="button" className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold">
                       View Calendar
@@ -1792,12 +1789,81 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
           </Dialog.Portal>
         </Dialog.Root>
 
+        <Dialog.Root open={reservedAllOpen} onOpenChange={setReservedAllOpen}>
+          <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60" />
+            <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[min(760px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-6 shadow-2xl">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">
+                    My Closet
+                  </div>
+                  <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">
+                    Reserved items ({reservedIds.length})
+                  </div>
+                </div>
+                <Dialog.Close asChild>
+                  <button
+                    type="button"
+                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-sm font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
+                  >
+                    Close
+                  </button>
+                </Dialog.Close>
+              </div>
+
+              <div className="mt-5 max-h-[70vh] overflow-auto rounded-xl border border-[hsl(var(--border))] bg-white/90 p-4">
+                {reservedIds.length ? (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                    {reservedIds.map((id) => {
+                      const g = catalogueItems.find((x) => x.id === id)
+                      const img =
+                        g?.primaryPhotoUrl ??
+                        (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                        '/placeholder.png'
+                      return (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => {
+                            setReservedAllOpen(false)
+                            openGarmentDetails(id)
+                          }}
+                          className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white shadow-sm transition hover:shadow-md"
+                        >
+                          <Image
+                            src={img}
+                            loading="lazy"
+                            alt={g?.name ?? 'Reserved'}
+                            width={240}
+                            height={240}
+                            className="h-36 w-full object-cover"
+                          />
+                          <div className="px-3 py-2">
+                            <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/95 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
+                              Tap to view
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                ) : (
+                  <div className="rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/90 p-6 text-center text-sm text-[hsl(var(--ink))]/70">
+                    No reserved garments yet.
+                  </div>
+                )}
+              </div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+
         <Dialog.Root open={detailOpen} onOpenChange={(open) => (open ? setDetailOpen(true) : setDetailOpen(false))}>
           <Dialog.Portal>
             <Dialog.Overlay
               className={cn(
-                'fixed inset-0 z-50 bg-[url("/images/checkered-background.jpg")] bg-cover bg-center bg-no-repeat',
-                'after:absolute after:inset-0 after:bg-black/40 after:content-[""]',
+                'fixed inset-0 z-50 bg-[url("/images/Backgrounds/plain%20wallpaper.png")] bg-cover bg-center bg-no-repeat',
+                'after:absolute after:inset-0 after:bg-black/55 after:content-[""]',
                 'transition-opacity duration-200 ease-out',
                 'data-[state=closed]:opacity-0 data-[state=open]:opacity-100'
               )}
@@ -2086,18 +2152,26 @@ export function TasteTunerClient({ images }: { images: ClothingImage[] }) {
                         Edit Profile
                       </Button>
 
-                      {!membership ? (
-                        <Button
-                          type="button"
-                          onClick={() => router.push('/memberships')}
-                          className="border-[3px] border-[#FFD700] px-6 py-6 text-xl font-bold"
-                        >
-                          Become A Member
-                        </Button>
-                      ) : null}
-                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full bg-white/70 hover:bg-white"
+                      onClick={() => setLikedAllOpen(true)}
+                    >
+                      Liked Items ({save.likes.length})
+                    </Button>
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full bg-white/70 hover:bg-white"
+                      onClick={() => setReservedAllOpen(true)}
+                    >
+                      Reserved Items ({reservedIds.length})
+                    </Button>
                   </div>
                 </div>
+            </div>
             </div>
 
           </div>
