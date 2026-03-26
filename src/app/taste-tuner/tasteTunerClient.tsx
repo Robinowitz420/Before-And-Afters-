@@ -486,6 +486,7 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
 
   const [likedAllOpen, setLikedAllOpen] = useState(false)
   const [reservedAllOpen, setReservedAllOpen] = useState(false)
+  const [myClosetOpen, setMyClosetOpen] = useState(false)
 
   const [deleteProfileOpen, setDeleteProfileOpen] = useState(false)
   const [deletingProfile, setDeletingProfile] = useState(false)
@@ -994,7 +995,7 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
     setDragX(dx)
   }
 
-  const onPointerUp = () => {
+  const onPointerUp = (e?: React.PointerEvent | React.TouchEvent) => {
     if (!dragging) return
     if (dragX > threshold) {
       onLike()
@@ -1004,9 +1005,25 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
       onDislike()
       return
     }
+    // Reset card to center if not swiped far enough
     setDragX(0)
     setDragging(false)
     dragStartX.current = null
+  }
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    dragStartX.current = e.touches[0].clientX
+    setDragging(true)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!dragging || dragStartX.current === null) return
+    const dx = e.touches[0].clientX - dragStartX.current
+    setDragX(dx)
+  }
+
+  const onTouchEnd = () => {
+    onPointerUp()
   }
 
   const deleteProfile = async () => {
@@ -1634,6 +1651,10 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
                   onPointerMove={onPointerMove}
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
+                  onTouchStart={onTouchStart}
+                  onTouchMove={onTouchMove}
+                  onTouchEnd={onTouchEnd}
+                  onTouchCancel={onTouchEnd}
                 >
                   <div
                     className="pointer-events-none absolute left-6 top-20 z-10 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
@@ -1685,21 +1706,33 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
                 </div>
 
                 {usingCatalogue ? (
-                  <div className="mt-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
-                      onClick={() => {
-                        if (!currentCard) return
-                        reserveCurrent(currentCard.id).catch(() => {
-                          // ignore
-                        })
-                      }}
-                    >
-                      Reserve item
-                    </Button>
-                  </div>
+                  <>
+                    <div className="mt-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full bg-[hsl(var(--background))] hover:bg-[hsl(var(--secondary))]"
+                        onClick={() => {
+                          if (!currentCard) return
+                          reserveCurrent(currentCard.id).catch(() => {
+                            // ignore
+                          })
+                        }}
+                      >
+                        Reserve item
+                      </Button>
+                    </div>
+                    <div className="mt-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full bg-white/70 hover:bg-white"
+                        onClick={() => setMyClosetOpen(true)}
+                      >
+                        Your Closet ({save.likes.length + reservedIds.length})
+                      </Button>
+                    </div>
+                  </>
                 ) : null}
 
                 <div className="mt-4 text-center text-sm text-muted-foreground">
@@ -1784,6 +1817,139 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
                     No liked garments yet.
                   </div>
                 )}
+              </div>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog.Root>
+
+        {/* My Closet - Combined Liked and Reserved Items */}
+        <Dialog.Root open={myClosetOpen} onOpenChange={setMyClosetOpen}>
+          <Dialog.Portal>
+            <Dialog.Overlay className="fixed inset-0 z-50 bg-black/60" />
+            <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[min(760px,calc(100%-2rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-[hsl(var(--border))] bg-white/90 p-6 shadow-2xl">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="font-ranchers text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">
+                    My Closet
+                  </div>
+                  <div className="font-ranchers mt-1 text-lg font-semibold text-[hsl(var(--ink))]">
+                    Liked ({save.likes.length}) • Reserved ({reservedIds.length})
+                  </div>
+                </div>
+                <Dialog.Close asChild>
+                  <button
+                    type="button"
+                    className="rounded-full border border-[hsl(var(--border))] bg-white px-3 py-1 text-sm font-medium text-[hsl(var(--ink))] hover:bg-[hsl(var(--secondary))]"
+                  >
+                    Close
+                  </button>
+                </Dialog.Close>
+              </div>
+
+              {/* Liked Items Section */}
+              <div className="mt-5">
+                <div className="font-ranchers mb-2 text-sm font-semibold text-[hsl(var(--ink))]">Liked Items ({save.likes.length})</div>
+                <div className="max-h-[35vh] overflow-auto rounded-xl border border-[hsl(var(--border))] bg-white/90 p-4">
+                  {save.likes.length ? (
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                      {save.likes.map((src) => (
+                        <button
+                          key={src}
+                          type="button"
+                          onClick={() => {
+                            setMyClosetOpen(false)
+                            if (usingCatalogue) {
+                              openGarmentDetails(src)
+                            } else {
+                              openClosetItem(src)
+                            }
+                          }}
+                          className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white shadow-sm transition hover:shadow-md"
+                        >
+                          <Image
+                            src={
+                              usingCatalogue
+                                ? (() => {
+                                    const g = catalogueItems.find((x) => x.id === src)
+                                    return (
+                                      g?.primaryPhotoUrl ??
+                                      (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                                      '/placeholder.png'
+                                    )
+                                  })()
+                                : src
+                            }
+                            alt={(() => {
+                              if (!usingCatalogue) return 'Closet item'
+                              const g = catalogueItems.find((x) => x.id === src)
+                              return g?.name ?? 'Closet item'
+                            })()}
+                            loading="lazy"
+                            width={240}
+                            height={240}
+                            className="h-36 w-full object-cover"
+                          />
+                          <div className="px-3 py-2">
+                            <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/95 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
+                              Tap to view
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/90 p-6 text-center text-sm text-[hsl(var(--ink))]/70">
+                      No liked garments yet.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Reserved Items Section */}
+              <div className="mt-5">
+                <div className="font-ranchers mb-2 text-sm font-semibold text-[hsl(var(--ink))]">Reserved Items ({reservedIds.length})</div>
+                <div className="max-h-[35vh] overflow-auto rounded-xl border border-[hsl(var(--border))] bg-white/90 p-4">
+                  {reservedIds.length ? (
+                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                      {reservedIds.map((id) => {
+                        const g = catalogueItems.find((x) => x.id === id)
+                        const img =
+                          g?.primaryPhotoUrl ??
+                          (Array.isArray(g?.photoUrls) ? g?.photoUrls?.[0] : null) ??
+                          '/placeholder.png'
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => {
+                              setMyClosetOpen(false)
+                              openGarmentDetails(id)
+                            }}
+                            className="overflow-hidden rounded-xl border border-[hsl(var(--border))] bg-white shadow-sm transition hover:shadow-md"
+                          >
+                            <Image
+                              src={img}
+                              loading="lazy"
+                              alt={g?.name ?? 'Reserved'}
+                              width={240}
+                              height={240}
+                              className="h-36 w-full object-cover"
+                            />
+                            <div className="px-3 py-2">
+                              <div className="inline-flex rounded-full border border-[hsl(var(--border))] bg-white/95 px-2 py-1 text-[11px] font-medium text-[hsl(var(--ink))]">
+                                Tap to view
+                              </div>
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div className="rounded-lg border border-dashed border-[hsl(var(--border))] bg-white/90 p-6 text-center text-sm text-[hsl(var(--ink))]/70">
+                      No reserved garments yet.
+                    </div>
+                  )}
+                </div>
               </div>
             </Dialog.Content>
           </Dialog.Portal>
@@ -2152,23 +2318,14 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
                         Edit Profile
                       </Button>
 
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full bg-white/70 hover:bg-white"
-                      onClick={() => setLikedAllOpen(true)}
-                    >
-                      Liked Items ({save.likes.length})
-                    </Button>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full bg-white/70 hover:bg-white"
-                      onClick={() => setReservedAllOpen(true)}
-                    >
-                      Reserved Items ({reservedIds.length})
-                    </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full bg-white/70 hover:bg-white"
+                        onClick={() => setMyClosetOpen(true)}
+                      >
+                        My Closet ({save.likes.length + reservedIds.length})
+                      </Button>
                   </div>
                 </div>
             </div>
