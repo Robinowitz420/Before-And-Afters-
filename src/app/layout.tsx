@@ -8,7 +8,7 @@ import './globals.css'
 // ============================================
 // 🔴 SITE PAUSE TOGGLE - Set to true to pause the site
 // ============================================
-const SITE_IS_PAUSED = true
+const SITE_IS_PAUSED = false
 const PAUSE_MESSAGE = "Site paused till further notice, Michelle needs to reply to Robin!"
 // ============================================
 
