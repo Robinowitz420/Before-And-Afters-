@@ -45,6 +45,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null)
   const [rsvpStatus, setRsvpStatus] = useState<'none' | 'attending' | 'not_attending'>('none')
   const [rsvpSaving, setRsvpSaving] = useState(false)
+  const [eventRsvpStatuses, setEventRsvpStatuses] = useState<Record<string, 'none' | 'attending' | 'not_attending'>>({})
 
   const [draft, setDraft] = useState<Partial<EventItem> & { id?: string }>({
     title: '',
@@ -92,6 +93,26 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
       const json = (await res.json().catch(() => null)) as any
       if (!res.ok) throw new Error(json?.error || 'Failed to load events')
       setEvents(Array.isArray(json?.events) ? json.events : [])
+      
+      // Load RSVP statuses for all events
+      if (Array.isArray(json?.events)) {
+        const statuses: Record<string, 'none' | 'attending' | 'not_attending'> = {}
+        for (const event of json.events) {
+          try {
+            const rsvpRes = await fetch(`/api/events/rsvp?eventId=${encodeURIComponent(event.id)}`, { cache: 'no-store' })
+            if (rsvpRes.ok) {
+              const rsvpJson = (await rsvpRes.json().catch(() => null)) as any
+              const status = rsvpJson?.status
+              if (status === 'attending' || status === 'not_attending' || status === 'none') {
+                statuses[event.id] = status
+              }
+            }
+          } catch {
+            // ignore
+          }
+        }
+        setEventRsvpStatuses(statuses)
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to load events')
     } finally {
@@ -105,18 +126,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
 
   const openEvent = async (ev: EventItem) => {
     setSelectedEvent(ev)
-    setRsvpStatus('none')
-
-    try {
-      const res = await fetch(`/api/events/rsvp?eventId=${encodeURIComponent(ev.id)}`, { cache: 'no-store' })
-      if (res.ok) {
-        const json = (await res.json().catch(() => null)) as any
-        const s = json?.status
-        if (s === 'attending' || s === 'not_attending' || s === 'none') setRsvpStatus(s)
-      }
-    } catch {
-      // ignore
-    }
+    setRsvpStatus(eventRsvpStatuses[ev.id] || 'none')
 
     if (canEdit) {
       setDraft({
@@ -190,6 +200,30 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
       const json = (await res.json().catch(() => null)) as any
       if (!res.ok) throw new Error(json?.error || 'Failed to RSVP')
       setRsvpStatus(status)
+      setEventRsvpStatuses(prev => ({ ...prev, [selectedEvent.id]: status }))
+      
+      // TODO: Send RSVP data to sister site (wardrobe-manager2)
+      console.log('RSVP for event', selectedEvent.id, ':', status, '- should sync to sister site')
+    } finally {
+      setRsvpSaving(false)
+    }
+  }
+
+  const setRsvpForEvent = async (event: EventItem, status: 'attending' | 'not_attending') => {
+    setRsvpSaving(true)
+    try {
+      const res = await fetch('/api/events/rsvp', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ eventId: event.id, status }),
+      })
+      const json = (await res.json().catch(() => null)) as any
+      if (!res.ok) throw new Error(json?.error || 'Failed to RSVP')
+      
+      setEventRsvpStatuses(prev => ({ ...prev, [event.id]: status }))
+      
+      // TODO: Send RSVP data to sister site (wardrobe-manager2)
+      console.log('RSVP for event', event.id, ':', status, '- should sync to sister site')
     } finally {
       setRsvpSaving(false)
     }
@@ -303,26 +337,72 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
                   <div className="text-sm text-[hsl(var(--ink))]/50 italic">No events this day</div>
                 ) : (
                   <div className="space-y-3">
-                    {dayEvents.map((ev) => (
-                      <button
-                        key={ev.id}
-                        type="button"
-                        onClick={() => openEvent(ev)}
-                        className="w-full text-left rounded-2xl border-2 border-black/10 bg-white/80 p-4 hover:bg-white transition-colors"
-                      >
-                        <div className="font-semibold text-lg text-[hsl(var(--ink))]">{ev.title || 'Untitled'}</div>
-                        <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">
-                          {ev.startTime ? `${ev.startTime}` : ''}
-                          {ev.startTime && ev.endTime ? ` – ${ev.endTime}` : ''}
-                          {ev.location ? ` • ${ev.location}` : ''}
-                        </div>
-                        {ev.description && (
-                          <div className="text-sm text-[hsl(var(--ink))]/60 mt-2 line-clamp-2">
-                            {ev.description}
+                    {dayEvents.map((ev) => {
+                      const isAttending = eventRsvpStatuses[ev.id] === 'attending'
+                      const isNotAttending = eventRsvpStatuses[ev.id] === 'not_attending'
+                      
+                      return (
+                        <div
+                          key={ev.id}
+                          className="w-full text-left rounded-2xl border-2 border-black/10 bg-white/80 p-4"
+                        >
+                          <button
+                            type="button"
+                            onClick={() => openEvent(ev)}
+                            className="w-full text-left"
+                          >
+                            <div className="font-semibold text-lg text-[hsl(var(--ink))]">{ev.title || 'Untitled'}</div>
+                            <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">
+                              {ev.startTime ? `${ev.startTime}` : ''}
+                              {ev.startTime && ev.endTime ? ` – ${ev.endTime}` : ''}
+                              {ev.location ? ` • ${ev.location}` : ''}
+                            </div>
+                            {ev.description && (
+                              <div className="text-sm text-[hsl(var(--ink))]/60 mt-2 line-clamp-2">
+                                {ev.description}
+                              </div>
+                            )}
+                          </button>
+                          
+                          {/* RSVP buttons for mobile */}
+                          <div className="mt-3 flex gap-2">
+                            <Button
+                              type="button"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setRsvpForEvent(ev, 'attending')
+                              }}
+                              disabled={rsvpSaving}
+                              className={`px-3 py-1 text-xs font-semibold ${
+                                isAttending 
+                                  ? 'bg-green-500 text-white border-green-500' 
+                                  : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
+                              }`}
+                            >
+                              {isAttending ? '✓ Attending' : 'Attend'}
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setRsvpForEvent(ev, 'not_attending')
+                              }}
+                              disabled={rsvpSaving}
+                              className={`px-3 py-1 text-xs font-semibold ${
+                                isNotAttending 
+                                  ? 'bg-red-500 text-white border-red-500' 
+                                  : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
+                              }`}
+                            >
+                              {isNotAttending ? '✗ Not Going' : 'Not Going'}
+                            </Button>
                           </div>
-                        )}
-                      </button>
-                    ))}
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>
