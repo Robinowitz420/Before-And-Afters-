@@ -39,16 +39,54 @@ export async function GET(request: NextRequest) {
 
     const attendeeUserIds = snap.docs.map((doc) => (doc.data() as any)?.userId).filter(Boolean)
 
-    // Fetch user display names from profiles
+    // Fetch user display names from profiles (look up by clerkUserId field)
     const profiles = await Promise.all(
       attendeeUserIds.map(async (uid: string) => {
         try {
-          const profileSnap = await db.collection('profiles').doc(uid).get()
-          const profileData = profileSnap.exists ? (profileSnap.data() as any) : null
-          return {
-            userId: uid,
-            displayName: profileData?.displayName || 'Anonymous',
+          // Try to find profile where clerkUserId matches
+          const profileQuery = await db
+            .collection('profiles')
+            .where('clerkUserId', '==', uid)
+            .limit(1)
+            .get()
+
+          if (!profileQuery.empty) {
+            const doc = profileQuery.docs[0]
+            const raw = doc.data() as any
+            const data = raw?.data && typeof raw.data === 'object' ? (raw.data as any) : raw
+
+            const displayName =
+              (typeof data.displayName === 'string' && data.displayName.trim()) ||
+              (typeof data.fullName === 'string' && data.fullName.trim()) ||
+              (typeof data.nickname === 'string' && data.nickname.trim()) ||
+              null
+
+            return {
+              userId: uid,
+              displayName: displayName || 'Anonymous',
+            }
           }
+
+          // Fallback: try to get name from Prisma User table
+          const { prisma } = await import('@/lib/prisma')
+          const user = await prisma.user.findFirst({
+            where: {
+              OR: [
+                { clerkUserId: uid },
+                { email: { in: [] } }, // placeholder for OR
+              ],
+            },
+            select: { displayName: true, name: true, email: true },
+          })
+
+          if (user) {
+            return {
+              userId: uid,
+              displayName: user.displayName || user.name || user.email?.split('@')[0] || 'Anonymous',
+            }
+          }
+
+          return { userId: uid, displayName: 'Anonymous' }
         } catch {
           return { userId: uid, displayName: 'Anonymous' }
         }
