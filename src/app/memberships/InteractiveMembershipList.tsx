@@ -9,9 +9,6 @@ const BASE_IMAGE_SRC = '/images/Backgrounds/Background2.jpg'
 
 const TIER_IMAGES: Record<MembershipTier, string> = {
   Eeeehs: '/images/Memberships/eeeehs.jpg',
-  Oooohs: '/images/Memberships/Oooohs.jpg',
-  Aaaaahs: '/images/Memberships/Aaaahs.jpg',
-  Mmmmms: '/images/Memberships/Mmmms.jpg',
 }
 
 const membershipDisclaimer = `Membership Agreement & Disclaimer

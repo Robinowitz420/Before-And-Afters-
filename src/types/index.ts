@@ -1,5 +1,5 @@
-// Membership Tiers
-export type MembershipTier = 'Eeeehs' | 'Oooohs' | 'Aaaaahs' | 'Mmmmms';
+// Membership Tiers - Only Eeeehs ($50/mo) available
+export type MembershipTier = 'Eeeehs';
 
 export interface MembershipLevel {
   id: MembershipTier;
@@ -145,61 +145,6 @@ export const MEMBERSHIP_LEVELS: Record<MembershipTier, MembershipLevel> = {
       '1 Check Me Out / month',
       'Spritz & Glitz access (makeup & beauty hygiene bar)',
       '1 Glitcoin / month'
-    ]
-  },
-  Oooohs: {
-    id: 'Oooohs',
-    name: '💚 Oooohs — $100/mo',
-    monthlyPrice: 75,
-    yearlyPrice: 1000,
-    maxItems: 2,
-    freeCheckMeowtItems: 2,
-    glitcoinValue: 20,
-    freeMonthlyGlitcoins: 3,
-    benefits: [
-      '2 Closet Club items',
-      'Unlimited swap-outs',
-      '2 Check Me Out / month',
-      'Spritz & Glitz access (makeup & beauty hygiene bar)',
-      '3 Glitcoins / month'
-    ]
-  },
-  Aaaaahs: {
-    id: 'Aaaaahs',
-    name: '💜 Aaaahs — $200/mo',
-    monthlyPrice: 200,
-    yearlyPrice: 2000,
-    maxItems: 5,
-    freeCheckMeowtItems: 5,
-    glitcoinValue: 40,
-    freeMonthlyGlitcoins: 5,
-    benefits: [
-      '5 Closet Club items',
-      'Unlimited swap-outs',
-      '5 Check Me Out / month',
-      'Spritz & Glitz access (makeup & beauty hygiene bar)',
-      '5 Glitcoins / month',
-      '1 Fashion Photoshoot / month'
-    ]
-  },
-  Mmmmms: {
-    id: 'Mmmmms',
-    name: '💖 Mmmms — $500/mo',
-    monthlyPrice: 500,
-    yearlyPrice: 5000,
-    maxItems: 10,
-    freeCheckMeowtItems: 10,
-    glitcoinValue: 100,
-    freeMonthlyGlitcoins: 10,
-    benefits: [
-      '10 Closet Club items',
-      'Unlimited swap-outs',
-      'Unlimited Check Me Out',
-      'Spritz & Glitz access (makeup & beauty hygiene bar)',
-      '10 Glitcoins / month',
-      '4 Fashion Photoshoots / month',
-      'Priority rare drops',
-      'Ongoing coaching from Michelle herself'
     ]
   }
 };

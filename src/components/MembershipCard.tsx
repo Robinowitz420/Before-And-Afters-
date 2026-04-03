@@ -7,9 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 const TIER_IMAGE: Record<MembershipTier, string> = {
   Eeeehs: '/images/Membership Images/EeeehsSelected.png',
-  Oooohs: '/images/Membership Images/OooohsSelected.png',
-  Aaaaahs: '/images/Membership Images/AaaagsSelected.png',
-  Mmmmms: '/images/Membership Images/MmmmsSelected.png',
 }
 
 interface MembershipCardProps {

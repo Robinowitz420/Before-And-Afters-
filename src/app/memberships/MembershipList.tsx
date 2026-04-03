@@ -9,9 +9,6 @@ import { Badge } from '@/components/ui/badge'
 
 const TIER_IMAGE: Record<MembershipTier, string> = {
   Eeeehs: '/images/MEMBERSHIPS/Eeeehs.png',
-  Oooohs: '/images/MEMBERSHIPS/Oooohs.png',
-  Aaaaahs: '/images/MEMBERSHIPS/Aaaahs.png',
-  Mmmmms: '/images/MEMBERSHIPS/Mmmms.png',
 }
 
 interface Membership {
