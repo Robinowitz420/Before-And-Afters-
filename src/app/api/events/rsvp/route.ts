@@ -23,11 +23,42 @@ export async function GET(request: NextRequest) {
 
   const url = new URL(request.url)
   const eventId = normalizeString(url.searchParams.get('eventId'))
+  const attendees = url.searchParams.get('attendees') === 'true'
 
   if (!eventId) {
     return NextResponse.json({ error: 'Missing eventId' }, { status: 400 })
   }
 
+  // If attendees=true, return list of attendees
+  if (attendees) {
+    const snap = await db
+      .collection('eventRsvps')
+      .where('eventId', '==', eventId)
+      .where('status', '==', 'attending')
+      .get()
+
+    const attendeeUserIds = snap.docs.map((doc) => (doc.data() as any)?.userId).filter(Boolean)
+
+    // Fetch user display names from profiles
+    const profiles = await Promise.all(
+      attendeeUserIds.map(async (uid: string) => {
+        try {
+          const profileSnap = await db.collection('profiles').doc(uid).get()
+          const profileData = profileSnap.exists ? (profileSnap.data() as any) : null
+          return {
+            userId: uid,
+            displayName: profileData?.displayName || 'Anonymous',
+          }
+        } catch {
+          return { userId: uid, displayName: 'Anonymous' }
+        }
+      })
+    )
+
+    return NextResponse.json({ attendees: profiles })
+  }
+
+  // Otherwise return current user's RSVP status
   const snap = await db.collection('eventRsvps').doc(`${eventId}_${userId}`).get()
   if (!snap.exists) {
     return NextResponse.json({ status: 'none' })

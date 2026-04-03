@@ -46,6 +46,8 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
   const [rsvpStatus, setRsvpStatus] = useState<'none' | 'attending' | 'not_attending'>('none')
   const [rsvpSaving, setRsvpSaving] = useState(false)
   const [eventRsvpStatuses, setEventRsvpStatuses] = useState<Record<string, 'none' | 'attending' | 'not_attending'>>({})
+  const [expandedEventId, setExpandedEventId] = useState<string | null>(null)
+  const [eventAttendees, setEventAttendees] = useState<Record<string, Array<{ userId: string; displayName: string }>>>({})
 
   const [draft, setDraft] = useState<Partial<EventItem> & { id?: string }>({
     title: '',
@@ -222,10 +224,38 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
       
       setEventRsvpStatuses(prev => ({ ...prev, [event.id]: status }))
       
+      // Refresh attendees list if expanded
+      if (expandedEventId === event.id) {
+        await loadAttendees(event.id)
+      }
+      
       // TODO: Send RSVP data to sister site (wardrobe-manager2)
       console.log('RSVP for event', event.id, ':', status, '- should sync to sister site')
     } finally {
       setRsvpSaving(false)
+    }
+  }
+
+  const loadAttendees = async (eventId: string) => {
+    try {
+      const res = await fetch(`/api/events/rsvp?eventId=${encodeURIComponent(eventId)}&attendees=true`, { cache: 'no-store' })
+      if (res.ok) {
+        const json = (await res.json().catch(() => null)) as any
+        if (Array.isArray(json?.attendees)) {
+          setEventAttendees(prev => ({ ...prev, [eventId]: json.attendees }))
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  const toggleEventExpand = async (event: EventItem) => {
+    if (expandedEventId === event.id) {
+      setExpandedEventId(null)
+    } else {
+      setExpandedEventId(event.id)
+      await loadAttendees(event.id)
     }
   }
 
@@ -340,66 +370,97 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
                     {dayEvents.map((ev) => {
                       const isAttending = eventRsvpStatuses[ev.id] === 'attending'
                       const isNotAttending = eventRsvpStatuses[ev.id] === 'not_attending'
+                      const isExpanded = expandedEventId === ev.id
+                      const attendees = eventAttendees[ev.id] ?? []
                       
                       return (
                         <div
                           key={ev.id}
-                          className="w-full text-left rounded-2xl border-2 border-black/10 bg-white/80 p-4"
+                          className="w-full text-left rounded-2xl border-2 border-black/10 bg-white/80 overflow-hidden"
                         >
+                          {/* Header - always visible */}
                           <button
                             type="button"
-                            onClick={() => openEvent(ev)}
-                            className="w-full text-left"
+                            onClick={() => toggleEventExpand(ev)}
+                            className="w-full text-left p-4"
                           >
-                            <div className="font-semibold text-lg text-[hsl(var(--ink))]">{ev.title || 'Untitled'}</div>
-                            <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">
-                              {ev.startTime ? `${ev.startTime}` : ''}
-                              {ev.startTime && ev.endTime ? ` – ${ev.endTime}` : ''}
-                              {ev.location ? ` • ${ev.location}` : ''}
-                            </div>
-                            {ev.description && (
-                              <div className="text-sm text-[hsl(var(--ink))]/60 mt-2 line-clamp-2">
-                                {ev.description}
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="font-semibold text-lg text-[hsl(var(--ink))]">{ev.title || 'Untitled'}</div>
+                                <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">
+                                  {ev.startTime ? `${ev.startTime}` : ''}
+                                  {ev.startTime && ev.endTime ? ` – ${ev.endTime}` : ''}
+                                  {ev.location ? ` • ${ev.location}` : ''}
+                                </div>
                               </div>
-                            )}
+                              <div className="ml-3 text-2xl text-[hsl(var(--ink))]/50">
+                                {isExpanded ? '−' : '+'}
+                              </div>
+                            </div>
                           </button>
                           
-                          {/* RSVP buttons for mobile */}
-                          <div className="mt-3 flex gap-2">
-                            <Button
-                              type="button"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setRsvpForEvent(ev, 'attending')
-                              }}
-                              disabled={rsvpSaving}
-                              className={`px-3 py-1 text-xs font-semibold ${
-                                isAttending 
-                                  ? 'bg-green-500 text-white border-green-500' 
-                                  : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
-                              }`}
-                            >
-                              {isAttending ? '✓ Attending' : 'Attend'}
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setRsvpForEvent(ev, 'not_attending')
-                              }}
-                              disabled={rsvpSaving}
-                              className={`px-3 py-1 text-xs font-semibold ${
-                                isNotAttending 
-                                  ? 'bg-red-500 text-white border-red-500' 
-                                  : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
-                              }`}
-                            >
-                              {isNotAttending ? '✗ Not Going' : 'Not Going'}
-                            </Button>
-                          </div>
+                          {/* Expanded details */}
+                          {isExpanded && (
+                            <div className="px-4 pb-4 border-t border-black/5 pt-3">
+                              {ev.description && (
+                                <div className="text-sm text-[hsl(var(--ink))]/70 mb-4 whitespace-pre-wrap">
+                                  {ev.description}
+                                </div>
+                              )}
+                              
+                              {/* Attendees list */}
+                              <div className="mb-4">
+                                <div className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--ink))]/50 mb-2">
+                                  Who&apos;s Attending ({attendees.length})
+                                </div>
+                                {attendees.length === 0 ? (
+                                  <div className="text-sm text-[hsl(var(--ink))]/50 italic">No one yet - be the first!</div>
+                                ) : (
+                                  <div className="flex flex-wrap gap-2">
+                                    {attendees.map((a) => (
+                                      <div
+                                        key={a.userId}
+                                        className="rounded-full bg-pink-200 px-3 py-1 text-sm font-medium text-[hsl(var(--ink))]"
+                                      >
+                                        {a.displayName}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* RSVP buttons */}
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  onClick={() => setRsvpForEvent(ev, 'attending')}
+                                  disabled={rsvpSaving}
+                                  className={`px-4 py-2 text-sm font-semibold ${
+                                    isAttending 
+                                      ? 'bg-green-500 text-white border-green-500' 
+                                      : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
+                                  }`}
+                                >
+                                  {isAttending ? '✓ Attending' : 'Attend'}
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setRsvpForEvent(ev, 'not_attending')}
+                                  disabled={rsvpSaving}
+                                  className={`px-4 py-2 text-sm font-semibold ${
+                                    isNotAttending 
+                                      ? 'bg-red-500 text-white border-red-500' 
+                                      : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
+                                  }`}
+                                >
+                                  {isNotAttending ? '✗ Not Going' : 'Not Going'}
+                                </Button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )
                     })}
