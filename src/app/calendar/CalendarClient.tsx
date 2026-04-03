@@ -28,6 +28,10 @@ function monthLabel(date: Date) {
   return date.toLocaleString(undefined, { month: 'long', year: 'numeric' })
 }
 
+function dayLabel(date: Date) {
+  return date.toLocaleString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })
+}
+
 export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
   const [month, setMonth] = useState(() => {
     const now = new Date()
@@ -242,7 +246,7 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
         <div>Sun</div>
       </div>
 
-      <div className="mt-2 grid grid-cols-7 gap-2">
+      <div className="mt-2 grid grid-cols-7 gap-2 hidden sm:grid">
         {calendarCells.map((cell, idx) => {
           const dayEvents = cell.date ? eventsByDate.get(cell.date) ?? [] : []
           return (
@@ -267,6 +271,63 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
             </div>
           )
         })}
+      </div>
+
+      {/* Mobile: Day-by-day scrollable view */}
+      <div className="mt-4 sm:hidden space-y-4">
+        {calendarCells
+          .filter((cell) => cell.date !== null)
+          .map((cell, idx) => {
+            if (!cell.date || !cell.day) return null
+            const dayEvents = eventsByDate.get(cell.date) ?? []
+            const cellDate = new Date(monthStart.getFullYear(), monthStart.getMonth(), cell.day)
+            
+            return (
+              <div
+                key={cell.date}
+                className="rounded-3xl border border-black/10 bg-white/95 p-4 shadow-sm"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <div className="text-2xl font-bold text-[hsl(var(--ink))]">{cell.day}</div>
+                    <div className="text-sm text-[hsl(var(--ink))]/70">{dayLabel(cellDate)}</div>
+                  </div>
+                  {dayEvents.length > 0 && (
+                    <div className="rounded-full bg-pink-300 px-3 py-1 text-sm font-semibold text-[hsl(var(--ink))]">
+                      {dayEvents.length} event{dayEvents.length !== 1 ? 's' : ''}
+                    </div>
+                  )}
+                </div>
+                
+                {dayEvents.length === 0 ? (
+                  <div className="text-sm text-[hsl(var(--ink))]/50 italic">No events this day</div>
+                ) : (
+                  <div className="space-y-3">
+                    {dayEvents.map((ev) => (
+                      <button
+                        key={ev.id}
+                        type="button"
+                        onClick={() => openEvent(ev)}
+                        className="w-full text-left rounded-2xl border-2 border-black/10 bg-white/80 p-4 hover:bg-white transition-colors"
+                      >
+                        <div className="font-semibold text-lg text-[hsl(var(--ink))]">{ev.title || 'Untitled'}</div>
+                        <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">
+                          {ev.startTime ? `${ev.startTime}` : ''}
+                          {ev.startTime && ev.endTime ? ` – ${ev.endTime}` : ''}
+                          {ev.location ? ` • ${ev.location}` : ''}
+                        </div>
+                        {ev.description && (
+                          <div className="text-sm text-[hsl(var(--ink))]/60 mt-2 line-clamp-2">
+                            {ev.description}
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
       </div>
 
       {selectedEvent ? (
