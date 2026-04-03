@@ -62,20 +62,6 @@ export default async function ProfilePage() {
           />
         </div>
 
-        {/* Become A Member Button - Desktop only */}
-        {!membership ? (
-          <div className="mb-6 hidden justify-center lg:flex">
-            <Link href="/memberships">
-              <Button
-                type="button"
-                className="border-[3px] border-[#FFD700] px-8 py-6 text-xl font-bold"
-              >
-                Become A Member
-              </Button>
-            </Link>
-          </div>
-        ) : null}
-
         <TasteTunerClient images={[]} membership={membership} />
       </div>
     </div>

@@ -1404,6 +1404,18 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
             </Link>
           </div>
         ) : null}
+
+        {/* Mobile: Community button under Become A Member */}
+        <div className="w-full lg:hidden px-4 pt-2">
+          <Link href="/community" className="block">
+            <Button
+              type="button"
+              className="w-full border-[3px] border-pink-400 bg-pink-500 hover:bg-pink-600 px-6 py-5 text-lg font-bold text-white"
+            >
+              💬 Join the Community
+            </Button>
+          </Link>
+        </div>
         
         {/* Mobile: Profile section at top */}
         <aside className="w-full lg:hidden">
