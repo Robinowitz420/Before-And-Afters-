@@ -71,6 +71,18 @@ export default async function ProfilePage() {
           </div>
         ) : null}
 
+        {/* Community Button */}
+        <div className="mb-6 flex justify-center">
+          <Link href="/community">
+            <Button
+              type="button"
+              className="border-[3px] border-pink-400 bg-pink-500 hover:bg-pink-600 px-8 py-6 text-xl font-bold text-white"
+            >
+              💬 Join the Community
+            </Button>
+          </Link>
+        </div>
+
         <TasteTunerClient images={[]} membership={membership} />
       </div>
     </div>
