@@ -237,9 +237,9 @@ export default function InteractiveMembershipList() {
           })}
         </div>
 
-        {/* Desktop: centered 4-column grid */}
+        {/* Desktop: centered single large card */}
         <div className="absolute inset-0 hidden items-center justify-center p-8 sm:flex">
-          <div className="grid w-full max-w-7xl grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="flex items-center justify-center w-full">
             {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
               return (
                 <TierCard
@@ -247,9 +247,9 @@ export default function InteractiveMembershipList() {
                   tier={tier}
                   disabled={checkoutTier !== null}
                   onSelect={onSelectTier}
-                  sizes="(max-width: 1024px) 50vw, 25vw"
+                  sizes="50vw"
                   priority={tier === 'Eeeehs'}
-                  className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+                  className="group relative overflow-hidden rounded-3xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100 w-[600px] h-[800px]"
                 />
               )
             })}
