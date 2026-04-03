@@ -194,7 +194,7 @@ export default function InteractiveMembershipList() {
   }, [])
 
   return (
-    <div className="relative min-h-[100svh] w-screen overflow-x-hidden overflow-y-auto bg-black lg:h-[100svh] lg:overflow-hidden">
+    <div className="relative w-screen overflow-x-hidden overflow-y-auto bg-black lg:h-[100svh] lg:overflow-hidden">
       {promoInfo?.applied ? (
         <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-xl border border-yellow-300/60 bg-yellow-200/90 px-4 py-3 text-center text-sm font-semibold text-black shadow-lg backdrop-blur">
           $50 off applied to your first month. {promoInfo.remaining > 0 ? `${promoInfo.remaining} spots left.` : ''}
@@ -208,7 +208,7 @@ export default function InteractiveMembershipList() {
       )}
 
       {/* Mobile: scrollable single column, Desktop: fixed fullscreen */}
-      <div className="relative min-h-full w-full lg:fixed lg:inset-0">
+      <div className="relative w-full lg:fixed lg:inset-0">
         <Image
           src={BASE_IMAGE_SRC}
           alt="Membership"
