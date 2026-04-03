@@ -14,7 +14,7 @@ type Employee = {
   createdAt?: string
 }
 
-const MEMBERSHIPS_BASE_URL = 'https://beforeandafters.vercel.app/memberships'
+const MEMBERSHIPS_BASE_URL = 'https://www.changeyouroutfitchangetheworld.com/memberships'
 
 export default function AdminEmployeesPage() {
   const [employees, setEmployees] = useState<Employee[]>([])

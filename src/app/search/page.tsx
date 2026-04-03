@@ -370,28 +370,28 @@ export default function SearchPage() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
             Explore Joni&apos;s Closet
           </h1>
           {/* Action Buttons */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
             <Button
               onClick={handleSearch}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 text-lg"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-5 py-2 text-base sm:px-8 sm:py-3 sm:text-lg"
             >
               🔍 Search Clothing
             </Button>
             <Button
               variant="outline"
               onClick={clearAll}
-              className="px-6 py-3 bg-black text-white hover:bg-black/80 border-white/20"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-black text-white hover:bg-black/80 border-white/20"
             >
               Clear All
             </Button>
             <Button
               variant="outline"
               onClick={() => router.push('/profile')}
-              className="px-6 py-3 bg-black text-white hover:bg-black/80 border-white/20"
+              className="px-4 py-2 sm:px-6 sm:py-3 bg-black text-white hover:bg-black/80 border-white/20"
             >
               ← Back to Profile
             </Button>
@@ -399,7 +399,7 @@ export default function SearchPage() {
         </div>
 
         {/* Search Preferences */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-4 sm:gap-8 lg:grid-cols-2">
           {/* Tones */}
           <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
             <CardHeader>

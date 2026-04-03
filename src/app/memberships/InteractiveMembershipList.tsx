@@ -194,21 +194,21 @@ export default function InteractiveMembershipList() {
   }, [])
 
   return (
-    <div className="relative w-screen overflow-x-hidden overflow-y-auto bg-black lg:h-[100svh] lg:overflow-hidden">
+    <div className="relative min-h-[calc(100svh-3.5rem)] w-full overflow-x-hidden overflow-y-auto bg-black lg:h-[calc(100svh-3.5rem)] lg:overflow-hidden">
       {promoInfo?.applied ? (
-        <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-xl border border-yellow-300/60 bg-yellow-200/90 px-4 py-3 text-center text-sm font-semibold text-black shadow-lg backdrop-blur">
+        <div className="absolute left-1/2 top-2 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-xl border border-yellow-300/60 bg-yellow-200/90 px-4 py-2 text-center text-sm font-semibold text-black shadow-lg backdrop-blur sm:top-4 sm:py-3">
           $50 off applied to your first month. {promoInfo.remaining > 0 ? `${promoInfo.remaining} spots left.` : ''}
         </div>
       ) : null}
 
       {error && (
-        <div className="absolute left-1/2 top-4 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive">
+        <div className="absolute left-1/2 top-2 z-[60] w-[min(92vw,56rem)] -translate-x-1/2 rounded-lg bg-destructive/10 px-4 py-2 text-sm text-destructive sm:top-4">
           {error}
         </div>
       )}
 
-      {/* Mobile: scrollable single column, Desktop: fixed fullscreen */}
-      <div className="relative w-full lg:fixed lg:inset-0">
+      {/* Background image - always covers full area */}
+      <div className="fixed inset-0 -z-0">
         <Image
           src={BASE_IMAGE_SRC}
           alt="Membership"
@@ -217,11 +217,12 @@ export default function InteractiveMembershipList() {
           className="object-cover"
           sizes="100vw"
         />
-
         <div className="absolute inset-0 bg-black/20" />
+      </div>
 
-        {/* Mobile: vertical scrollable layout, Desktop: centered grid */}
-        <div className="relative flex flex-col items-center gap-4 p-4 pb-8 sm:hidden">
+      {/* Card layout - single responsive layout */}
+      <div className="relative z-10 flex min-h-[calc(100svh-3.5rem)] w-full items-center justify-center p-4 sm:p-8">
+        <div className="grid w-full max-w-sm gap-4 sm:max-w-7xl sm:grid-cols-2 lg:grid-cols-4">
           {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
             return (
               <TierCard
@@ -229,31 +230,12 @@ export default function InteractiveMembershipList() {
                 tier={tier}
                 disabled={checkoutTier !== null}
                 onSelect={onSelectTier}
-                sizes="100vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                 priority={tier === 'Eeeehs'}
-                className="group relative w-full max-w-sm overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
+                className="group relative overflow-hidden rounded-2xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100"
               />
             )
           })}
-        </div>
-
-        {/* Desktop: centered single large card */}
-        <div className="absolute inset-0 hidden items-center justify-center p-8 sm:flex">
-          <div className="flex items-center justify-center w-full">
-            {(Object.keys(MEMBERSHIP_LEVELS) as MembershipTier[]).map((tier) => {
-              return (
-                <TierCard
-                  key={tier}
-                  tier={tier}
-                  disabled={checkoutTier !== null}
-                  onSelect={onSelectTier}
-                  sizes="50vw"
-                  priority={tier === 'Eeeehs'}
-                  className="group relative overflow-hidden rounded-3xl border-4 border-white/30 bg-black/20 shadow-2xl transition-transform duration-300 hover:border-yellow-400/80 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 disabled:cursor-not-allowed disabled:opacity-50 active:scale-100 w-[600px] h-[800px]"
-                />
-              )
-            })}
-          </div>
         </div>
       </div>
 
@@ -266,25 +248,25 @@ export default function InteractiveMembershipList() {
       ) : null}
 
       {disclaimerOpen ? (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 px-4 pt-10">
-          <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-6 shadow-2xl">
+        <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-black/60 px-3 py-4 sm:px-4 sm:pt-10">
+          <div className="w-full max-w-3xl rounded-2xl border border-[hsl(var(--border))] bg-[hsl(var(--background))] p-4 shadow-2xl sm:p-6">
             <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Membership Agreement</div>
-            <div className="mt-2 text-xl font-semibold text-[hsl(var(--ink))]">Membership Agreement & Disclaimer</div>
-            <div className="mt-4 max-h-[40vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-4 text-sm leading-relaxed text-[hsl(var(--ink))]">
+            <div className="mt-2 text-lg font-semibold text-[hsl(var(--ink))] sm:text-xl">Membership Agreement & Disclaimer</div>
+            <div className="mt-3 max-h-[35vh] overflow-auto whitespace-pre-wrap rounded-xl border border-[hsl(var(--border))] bg-white/60 p-3 text-sm leading-relaxed text-[hsl(var(--ink))] sm:mt-4 sm:max-h-[40vh] sm:p-4">
               {membershipDisclaimer}
             </div>
 
-            <label className="mt-4 flex items-start gap-3 text-sm text-[hsl(var(--ink))]">
+            <label className="mt-3 flex items-start gap-3 text-sm text-[hsl(var(--ink))] sm:mt-4">
               <input
                 type="checkbox"
-                className="mt-1 h-4 w-4"
+                className="mt-1 h-5 w-5 shrink-0"
                 checked={disclaimerAgreed}
                 onChange={(e) => setDisclaimerAgreed(e.target.checked)}
               />
               <span>I agree to the Membership Agreement & Disclaimer</span>
             </label>
 
-            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <div className="mt-4 flex flex-col-reverse gap-3 sm:mt-6 sm:flex-row sm:justify-end">
               <Button
                 variant="outline"
                 type="button"

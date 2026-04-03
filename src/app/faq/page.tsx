@@ -64,7 +64,7 @@ It is important to note that this is a business model based on TRUST and INTEGRI
   ]
 
   return (
-    <div className="mx-auto w-full max-w-4xl px-6 py-10">
+    <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="mb-8">
         <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">FAQ</div>
         <h1 className="mt-2 text-3xl font-semibold text-[hsl(var(--ink))]">Frequently Asked Questions</h1>
@@ -79,7 +79,7 @@ It is important to note that this is a business model based on TRUST and INTEGRI
             key={faq.id}
             open={openItem === faq.id}
             onToggle={(open) => setOpenItem(open ? faq.id : null)}
-            className="group border border-[hsl(var(--border))] rounded-lg p-6 cursor-pointer"
+            className="group border border-[hsl(var(--border))] rounded-lg p-4 sm:p-6 cursor-pointer"
           >
             <summary className="flex justify-between items-center font-medium text-[hsl(var(--ink))] list-none">
               {faq.question}
