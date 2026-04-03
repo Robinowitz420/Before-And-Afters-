@@ -1491,9 +1491,23 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
           </div>
         </aside>
 
-        {/* Desktop: My Closet sidebar */}
+        {/* Desktop: My Calendar sidebar */}
         <aside className="hidden w-full lg:sticky lg:top-6 lg:self-start lg:block">
           <div className="p-4">
+            {/* Become A Member Button - above My Calendar */}
+            {!membershipTitle ? (
+              <div className="mb-4">
+                <Link href="/memberships" className="block">
+                  <Button
+                    type="button"
+                    className="w-full border-[3px] border-[#FFD700] px-4 py-3 text-base font-bold"
+                  >
+                    Become A Member
+                  </Button>
+                </Link>
+              </div>
+            ) : null}
+            
             <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
                 <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">My Calendar</div>
 
@@ -1720,16 +1734,6 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
                         }}
                       >
                         Reserve item
-                      </Button>
-                    </div>
-                    <div className="mt-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full bg-white/70 hover:bg-white"
-                        onClick={() => setMyClosetOpen(true)}
-                      >
-                        Your Closet ({save.likes.length + reservedIds.length})
                       </Button>
                     </div>
                   </>
@@ -2196,10 +2200,21 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
         </Dialog.Root>
 
         <aside className="hidden w-full lg:sticky lg:top-6 lg:self-start lg:block">
-          <div className="space-y-3">
-            <div className="p-4">
-              <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
-                  <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">Profile</div>
+          <div className="p-4">
+            {/* Community Button - above Profile */}
+            <div className="mb-4">
+              <Link href="/community" className="block">
+                <Button
+                  type="button"
+                  className="w-full border-[3px] border-pink-400 bg-pink-500 hover:bg-pink-600 px-4 py-3 text-base font-bold text-white"
+                >
+                  💬 Join the Community
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="rounded-2xl border-[3px] border-blue-600 bg-pink-100/95 p-4 shadow-sm">
+                <div className="font-ranchers text-lg font-semibold text-[hsl(var(--ink))]">Profile</div>
 
                   <div className="mt-3 flex flex-col items-center gap-3">
                     <div
@@ -2329,8 +2344,6 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
                   </div>
                 </div>
             </div>
-            </div>
-
           </div>
         </aside>
       </div>
