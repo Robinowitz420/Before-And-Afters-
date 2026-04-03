@@ -2361,7 +2361,7 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
           className="mt-6 flex flex-col items-center rounded-3xl bg-white p-8 shadow-2xl hover:shadow-3xl transition cursor-pointer"
         >
           <QRCodeSVG
-            value={`https://beforeandafters.clothing/profile/${userId || 'guest'}`}
+            value={`https://www.changeyouroutfitchangetheworld.com/profile/${userId || 'guest'}`}
             size={280}
             level="H"
             includeMargin={false}
@@ -2457,7 +2457,7 @@ export function TasteTunerClient({ images, membership: initialMembership }: { im
 
             <div className="mt-8 rounded-3xl bg-white p-6 shadow-2xl">
               <QRCodeSVG
-                value={`https://beforeandafters.clothing/profile/${userId || 'guest'}`}
+                value={`https://www.changeyouroutfitchangetheworld.com/profile/${userId || 'guest'}`}
                 size={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 80 : 320)}
                 level="H"
                 includeMargin={true}

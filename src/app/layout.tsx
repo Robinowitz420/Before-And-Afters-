@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Crimson_Text, Ranchers } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { AppShell } from '@/components/AppShell'
@@ -23,6 +23,12 @@ const ranchers = Ranchers({
   subsets: ['latin'],
   variable: '--font-ranchers',
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
 
 export const metadata: Metadata = {
   title: 'Before And Afters',

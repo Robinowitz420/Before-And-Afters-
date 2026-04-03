@@ -8,10 +8,10 @@ export default function DetailsPage() {
   return (
     <main className="text-[hsl(var(--foreground))]">
       <section className="relative bg-[hsl(var(--background))]">
-        <div className="mx-auto w-full max-w-5xl px-6 py-16 md:py-24">
+        <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 md:py-24">
           <div className="text-center">
             <div className="text-xs font-medium uppercase tracking-[0.2em] text-[hsl(var(--ink))]/70">Details</div>
-            <h1 className="mt-2 text-balance text-4xl font-black tracking-tight text-[hsl(var(--ink))] sm:text-5xl">
+            <h1 className="mt-2 text-balance text-3xl font-black tracking-tight text-[hsl(var(--ink))] sm:text-5xl">
               Before &amp; Afters (Flagship)
             </h1>
             <p className="mt-4 text-base leading-relaxed text-[hsl(var(--ink))]/80 sm:text-lg">

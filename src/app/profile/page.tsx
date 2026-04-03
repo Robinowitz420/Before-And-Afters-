@@ -50,7 +50,7 @@ export default async function ProfilePage() {
 
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center px-4 sm:px-6">
         {/* Hero Banner */}
-        <div className="mb-6 overflow-hidden rounded-2xl border border-white/10 shadow-lg lg:ml-[75px]">
+        <div className="mb-6 overflow-hidden rounded-2xl border border-white/10 shadow-lg">
           <Image
             src="/images/Banners/MyCLoset1.png"
             alt="My Closet"
