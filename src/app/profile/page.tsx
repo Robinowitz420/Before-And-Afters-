@@ -1,6 +1,6 @@
 import { TasteTunerClient } from '../taste-tuner/tasteTunerClient'
 import Image from 'next/image'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -18,7 +18,7 @@ export default async function ProfilePage() {
     
     if (!user) {
       // Fallback: get email from Clerk and look up by email
-      const clerkUser = await import('@clerk/nextjs/server').then(m => m.currentUser())
+      const clerkUser = await currentUser()
       const email = clerkUser?.primaryEmailAddress?.emailAddress || clerkUser?.emailAddresses?.[0]?.emailAddress
       if (email) {
         user = await prisma.user.findUnique({
