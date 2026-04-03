@@ -1094,9 +1094,29 @@ function Step4({ data, setData }: { data: WizardData; setData: (v: WizardData) =
                 className="hidden"
                 id="selfie-upload"
               />
+              
+              {/* Mobile: Frame with small button underneath */}
+              <div className="sm:hidden flex flex-col items-center">
+                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100 flex items-center justify-center">
+                  {data.selfieUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={data.selfieUrl} alt="Selfie preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-4xl">👤</div>
+                  )}
+                </div>
+                <label
+                  htmlFor="selfie-upload"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 px-4 py-2 text-sm font-semibold text-white shadow-md hover:from-pink-600 hover:to-purple-600 cursor-pointer transition-all"
+                >
+                  📷 {data.selfieUrl ? 'Change Photo' : 'Upload Photo'}
+                </label>
+              </div>
+
+              {/* Desktop: Large dashed border area */}
               <label
                 htmlFor="selfie-upload"
-                className="block w-full cursor-pointer"
+                className="hidden sm:block w-full cursor-pointer"
               >
                 <div className="border-2 border-dashed border-blue-300 rounded-2xl p-8 text-center hover:bg-blue-50/50 transition-colors">
                   {data.selfieUrl ? (
