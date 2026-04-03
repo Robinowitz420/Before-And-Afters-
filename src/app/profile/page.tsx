@@ -10,10 +10,32 @@ export default async function ProfilePage() {
   let membership: string | null = null
   
   if (userId) {
-    const user = await prisma.user.findUnique({
+    // Try to find user by clerkUserId first, then by email
+    let user = await prisma.user.findUnique({
       where: { clerkUserId: userId },
-      select: { membershipTier: true },
+      select: { membershipTier: true, email: true, clerkUserId: true },
     })
+    
+    if (!user) {
+      // Fallback: get email from Clerk and look up by email
+      const clerkUser = await import('@clerk/nextjs/server').then(m => m.currentUser())
+      const email = clerkUser?.primaryEmailAddress?.emailAddress || clerkUser?.emailAddresses?.[0]?.emailAddress
+      if (email) {
+        user = await prisma.user.findUnique({
+          where: { email: email.toLowerCase() },
+          select: { membershipTier: true, email: true, clerkUserId: true },
+        })
+        
+        // Link clerkUserId to the user record if it was missing
+        if (user && !user.clerkUserId) {
+          await prisma.user.update({
+            where: { email: email.toLowerCase() },
+            data: { clerkUserId: userId },
+          })
+        }
+      }
+    }
+    
     membership = user?.membershipTier ?? null
   }
   
