@@ -319,16 +319,23 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
               className="min-h-32 rounded-2xl border border-black/10 bg-white/90 p-2"
             >
               {cell.day ? <div className="text-sm font-bold text-[hsl(var(--ink))]">{cell.day}</div> : null}
-              {dayEvents.slice(0, 4).map((ev) => (
-                <button
-                  key={ev.id}
-                  type="button"
-                  onClick={() => openEvent(ev)}
-                  className="mt-1 block w-full truncate rounded-lg border border-black/10 bg-white/70 px-2 py-1 text-left text-xs text-[hsl(var(--ink))] hover:bg-white"
-                >
-                  {ev.title || 'Untitled'}
-                </button>
-              ))}
+              {dayEvents.slice(0, 4).map((ev) => {
+                const isAttending = eventRsvpStatuses[ev.id] === 'attending'
+                const isNotAttending = eventRsvpStatuses[ev.id] === 'not_attending'
+                
+                return (
+                  <button
+                    key={ev.id}
+                    type="button"
+                    onClick={() => toggleEventExpand(ev)}
+                    className="mt-1 block w-full truncate rounded-lg border border-black/10 bg-white/70 px-2 py-1 text-left text-xs text-[hsl(var(--ink))] hover:bg-white"
+                  >
+                    <span className="font-medium">{ev.title || 'Untitled'}</span>
+                    {isAttending && <span className="ml-1 text-green-600">✓</span>}
+                    {isNotAttending && <span className="ml-1 text-red-500">✗</span>}
+                  </button>
+                )
+              })}
               {dayEvents.length > 4 ? (
                 <div className="mt-1 text-[10px] text-[hsl(var(--ink))]/70">+{dayEvents.length - 4} more</div>
               ) : null}
@@ -336,6 +343,108 @@ export default function CalendarClient({ canEdit }: { canEdit: boolean }) {
           )
         })}
       </div>
+
+      {/* Desktop: Expanded event modal */}
+      {expandedEventId && (
+        <div className="hidden sm:block fixed inset-0 z-50 bg-black/30" onClick={() => setExpandedEventId(null)}>
+          <div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md p-6 rounded-2xl border-2 border-black/20 bg-white shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {(() => {
+              const ev = events.find(e => e.id === expandedEventId)
+              if (!ev) return null
+              
+              const isAttending = eventRsvpStatuses[ev.id] === 'attending'
+              const isNotAttending = eventRsvpStatuses[ev.id] === 'not_attending'
+              const attendees = eventAttendees[ev.id] ?? []
+              
+              return (
+                <>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="text-xl font-bold text-[hsl(var(--ink))]">{ev.title || 'Untitled'}</div>
+                      <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">
+                        {ev.date}
+                        {ev.startTime ? ` • ${ev.startTime}` : ''}
+                        {ev.endTime ? ` – ${ev.endTime}` : ''}
+                      </div>
+                      {ev.location && (
+                        <div className="text-sm text-[hsl(var(--ink))]/70 mt-1">{ev.location}</div>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setExpandedEventId(null)}
+                      className="text-2xl text-[hsl(var(--ink))]/50 hover:text-[hsl(var(--ink))]"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  
+                  {ev.description && (
+                    <div className="text-sm text-[hsl(var(--ink))]/70 mt-4 whitespace-pre-wrap">
+                      {ev.description}
+                    </div>
+                  )}
+                  
+                  {/* Attendees list */}
+                  <div className="mt-4">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--ink))]/50 mb-2">
+                      Who&apos;s Attending ({attendees.length})
+                    </div>
+                    {attendees.length === 0 ? (
+                      <div className="text-sm text-[hsl(var(--ink))]/50 italic">No one yet - be the first!</div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {attendees.map((a) => (
+                          <div
+                            key={a.userId}
+                            className="rounded-full bg-pink-200 px-3 py-1 text-sm font-medium text-[hsl(var(--ink))]"
+                          >
+                            {a.displayName}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* RSVP buttons */}
+                  <div className="mt-4 flex gap-3">
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => setRsvpForEvent(ev, 'attending')}
+                      disabled={rsvpSaving}
+                      className={`px-4 py-2 text-sm font-semibold ${
+                        isAttending 
+                          ? 'bg-green-500 text-white border-green-500' 
+                          : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
+                      }`}
+                    >
+                      {isAttending ? '✓ Attending' : 'Attend'}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setRsvpForEvent(ev, 'not_attending')}
+                      disabled={rsvpSaving}
+                      className={`px-4 py-2 text-sm font-semibold ${
+                        isNotAttending 
+                          ? 'bg-red-500 text-white border-red-500' 
+                          : 'border-[2px] border-[#FFD700] hover:bg-yellow-50'
+                      }`}
+                    >
+                      {isNotAttending ? '✗ Not Going' : 'Not Going'}
+                    </Button>
+                  </div>
+                </>
+              )
+            })()}
+          </div>
+        </div>
+      )}
 
       {/* Mobile: Day-by-day scrollable view */}
       <div className="mt-4 sm:hidden space-y-4">
