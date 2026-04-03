@@ -10,33 +10,38 @@ export default async function ProfilePage() {
   let membership: string | null = null
   
   if (userId) {
-    // Try to find user by clerkUserId first, then by email
-    let user = await prisma.user.findUnique({
-      where: { clerkUserId: userId },
-      select: { membershipTier: true, email: true, clerkUserId: true },
-    })
-    
-    if (!user) {
-      // Fallback: get email from Clerk and look up by email
-      const clerkUser = await currentUser()
-      const email = clerkUser?.primaryEmailAddress?.emailAddress || clerkUser?.emailAddresses?.[0]?.emailAddress
-      if (email) {
-        user = await prisma.user.findUnique({
-          where: { email: email.toLowerCase() },
-          select: { membershipTier: true, email: true, clerkUserId: true },
-        })
-        
-        // Link clerkUserId to the user record if it was missing
-        if (user && !user.clerkUserId) {
-          await prisma.user.update({
+    try {
+      // Try to find user by clerkUserId first, then by email
+      let user = await prisma.user.findUnique({
+        where: { clerkUserId: userId },
+        select: { membershipTier: true, email: true, clerkUserId: true },
+      })
+      
+      if (!user) {
+        // Fallback: get email from Clerk and look up by email
+        const clerkUser = await currentUser()
+        const email = clerkUser?.primaryEmailAddress?.emailAddress || clerkUser?.emailAddresses?.[0]?.emailAddress
+        if (email) {
+          user = await prisma.user.findUnique({
             where: { email: email.toLowerCase() },
-            data: { clerkUserId: userId },
+            select: { membershipTier: true, email: true, clerkUserId: true },
           })
+          
+          // Link clerkUserId to the user record if it was missing
+          if (user && !user.clerkUserId) {
+            await prisma.user.update({
+              where: { email: email.toLowerCase() },
+              data: { clerkUserId: userId },
+            }).catch(() => {})
+          }
         }
       }
+      
+      membership = user?.membershipTier ?? null
+    } catch (error) {
+      console.error('Error fetching user membership:', error)
+      // Continue without membership - user can still see the page
     }
-    
-    membership = user?.membershipTier ?? null
   }
   
   return (
