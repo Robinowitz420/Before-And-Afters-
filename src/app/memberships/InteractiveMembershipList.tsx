@@ -42,6 +42,9 @@ You may cancel at any time, but no refunds will be issued for partial months.
 All borrowed items must be returned before cancellation is finalized.
 `
 
+// Set to true to show disclaimer modal before checkout
+const DISCLAIMER_ENABLED = false
+
 const TierCard = memo(function TierCard({
   tier,
   disabled,
@@ -176,9 +179,14 @@ export default function InteractiveMembershipList() {
   }
 
   const openDisclaimerForTier = (tier: string) => {
-    setPendingTier(tier)
-    setDisclaimerAgreed(false)
-    setDisclaimerOpen(true)
+    if (DISCLAIMER_ENABLED) {
+      setPendingTier(tier)
+      setDisclaimerAgreed(false)
+      setDisclaimerOpen(true)
+    } else {
+      // Disclaimer disabled - go straight to checkout
+      redirectToStripeCheckout(tier)
+    }
   }
 
   const onSelectTier = useCallback((tier: MembershipTier) => {
